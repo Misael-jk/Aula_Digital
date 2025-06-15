@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
+using Dapper;
 
-namespace CapaDatos
+namespace Sistema_de_notebooks.CapaDatos
 {
     public class Conexion
     {
         private string _connectionString;
-
+       
         public Conexion(string connectionString)
         {
             _connectionString = connectionString;
+            
         }
 
         public void ObtenerTodo()

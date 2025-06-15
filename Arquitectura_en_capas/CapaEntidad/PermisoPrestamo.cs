@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CapaEntidad
+namespace Sistema_de_notebooks.CapaEntidad
 {
-    class PermisoPrestamo
+    public class PermisoPrestamo
     {
         public int IdPermiso {get; set;}
         public int IdAlumno {get; set;} 
