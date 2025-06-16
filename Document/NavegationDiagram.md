@@ -1,14 +1,14 @@
 ```mermaid
 
 graph TD
-    Login[Login]
-    Menu[Menú Principal]
-    GestionDocentes[Gestión de Docentes]
-    GestionAlumnos[Gestión de Alumnos]
-    Prestamos[Gestión de Préstamos]
-    DetallePrestamo[Detalle del Préstamo]
-    Carritos[Gestión de Carritos]
-    Notebooks[Gestión de Notebooks]
+    Login(Login)
+    Menu(Menu Principal)
+    GestionDocentes(Gestion de Docentes)
+    GestionAlumnos(Gestion de Alumnos)
+    Prestamos(Gestion de Prestamos)
+    DetallePrestamo(Detalle del Prestamo)
+    Carritos(Gestion de Carritos)
+    Notebooks(Gestion de Notebooks)
 
     Login --> Menu
     Menu --> GestionDocentes
@@ -17,5 +17,6 @@ graph TD
     Prestamos --> DetallePrestamo
     Menu --> Carritos
     Menu --> Notebooks
+
 
 ```

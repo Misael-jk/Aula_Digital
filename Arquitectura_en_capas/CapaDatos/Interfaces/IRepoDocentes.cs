@@ -4,7 +4,9 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
 {
     interface IRepoDocentes
     {
-        public void Alta(Docentes docente);
+        public void AltaDocente(Docentes docente);
+        public void ActualizarDocente(Docentes docente);
+        public void EliminarDocente(int idDocente);
         public List<Docentes> ListarDocentes();
         public Docentes? DetalleDocentes(int idDocente);
     }

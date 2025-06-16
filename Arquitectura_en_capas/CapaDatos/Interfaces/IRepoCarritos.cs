@@ -4,7 +4,10 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
 {
     interface IRepoCarritos
     {
-        public void Alta(Carritos carrito);
+        public void AltaCarrito(Carritos carrito);
+        public void ActualizarCarrito(Carritos carrito);
+        public void EliminarCarrito(int idCarrito);
+
         public List<Carritos> ListarCarritos();
         public Carritos? DetalleCarritos(int idCarrito);
     }

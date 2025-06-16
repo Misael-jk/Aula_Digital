@@ -21,22 +21,32 @@ class Alumno {
 
 class PermisoPrestamo {
   +int idPermiso
+  +int idAlumno
+  +int idDocente
   +DateTime fechaPermiso
 }
 
 class Prestamo {
   +int idPrestamo
+  +int idPermiso
+  +int idDocente
+  +int idCarrito
   +DateTime fechaPrestamo
   +DateTime fechaPactada
   +string tipoPrestamo
 }
 
 class PrestamoDetalle {
+  +int idPrestamo
+  +int idNotebook
+  +int idEstadoPrestamo
   +DateTime? fechaDevolucion
 }
 
 class Notebook {
   +int idNotebook
+  +int idTecnologia
+  +int idEstadoNotebook
 }
 
 class Tecnologia {
@@ -51,6 +61,7 @@ class EstadoNotebook {
 
 class Carrito {
   +int idCarrito
+  +int idDocente
   +int capacidad
 }
 
@@ -59,27 +70,25 @@ class EstadoPrestamo {
   +string estadoPrestamo
 }
 
-%% ==== RELACIONES ENTRE CLASES ====
+Docente --> "0..*" PermisoPrestamo
+Alumno --> "0..*" PermisoPrestamo 
+PermisoPrestamo --> "0..1" Prestamo 
 
-Docente --> "0..*" PermisoPrestamo : otorga
-Alumno --> "0..*" PermisoPrestamo : recibe
-PermisoPrestamo --> "0..1" Prestamo : autoriza
+Docente --> "0..*" Prestamo 
+Prestamo --> "0..1" Carrito 
 
-Docente --> "0..*" Prestamo : registra
-Prestamo --> "0..1" Carrito : utiliza
+Prestamo --> "1..*" PrestamoDetalle 
+Notebook --> "0..*" PrestamoDetalle 
 
-Prestamo --> "1..*" PrestamoDetalle : contiene
-Notebook --> "0..*" PrestamoDetalle : esPrestado
+EstadoPrestamo --> "1" PrestamoDetalle
 
-EstadoPrestamo --> "1" PrestamoDetalle : estado
+Notebook --> "1" Tecnologia 
+Notebook --> "1" EstadoNotebook 
 
-Notebook --> "1" Tecnologia : usa
-Notebook --> "1" EstadoNotebook : tiene
+Docente --> "0..*" Carrito 
+Carrito --> "1..*" Notebook 
 
-Docente --> "0..*" Carrito : administra
-Carrito --> "1..*" Notebook : contiene
-
-Carrito --> "0..*" CarritoNotebook : relaciona
-Notebook --> "0..*" CarritoNotebook : relaciona
+Carrito --> "0..*" CarritoNotebook 
+Notebook --> "0..*" CarritoNotebook 
 
 ```
