@@ -1,4 +1,5 @@
-﻿using Sistema_de_notebooks.CapaDatos;
+﻿using Dapper;
+using Sistema_de_notebooks.CapaDatos;
 using Sistema_de_notebooks.CapaDatos.Interfaces;
 using Sistema_de_notebooks.CapaEntidad;
 using System;
@@ -17,17 +18,48 @@ namespace CapaDatos.Repos
         {
         }
 
-        public void Alta(PrestamoDetalle alumnos)
+        #region ver los datos del detalle
+        public IEnumerable<PrestamoDetalle> ListarPrestamoDetalle()
         {
-        }
+            string query = "select * from PrestamoDetalle";
 
-        public List<PrestamoDetalle> ListarPrestamoDetalle()
-        {
-            return new List<PrestamoDetalle>();
+            try
+            {
+                return Conexion.Query<PrestamoDetalle>(query);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener los datos del detalle");
+            }
         }
-        public PrestamoDetalle? DetallePrestamoDetalle(int idAlumno)
+        #endregion
+
+        #region Historial de la notebook
+        public IEnumerable<PrestamoDetalle> HistorialNotebook(int idNotebook)
         {
-            return null;
+            DynamicParameters parametros = new DynamicParameters();
+            parametros.Add("unidNotebook", idNotebook);
+
+            try
+            {
+                return Conexion.Query<PrestamoDetalle>("HistorialNotebook", parametros, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener el historial de la notebook");
+            }
         }
+        #endregion
+
+        #region Obtener Detalle por prestamos
+        public IEnumerable<PrestamoDetalle> DetallePorPrestamo(int idPrestamo)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("unidPrestamo", idPrestamo);
+
+            return Conexion.Query<PrestamoDetalle>("DetallePorPrestamo", parametros, commandType: CommandType.StoredProcedure
+            );
+        }
+        #endregion
     }
 }

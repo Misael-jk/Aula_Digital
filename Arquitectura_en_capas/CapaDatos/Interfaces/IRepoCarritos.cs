@@ -8,7 +8,7 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
         public void ActualizarCarrito(Carritos carrito);
         public void EliminarCarrito(int idCarrito);
 
-        public List<Carritos> ListarCarritos();
+        public IEnumerable<Carritos> ListarCarritos();
         public Carritos? DetalleCarritos(int idCarrito);
     }
 }

@@ -29,7 +29,7 @@ namespace CapaDatos.Repos
 
             try
             {
-                Conexion.Execute("AltaNotebook", parametros, commandType: CommandType.StoredProcedure);
+                Conexion.Execute("InsertNotebook", parametros, commandType: CommandType.StoredProcedure);
                 notebook.IdNotebook = parametros.Get<int>("unidNotebook");
             }
             catch (Exception)
@@ -49,7 +49,7 @@ namespace CapaDatos.Repos
 
             try
             {
-                Conexion.Execute("UpdateAlumno", parametros, commandType: CommandType.StoredProcedure);
+                Conexion.Execute("UpdateNotebook", parametros, commandType: CommandType.StoredProcedure);
             }
             catch (Exception)
             {
@@ -76,13 +76,38 @@ namespace CapaDatos.Repos
         }
         #endregion
 
-        public List<Notebook> ListarNotebooks()
+        #region Obtener los datos
+        public IEnumerable<Notebook> ListarNotebooks()
         {
-            return new List<Notebook>();
+            string query = "select * from Notebooks";
+
+            try
+            {
+                return Conexion.Query<Notebook>(query);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener los datos de las notebooks");
+            }
         }
-        public Notebook? DetalleNotebooks(int idAlumno)
+        #endregion
+
+        #region Obtener por Id
+        public Notebook? DetalleNotebooks(int idNotebook)
         {
-            return null;
+            string query = "select * from Notebooks where idNotebook = unidNotebook";
+
+            DynamicParameters parametros = new DynamicParameters();
+            try
+            {
+                parametros.Add("unidNotebook", idNotebook);
+                return Conexion.QueryFirstOrDefault<Notebook>(query, parametros);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener el id de la notebook");
+            }
         }
+        #endregion
     }
 }

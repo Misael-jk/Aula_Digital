@@ -37,7 +37,7 @@ namespace CapaDatos.Repos
                 throw new Exception("Hubo un error al insertar un carrito");
             }
         }
-        #endregion
+        #endregion 
 
         #region Actualizar Carrito
         public void ActualizarCarrito(Carritos carritos)
@@ -76,13 +76,39 @@ namespace CapaDatos.Repos
         }
         #endregion
 
-        public List<Carritos> ListarCarritos()
+        #region Obtener todos los datos
+        public IEnumerable<Carritos> ListarCarritos()
         {
-            return new List<Carritos>();
+            string query = "select * from Carritos";
+            try
+            {
+                return Conexion.Query<Carritos>(query);
+            }
+            catch (Exception)
+            {
+                throw new Exception("No se pudo Obtener los datos de los carritos");
+            }
         }
+        #endregion
+
+        #region Obtener por Id
         public Carritos? DetalleCarritos(int idAlumno)
         {
-            return null;
+            string query = "select * from Carritos where idCarrito = unidCarrito";
+
+            DynamicParameters parametros = new DynamicParameters();
+
+            try
+            {
+                parametros.Add("unidCarrito", idAlumno);
+                return Conexion.QueryFirstOrDefault<Carritos>(query, parametros);
+            }
+            catch(Exception)
+            {
+                throw new Exception("Error al obtener el id del carrito");
+            }
+            
         }
+        #endregion
     }
 }

@@ -4,12 +4,9 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
 {
     interface IRepoPrestamoDetalle
     {
-        public interface IRepoPrestamoDetalle
-        {
-            public void Alta(PrestamoDetalle prestamoDetalle);
-            public List<PrestamoDetalle> ListarPrestamoDetalle(int idPrestamo);
-            public PrestamoDetalle? DetallePrestamoDetalle(int idPrestamo, byte idNotebook);
+        public IEnumerable<PrestamoDetalle> ListarPrestamoDetalle();
+        public IEnumerable<PrestamoDetalle> HistorialNotebook(int idNotebook);
+        public IEnumerable<PrestamoDetalle> DetallePorPrestamo(int idPrestamo);
 
-        }
     }
 }

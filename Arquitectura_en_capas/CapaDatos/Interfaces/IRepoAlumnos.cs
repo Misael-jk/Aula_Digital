@@ -4,7 +4,7 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
 {
     interface IRepoAlumnos
     {
-        public void AltaAlumno(Alumnos alumno);
+        public void AltaAlumno(Alumnos alumnos);
         public void ActualizarAlumno(Alumnos alumnos);
         public void EliminarAlumno(int IdAlumno);
         public IEnumerable<Alumnos> ListarAlumnos();

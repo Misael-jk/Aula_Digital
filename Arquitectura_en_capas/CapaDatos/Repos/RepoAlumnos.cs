@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Sistema_de_notebooks.CapaDatos.Repos
 {
-    class RepoAlumnos : RepoBase, IRepoAlumnos
+    public class RepoAlumnos : RepoBase, IRepoAlumnos
     {
        public RepoAlumnos(IDbConnection conexion)
        : base(conexion) 
@@ -82,13 +82,40 @@ namespace Sistema_de_notebooks.CapaDatos.Repos
         }
         #endregion
 
+        #region Obtener todos los datos
         public IEnumerable<Alumnos> ListarAlumnos()
         {
-            return new List<Alumnos>();
+            string query = "select * from Alumnos";
+
+            try
+            {
+                return Conexion.Query<Alumnos>(query);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("No se pudo obtener los datos del alumno"+ ex.Message);
+            }
         }
+        #endregion
+
+        #region Obtener por Id
         public Alumnos? DetalleAlumnos(int idAlumno)
         {
-            return null;
+            string query = "select * from Alumnos where idAlumno = unidAlumno";
+
+            DynamicParameters parametros = new DynamicParameters();
+
+            try
+            {
+                parametros.Add("unidAlumno", idAlumno);
+                return Conexion.QueryFirstOrDefault<Alumnos>(query, parametros);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener id del Alumno");
+            }
+
         }
+        #endregion
     }
 }

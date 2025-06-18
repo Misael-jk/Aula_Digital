@@ -4,8 +4,9 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
 {
     interface IRepoPermisosPrestamo
     {
-        public void Alta(PermisoPrestamo permiso);
-        public List<PermisoPrestamo> ListarPermisosPrestamo();
+        public void AltaPermisosPrestamo(PermisoPrestamo permiso);
+        public int EliminarPermisosPrestamo(int idPermisoPrestamo);
+        public IEnumerable<PermisoPrestamo> ListarPermisosPrestamo();
         public PermisoPrestamo? DetallePermisosPrestamo(int idPermiso);
     }
 }

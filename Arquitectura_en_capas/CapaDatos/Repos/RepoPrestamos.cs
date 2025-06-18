@@ -1,4 +1,5 @@
-﻿using Sistema_de_notebooks.CapaDatos;
+﻿using Dapper;
+using Sistema_de_notebooks.CapaDatos;
 using Sistema_de_notebooks.CapaDatos.Interfaces;
 using Sistema_de_notebooks.CapaEntidad;
 using System;
@@ -17,17 +18,63 @@ namespace CapaDatos.Repos
         {
         }
 
-        public void Alta(Prestamos alumnos)
+        #region Alta Prestamo
+        public void AltaPrestamo(Prestamos prestamos)
         {
-        }
+            DynamicParameters parametros = new DynamicParameters();
 
-        public List<Prestamos> ListarPrestamos()
-        {
-            return new List<Prestamos>();
+            parametros.Add("unidPrestamo", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+            parametros.Add("unidPermiso", prestamos.IdPermiso);
+            parametros.Add("unidDocente", prestamos.IdDocente);
+            parametros.Add("unidCarrito", prestamos.IdCarrito);
+            parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
+            parametros.Add("unafechaPactada", prestamos.FechaPactada);
+
+            try
+            {
+                Conexion.Execute("InsertPrestamo", parametros, commandType: CommandType.StoredProcedure);
+                prestamos.IdPrestamo = parametros.Get<int>("unidPrestamo");
+            }
+            catch (Exception)
+            {
+                throw new Exception("Hubo un error al insertar un Prestamo");
+            }
         }
-        public Prestamos? DetallePrestamos(int idAlumno)
+        #endregion
+
+        #region ver los prestamos
+        public IEnumerable<Prestamos> ListarPrestamos()
         {
-            return null;
+            string query = "señect * from Prestamos";
+
+            try
+            {
+                return Conexion.Query<Prestamos>(query);
+            }
+            catch(Exception)
+            {
+                throw new Exception("Error al ver los datos de los prestamos");
+            }
         }
+        #endregion
+
+        #region obtener por Id
+        public Prestamos? DetallePrestamos(int idPrestamo)
+        {
+            string query = "select * from Prestamos where idPrestamo = unidPrestamo";
+
+            DynamicParameters parametros = new DynamicParameters();
+            try
+            {
+                parametros.Add("unidPrestamo", idPrestamo);
+                return Conexion.QueryFirstOrDefault<Prestamos>(query, parametros);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener el id del prestamo");
+            }
+        }
+        #endregion
     }
 }

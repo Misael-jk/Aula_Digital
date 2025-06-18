@@ -82,13 +82,38 @@ namespace CapaDatos.Repos
         }
         #endregion
 
-        public List<Docentes> ListarDocentes()
+        #region Obtener todo los datos
+        public IEnumerable<Docentes> ListarDocentes()
         {
-            return new List<Docentes>();
+            string query = "select * from Docentes";
+
+            try
+            {
+                return Conexion.Query<Docentes>(query);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener los datos de los docentes");
+            }
         }
+        #endregion
+
+        #region Obtener por Id
         public Docentes? DetalleDocentes(int idDocente)
         {
-            return null;
+            string query = "select * from Docentes where idDocente = unidDocente";
+
+            DynamicParameters parametros = new DynamicParameters();
+            try
+            {
+                parametros.Add("unidDocente", idDocente);
+                return Conexion.QueryFirstOrDefault<Docentes>(query, parametros);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener el id del docente");
+            }
         }
+        #endregion
     }
 }

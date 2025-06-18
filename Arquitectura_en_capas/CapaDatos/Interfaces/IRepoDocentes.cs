@@ -7,7 +7,7 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
         public void AltaDocente(Docentes docente);
         public void ActualizarDocente(Docentes docente);
         public void EliminarDocente(int idDocente);
-        public List<Docentes> ListarDocentes();
+        public IEnumerable<Docentes> ListarDocentes();
         public Docentes? DetalleDocentes(int idDocente);
     }
 }
