@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CapaDatos.Repos
+namespace Sistema_de_notebooks.CapaDatos.Repos
 {
-    class RepoNotebooks : RepoBase, IRepoNotebooks
+    public class RepoNotebooks : RepoBase, IRepoNotebooks
     {
         public RepoNotebooks(IDbConnection conexion)
        : base(conexion)

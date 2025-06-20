@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CapaDatos.Repos
 {
-    class RepoCarritos : RepoBase, IRepoCarritos
+    public class RepoCarritos : RepoBase, IRepoCarritos
     {
         public RepoCarritos(IDbConnection conexion)
        : base(conexion)
@@ -92,7 +92,7 @@ namespace CapaDatos.Repos
         #endregion
 
         #region Obtener por Id
-        public Carritos? DetalleCarritos(int idAlumno)
+        public Carritos? DetalleCarritos(int idCarrito)
         {
             string query = "select * from Carritos where idCarrito = unidCarrito";
 
@@ -100,7 +100,7 @@ namespace CapaDatos.Repos
 
             try
             {
-                parametros.Add("unidCarrito", idAlumno);
+                parametros.Add("unidCarrito", idCarrito);
                 return Conexion.QueryFirstOrDefault<Carritos>(query, parametros);
             }
             catch(Exception)

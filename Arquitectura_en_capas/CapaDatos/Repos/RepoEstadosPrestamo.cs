@@ -7,27 +7,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using Dapper;
 
 namespace CapaDatos.Repos
 {
-    class RepoEstadosPrestamo : RepoBase, IRepoEstadosPrestamo
+    public class RepoEstadosPrestamo : RepoBase, IRepoEstadosPrestamo
     {
         public RepoEstadosPrestamo(IDbConnection conexion)
         : base(conexion)
         {
         }
 
-        public void Alta(EstadosPrestamo alumnos)
+        public IEnumerable<EstadosPrestamo> ListarEstadosPrestamo()
         {
-        }
+            string query = "select * from EstadosPrestamo";
 
-        public List<EstadosPrestamo> ListarEstadosPrestamo()
-        {
-            return new List<EstadosPrestamo>();
-        }
-        public EstadosPrestamo? DetalleEstadosPrestamo(int idAlumno)
-        {
-            return null;
+            try
+            {
+                return Conexion.Query<EstadosPrestamo>(query);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener los datos de los estados del prestamo");
+            }
         }
     }
 }

@@ -8,19 +8,44 @@ namespace Sistema_de_notebooks
     public partial class Form1 : Form
     {
         private IDbConnection conexion;
+        private RepoNotebooks repoNotebooks;
+        private RepoEstadosNotebook repoEstados;
 
         public Form1(IDbConnection conexion)
         {
             InitializeComponent();
             this.conexion = conexion;
+            this.repoNotebooks = new RepoNotebooks(conexion);
+            this.repoEstados = new RepoEstadosNotebook(conexion);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            RepoAlumnos repo = new RepoAlumnos(conexion);
+            var todas = repoNotebooks.ListarNotebooks();
+            dataGridView1.DataSource = todas;
 
-            IEnumerable<Alumnos> alumnos = repo.ListarAlumnos();
-            dataGridView1.DataSource = alumnos.ToList();
+            var estados = repoEstados.ListarEstadosNotebook();
+
+            comboBoxEstados.DataSource = estados;
+            comboBoxEstados.DisplayMember = "estadoNotebook"; 
+            comboBoxEstados.ValueMember = "idEstadoNotebook"; 
+            comboBoxEstados.SelectedIndex = -1; 
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxEstados.SelectedValue is int idEstados)
+            {
+                var filtradas = repoEstados.EstadosDeLaNotebook(idEstados);
+                dataGridView1.DataSource = filtradas;
+            }
+            else
+            {
+                var todas = repoNotebooks.ListarNotebooks();
+                dataGridView1.DataSource = todas;
+            }
+
         }
     }
 }
+

@@ -9,27 +9,6 @@ erDiagram
         varchar(40)   email
     }
 
-    Alumnos {
-        smallint      idAlumno   PK
-        int           dni
-        varchar(40)   nombre
-        varchar(40)   apellido
-        varchar(40)   email
-        varchar(40)   curso
-    }
-
-    PermisosPrestamo {
-        smallint   idPermiso    PK
-        smallint   idAlumno     FK
-        smallint   idDocente    FK
-        datetime   fechaPermiso
-    }
-
-    Tecnologia {
-        tinyint       idTecnologia   PK
-        varchar(40)   programa
-    }
-
     EstadosNotebook {
         tinyint       idEstadoNotebook   PK
         varchar(40)   estadoNotebook
@@ -44,7 +23,7 @@ erDiagram
     Carritos {
         tinyint   idCarrito   PK
         smallint  idDocente   FK
-        tinyint   capacidad
+        boolean   disponible
     }
 
     CarritoNotebooks {
@@ -54,12 +33,10 @@ erDiagram
 
     Prestamos {
         int           idPrestamo      PK
-        smallint      idPermiso       FK
         smallint      idDocente       FK
         tinyint       idCarrito       FK
         datetime      fechaPrestamo
         datetime      fechaPactada
-        varchar(40)   tipoPrestamo
     }
 
     EstadoPrestamo {

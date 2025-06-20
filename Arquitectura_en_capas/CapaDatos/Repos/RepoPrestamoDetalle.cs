@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using CapaDatos.DTOs;
+using Dapper;
 using Sistema_de_notebooks.CapaDatos;
 using Sistema_de_notebooks.CapaDatos.Interfaces;
 using Sistema_de_notebooks.CapaEntidad;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CapaDatos.Repos
 {
-    class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
+    public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
     {
         public RepoPrestamoDetalle(IDbConnection conexion)
        : base(conexion)
@@ -35,14 +36,13 @@ namespace CapaDatos.Repos
         #endregion
 
         #region Historial de la notebook
-        public IEnumerable<PrestamoDetalle> HistorialNotebook(int idNotebook)
+        public IEnumerable<HistorialNotebookDTO> HistorialNotebook(int idNotebook)
         {
-            DynamicParameters parametros = new DynamicParameters();
-            parametros.Add("unidNotebook", idNotebook);
+            string query = "select * from WievHistorialNotebook where idNotebook = @idNotebook";
 
             try
             {
-                return Conexion.Query<PrestamoDetalle>("HistorialNotebook", parametros, commandType: CommandType.StoredProcedure);
+                return Conexion.Query<HistorialNotebookDTO>(query, new {idNotebook}).ToList();
             }
             catch (Exception)
             {

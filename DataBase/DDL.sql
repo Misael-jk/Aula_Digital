@@ -13,38 +13,45 @@ create table Docentes (
     constraint UQ_Docentes_Email unique (email)
 );
 
+-- create table Curso(
+--	idCurso tinyint not null auto_increment,
+--	anio tinyint not null,
+--	division tinyint not null,
+-- 	turno varchar(30) not null,
+-- 	constraint PK_Curso primary key(idCurso)
+-- );
 
-create table Alumnos (
-    idAlumno smallint not null auto_increment,
-    dni int unique not null,
-    nombre varchar(40) not null,
-    apellido varchar(40) not null,
-    email varchar(70) not null,
-    curso varchar(30) not null,
-    constraint PK_Alumnos primary key (idAlumno),
-    constraint UQ_Alumnos unique (dni),
-    constraint UQ_Docentes_Email unique (email)
-);
-
-
-create table PermisosPrestamo (
-    idPermiso smallint not null auto_increment,
-    idAlumno smallint not null,
-    idDocente smallint not null,
-    fechaPermiso datetime not null,
-    constraint PK_PermisosPrestamo primary key (idPermiso),
-    constraint FK_PermisosPrestamos_Alumnos foreign key (idAlumno) 
-    	references Alumnos(idAlumno),
-    constraint FK_PermisosPrestamos_Docentes foreign key (idDocente) 
-    	references Docentes(idDocente)
-);
+-- create table Alumnos (
+--     idAlumno smallint not null auto_increment,
+--     dni int not null,
+--     nombre varchar(40) not null,
+--     apellido varchar(40) not null,
+--     email varchar(70) not null,
+--     curso varchar(30) not null,
+--     constraint PK_Alumnos primary key (idAlumno),
+--     constraint UQ_Alumnos unique (dni),
+--     constraint UQ_Docentes_Email unique (email)
+-- );
 
 
-create table Tecnologia (
-	idTecnologia tinyint not null auto_increment,
-    programa varchar(50) not null,
-    constraint PK_Tecnologia primary key (idTecnologia)
-);
+-- create table PermisosPrestamo (
+--     idPermiso smallint not null auto_increment,
+--     idAlumno smallint not null,
+--     idDocente smallint not null,
+--     fechaPermiso datetime not null,
+--     constraint PK_PermisosPrestamo primary key (idPermiso),
+--     constraint FK_PermisosPrestamos_Alumnos foreign key (idAlumno) 
+--     	references Alumnos(idAlumno),
+--     constraint FK_PermisosPrestamos_Docentes foreign key (idDocente) 
+--     	references Docentes(idDocente)
+-- );
+
+
+-- create table Tecnologia (
+-- 	idTecnologia tinyint not null auto_increment,
+--     programa varchar(50) not null,
+--     constraint PK_Tecnologia primary key (idTecnologia)
+-- );
 
 
 create table EstadosNotebook (
@@ -57,11 +64,8 @@ create table EstadosNotebook (
 
 create table Notebooks (
     idNotebook tinyint not null auto_increment,
-    idTecnologia tinyint not null,
     idEstadoNotebook tinyint not null,
     constraint PK_Notebooks primary key (idNotebook),
-    constraint FK_Notebooks_Tecnologia foreign key (idTecnologia)
-        references Tecnologia(idTecnologia),
     constraint FK_Notebooks_EstadosNotebook foreign key (idEstadoNotebook)
     	references EstadosNotebook(idEstadoNotebook)
 );
@@ -79,7 +83,7 @@ create table Notebooks (
 create table Carritos (
     idCarrito tinyint not null auto_increment,
     idDocente smallint not null,
-    capacidad tinyint not null,
+    disponible boolean not null,
     constraint PK_Carritos primary key (idCarrito),
     constraint FK_Carritos_Docentes foreign key (idDocente) 
         references Docentes(idDocente)
@@ -104,30 +108,21 @@ create table CarritoNotebooks (
 
 create table Prestamos (
     idPrestamo int auto_increment,
-    idPermiso smallint, 
     idDocente smallint not null,
     idCarrito tinyint,
     fechaPrestamo datetime not null,
     fechaPactada datetime not null,
-    tipoPrestamo varchar(30) not null,
     constraint PK_Prestamos primary key (idPrestamo),
-    constraint FK_Prestamos_PermisosPrestamo foreign key (idPermiso) 
-    	references PermisosPrestamo(idPermiso),
     constraint FK_Prestamos_Docentes foreign key (idDocente)
         references Docentes(idDocente),
     constraint FK_Prestamos_Carritos foreign key (idCarrito) 
-        references Carritos(idCarrito),
-        
-    constraint CHK_tipoPrestamo check (
-        (tipoPrestamo = 'individual' and idCarrito is null) or
-        (tipoPrestamo = 'carrito' and idCarrito is not null)
-    )
+        references Carritos(idCarrito)
 );
 
 
 CREATE TABLE EstadosPrestamo (
     idEstadoPrestamo tinyint not null auto_increment,
-    estadoPrestamo VARCHAR(40) not null,
+    estadoPrestamo varchar(40) not null,
     constraint PK_EstadoPrestamo primary key (idEstadoPrestamo),
     constraint UQ_EstadoPrestamo unique (estadoPrestamo)
 );

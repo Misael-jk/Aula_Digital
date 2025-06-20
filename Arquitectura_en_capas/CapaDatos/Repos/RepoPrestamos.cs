@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CapaDatos.Repos
 {
-    class RepoPrestamos : RepoBase, IRepoPrestamos
+    public class RepoPrestamos : RepoBase, IRepoPrestamos
     {
         public RepoPrestamos(IDbConnection conexion)
        : base(conexion)
