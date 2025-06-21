@@ -20,7 +20,7 @@ namespace Sistema_de_notebooks.CapaNegocio
         #region Dar alta al carrito
         public void CrearCarrito(Carritos newCarrito)
         {
-            newCarrito.Disponible = true;
+            newCarrito.DisponibleCarrito = true;
             carritos.AltaCarrito(newCarrito);
         }
         #endregion
@@ -43,11 +43,18 @@ namespace Sistema_de_notebooks.CapaNegocio
         public void OcuparCarrito(int idCarrito)
         {
             Carritos? carritoOcupado = carritos.DetalleCarritos(idCarrito); //Busca el Id del carrito
-            
-            if (carritoOcupado != null)
+
+            try
             {
-                carritoOcupado.Disponible = false;
-                carritos.ActualizarCarrito(carritoOcupado);
+                if (carritoOcupado != null)
+                {
+                    carritoOcupado.DisponibleCarrito = false;
+                    carritos.ActualizarCarrito(carritoOcupado);
+                }
+            }
+            catch(Exception)
+            {
+                throw new Exception("No se pudo encontrar el carrito. Ubicacion: capaNegocio");
             }
         }
         #endregion
@@ -64,7 +71,7 @@ namespace Sistema_de_notebooks.CapaNegocio
 
             if (carritoLiberado != null)
             {
-                carritoLiberado.Disponible = true;
+                carritoLiberado.DisponibleCarrito = true;
                 carritos.ActualizarCarrito(carritoLiberado);
             }
         }
@@ -82,7 +89,7 @@ namespace Sistema_de_notebooks.CapaNegocio
                 throw new ArgumentNullException("El carrito no existe. Ubicacion: CapaNegocio");
             }
 
-            return carrito.Disponible;
+            return carrito.DisponibleCarrito;
         }
         #endregion
 

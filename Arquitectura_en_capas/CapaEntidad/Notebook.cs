@@ -10,5 +10,6 @@ namespace Sistema_de_notebooks.CapaEntidad
     {
         public int IdNotebook {get; set;}
         public int IdEstadoNotebook {get; set;}
+        public bool DisponibleNotebook { get; set; }
     }
 }

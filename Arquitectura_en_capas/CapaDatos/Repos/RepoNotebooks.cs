@@ -76,6 +76,15 @@ namespace Sistema_de_notebooks.CapaDatos.Repos
         }
         #endregion
 
+        #region Cammbiar el estado de la notebook
+        public void CambiarDisponibilidad(int idNotebook, bool disponibleNotebook)
+        {
+            string sql = "update Notebooks set disponibleNotebook = @disponibleNotebook where idNotebook = @idNotebook";
+
+            Conexion.Execute(sql, new { disponibleNotebook, idNotebook });
+        }
+        #endregion 
+
         #region Obtener los datos
         public IEnumerable<Notebook> ListarNotebooks()
         {
