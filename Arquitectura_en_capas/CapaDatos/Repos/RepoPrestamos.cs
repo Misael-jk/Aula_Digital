@@ -25,7 +25,6 @@ namespace CapaDatos.Repos
 
             parametros.Add("unidPrestamo", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-            parametros.Add("unidPermiso", prestamos.IdPermiso);
             parametros.Add("unidDocente", prestamos.IdDocente);
             parametros.Add("unidCarrito", prestamos.IdCarrito);
             parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);

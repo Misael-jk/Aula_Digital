@@ -1,16 +1,19 @@
 ﻿using Sistema_de_notebooks.CapaEntidad;
 using System.Data;
 using CapaDatos.Repos;
+using CapaNegocio;
 
 namespace Sistema_de_notebooks.CapaNegocio
 {
     class CarritosCN
     {
-        private readonly RepoCarritos carritos;
+        private readonly RepoCarritos repoCarritos;
+        private readonly CarritoNotebooksCN carritoNotebooksCN;
 
         public CarritosCN(IDbConnection conexion)
         {
-            carritos = new RepoCarritos(conexion);
+            repoCarritos = new RepoCarritos(conexion);
+            carritoNotebooksCN = new CarritoNotebooksCN(conexion);
         }
 
         /*
@@ -21,7 +24,7 @@ namespace Sistema_de_notebooks.CapaNegocio
         public void CrearCarrito(Carritos newCarrito)
         {
             newCarrito.DisponibleCarrito = true;
-            carritos.AltaCarrito(newCarrito);
+            repoCarritos.AltaCarrito(newCarrito);
         }
         #endregion
 
@@ -30,7 +33,7 @@ namespace Sistema_de_notebooks.CapaNegocio
         #region Listar Carrito
         public IEnumerable<Carritos> ListarCarritos()
         {
-            return carritos.ListarCarritos().ToList();
+            return repoCarritos.ListarCarritos().ToList();
         }
         #endregion
 
@@ -42,38 +45,36 @@ namespace Sistema_de_notebooks.CapaNegocio
         #region Ocupar Carrito
         public void OcuparCarrito(int idCarrito)
         {
-            Carritos? carritoOcupado = carritos.DetalleCarritos(idCarrito); //Busca el Id del carrito
+            Carritos? carritoOcupado = repoCarritos.DetalleCarritos(idCarrito); 
 
-            try
-            {
-                if (carritoOcupado != null)
-                {
-                    carritoOcupado.DisponibleCarrito = false;
-                    carritos.ActualizarCarrito(carritoOcupado);
-                }
-            }
-            catch(Exception)
+            if (carritoOcupado == null)
             {
                 throw new Exception("No se pudo encontrar el carrito. Ubicacion: capaNegocio");
             }
+
+            carritoOcupado.DisponibleCarrito = false;
+            repoCarritos.ActualizarCarrito(carritoOcupado);
+            carritoNotebooksCN.DisponibilidadCarritoNotebook(idCarrito, false);
         }
         #endregion
 
 
         /*
         Esta parte cuando se haga la devolucion del carrito se debe invocar este metodo
-        en la clase de prestamo para cambiar su disponibilidad
+        en la clase de prestamo para cambiar su disponibilidad para el carrito y las notebooks del carrito
         */
         #region Desocupar Carrito
         public void DesocuparCarrito(int idCarrito)
         {
-            Carritos? carritoLiberado = carritos.DetalleCarritos(idCarrito); // El Id
+            Carritos? carritoDesocupado = repoCarritos.DetalleCarritos(idCarrito); 
 
-            if (carritoLiberado != null)
+            if (carritoDesocupado == null)
             {
-                carritoLiberado.DisponibleCarrito = true;
-                carritos.ActualizarCarrito(carritoLiberado);
+                throw new Exception("No se pudo encontrar el carrito. Ubicacion: capaNegocio");
             }
+            carritoDesocupado.DisponibleCarrito = true;
+            repoCarritos.ActualizarCarrito(carritoDesocupado);
+            carritoNotebooksCN.DisponibilidadCarritoNotebook(idCarrito, true);
         }
         #endregion
 
@@ -82,11 +83,11 @@ namespace Sistema_de_notebooks.CapaNegocio
         #region Disponibilidad del carrito
         public bool EstaDisponible(int idCarrito)
         {
-            Carritos? carrito = carritos.DetalleCarritos(idCarrito);
+            Carritos? carrito = repoCarritos.DetalleCarritos(idCarrito);
 
             if(carrito == null)
             {
-                throw new ArgumentNullException("El carrito no existe. Ubicacion: CapaNegocio");
+                throw new Exception("El carrito no existe. Ubicacion: CapaNegocio");
             }
 
             return carrito.DisponibleCarrito;

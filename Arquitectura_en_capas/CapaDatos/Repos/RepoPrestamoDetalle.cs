@@ -19,6 +19,27 @@ namespace CapaDatos.Repos
         {
         }
 
+        #region Insertar Detalle del Prestamo
+        public void AltaPrestamoDetalle(PrestamoDetalle prestamoDetalle)
+        {
+            DynamicParameters parametros = new DynamicParameters();
+
+            parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
+            parametros.Add("unidNotebook", prestamoDetalle.IdNotebook);
+            parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
+            parametros.Add("unafechaDevolucion", prestamoDetalle.FechaDevolucion);
+
+            try
+            {
+                Conexion.Execute("InsertPrestamoDetalle", parametros, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Hubo un error al insertar una notebook");
+            }
+        }
+        #endregion
+
         #region ver los datos del detalle
         public IEnumerable<PrestamoDetalle> ListarPrestamoDetalle()
         {
@@ -51,14 +72,64 @@ namespace CapaDatos.Repos
         }
         #endregion
 
-        #region Obtener Detalle por prestamos
-        public IEnumerable<PrestamoDetalle> DetallePorPrestamo(int idPrestamo)
+        #region Obtener Detalle por prestamos y notebooks
+        public PrestamoDetalle? DetallePorPrestamo(int idPrestamo, int idNotebook)
         {
-            var parametros = new DynamicParameters();
+            string query = "select * from PrestamoDetalle where idPrestamo = @idPrestamo and idNotebook = @idNotebook";
+
+            DynamicParameters parametros = new DynamicParameters();
+            parametros.Add("unidPrestamo", idPrestamo);
+            parametros.Add("unidNotebook", idNotebook);
+
+            try
+            {
+                return Conexion.QueryFirstOrDefault<PrestamoDetalle>(query, parametros);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener los detalles del prestamo y la notebook");
+            }
+        }
+        #endregion
+
+        #region Listar por prestamos
+        public IEnumerable<PrestamoDetalle> ListarDetallesPorPrestamo(int idPrestamo)
+        {
+            string query = "select * from PrestamoDetalle where idPrestamo = @unidPrestamo";
+
+            DynamicParameters parametros = new DynamicParameters();
             parametros.Add("unidPrestamo", idPrestamo);
 
-            return Conexion.Query<PrestamoDetalle>("DetallePorPrestamo", parametros, commandType: CommandType.StoredProcedure
-            );
+            try
+            {
+                return Conexion.Query<PrestamoDetalle>(query, parametros);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error al obtener los detalles del préstamo");
+            }
+        }
+
+        #endregion
+
+        #region Actualizar los detalles
+        public void ActualizarDetalle(PrestamoDetalle prestamoDetalle)
+        {
+            DynamicParameters parametros = new DynamicParameters();
+
+            parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
+            parametros.Add("unidNotebook", prestamoDetalle.IdNotebook);
+            parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
+            parametros.Add("unafechaDevolucion", prestamoDetalle.FechaDevolucion);
+
+            try
+            {
+                Conexion.Execute("UpdatePrestamoDetalle", parametros, commandType: CommandType.StoredProcedure);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Hubo un error al actualizar el Detalle del prestamo");
+            }
         }
         #endregion
     }

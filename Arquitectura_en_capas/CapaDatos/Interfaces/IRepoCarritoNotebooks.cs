@@ -11,7 +11,5 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
     interface IRepoCarritoNotebooks
     {
         public IEnumerable<CarritoNotebooks> ListarNotebooksCarrito(int idCarrito);
-        //public bool AgregarNotebookACarrito(int idCarrito, int idNotebook);
-        //public bool QuitarNotebookDeCarrito(int idCarrito, int idNotebook);
     }
 }

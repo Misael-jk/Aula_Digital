@@ -46,6 +46,7 @@ namespace Sistema_de_notebooks.CapaDatos.Repos
 
             parametros.Add("unidNotebook", notebook.IdNotebook);
             parametros.Add("unidEstadoNotebook", notebook.IdEstadoNotebook);
+            parametros.Add("undisponibleNotebook", notebook.DisponibleNotebook);
 
             try
             {
@@ -77,7 +78,7 @@ namespace Sistema_de_notebooks.CapaDatos.Repos
         #endregion
 
         #region Cammbiar el estado de la notebook
-        public void CambiarDisponibilidad(int idNotebook, bool disponibleNotebook)
+        public void CambiarDisponibilidad(IEnumerable<int> idNotebook, bool disponibleNotebook)
         {
             string sql = "update Notebooks set disponibleNotebook = @disponibleNotebook where idNotebook = @idNotebook";
 

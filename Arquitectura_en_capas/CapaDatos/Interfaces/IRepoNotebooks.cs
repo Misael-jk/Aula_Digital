@@ -7,7 +7,7 @@ namespace Sistema_de_notebooks.CapaDatos.Interfaces
         public void AltaNotebook(Notebook notebook);
         public void ActualizarNotebook(Notebook notebook);
         public void EliminarNotebook(int idNotebook);
-        public void CambiarDisponibilidad(int idNotebook, bool disponible);
+        public void CambiarDisponibilidad(IEnumerable<int> idsNotebook, bool disponible);
         public IEnumerable<Notebook> ListarNotebooks();
         public Notebook? DetalleNotebooks(int idNotebook);
     }

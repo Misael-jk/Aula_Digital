@@ -26,6 +26,8 @@ namespace CapaDatos.Repos
             parametros.Add("unidCarrito", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             parametros.Add("unidDocente", carritos.IdDocente);
+            parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
+
 
             try
             {
@@ -46,6 +48,8 @@ namespace CapaDatos.Repos
 
             parametros.Add("unidCarrito", carritos.IdCarrito);
             parametros.Add("unidDocente", carritos.IdDocente);
+            parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
+
 
             try
             {
