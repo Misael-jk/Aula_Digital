@@ -16,14 +16,15 @@ erDiagram
 
     Notebooks {
         tinyint   idNotebook         PK
-        tinyint   idTecnologia       FK
-        tinyint   idEstadoNotebook   FK 
+        tinyint   idEstadoNotebook   FK
+        boolean disponibleNotebook
+
     }
 
     Carritos {
         tinyint   idCarrito   PK
         smallint  idDocente   FK
-        boolean   disponible
+        boolean   disponibleCarrito
     }
 
     CarritoNotebooks {
@@ -51,14 +52,10 @@ erDiagram
         datetime    fechaDevolucion
     }
 
-    Docentes ||--o{ PermisosPrestamo : da
-    Alumnos ||--o{ PermisosPrestamo : recibe
-    PermisosPrestamo ||--o{ Prestamos : autoriza
     Docentes ||--o{ Prestamos : realiza_un
     Docentes ||--o| Carritos : lleva_un
     Carritos ||--o{ CarritoNotebooks : contiene
     Notebooks ||--o{ CarritoNotebooks : estan_en
-    Tecnologia ||--o{ Notebooks : tiene
     EstadosNotebook ||--o{ Notebooks : esta
     Carritos ||--o{ Prestamos : esta_usado_en
     Prestamos ||--o{ PrestamoDetalle : contiene
