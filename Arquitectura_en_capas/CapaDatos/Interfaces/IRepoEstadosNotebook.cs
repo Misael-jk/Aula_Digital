@@ -1,12 +1,10 @@
-﻿using CapaDatos.DTOs;
-using Sistema_de_notebooks.CapaDatos.DTOs;
+﻿using Sistema_de_notebooks.CapaDatos.DTOs;
 using Sistema_de_notebooks.CapaEntidad;
 
-namespace Sistema_de_notebooks.CapaDatos.Interfaces
+namespace Sistema_de_notebooks.CapaDatos.Interfaces;
+
+interface IRepoEstadosNotebook
 {
-    interface IRepoEstadosNotebook
-    {
-        public IEnumerable<EstadosNotebook> ListarEstadosNotebook();
-        public IEnumerable<EstadosNotebookDTO> EstadosDeLaNotebook(int idEstadoNotebook);
-    }
+    public IEnumerable<EstadosNotebook> ListarEstadosNotebook();
+    public IEnumerable<EstadosNotebookDTO> EstadosDeLaNotebook(int idEstadoNotebook);
 }

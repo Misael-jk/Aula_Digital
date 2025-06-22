@@ -1,11 +1,10 @@
 ﻿using Sistema_de_notebooks.CapaEntidad;
 
-namespace Sistema_de_notebooks.CapaDatos.Interfaces
+namespace Sistema_de_notebooks.CapaDatos.Interfaces;
+
+interface IRepoPrestamos
 {
-    interface IRepoPrestamos
-    {
-        public void AltaPrestamo(Prestamos prestamo);
-        public IEnumerable<Prestamos> ListarPrestamos();
-        public Prestamos? DetallePrestamos(int idPrestamo);
-    }
+    public void AltaPrestamo(Prestamos prestamo);
+    public IEnumerable<Prestamos> ListarPrestamos();
+    public Prestamos? DetallePrestamos(int idPrestamo);
 }

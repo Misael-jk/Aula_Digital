@@ -1,15 +1,13 @@
 ﻿using System.Data;
 
-namespace Sistema_de_notebooks.CapaDatos
+namespace Sistema_de_notebooks.CapaDatos;
+
+public abstract class RepoBase
 {
-    public abstract class RepoBase
+    protected readonly IDbConnection Conexion;
+
+    protected RepoBase(IDbConnection conexion)
     {
-        protected readonly IDbConnection Conexion;
-
-        protected RepoBase(IDbConnection conexion)
-        {
-            Conexion = conexion;
-        }
+        Conexion = conexion;
     }
-
 }
