@@ -1,65 +1,97 @@
-```mermaid
+mermaid``` 
 erDiagram
 
-    Docentes {
-        smallint      idDocente   PK
-        int           dni
-        varchar(40)   nombre
-        varchar(40)   apellido
-        varchar(40)   email
-    }
+Encargados {
+    tinyint      idEncargado   PK
+    varchar(40)   usuario
+    varchar(70)   password
+    varchar(40)   nombre
+    varchar(40)   apellido
+    varchar(70)   email
+}
 
-    EstadosNotebook {
-        tinyint       idEstadoNotebook   PK
-        varchar(40)   estadoNotebook
-    }
+Docentes {
+    smallint      idDocente   PK
+    int           dni
+    varchar(40)   nombre
+    varchar(40)   apellido
+    varchar(70)   email
+}
 
-    Notebooks {
-        tinyint   idNotebook         PK
-        tinyint   idEstadoNotebook   FK
-        boolean disponibleNotebook
+EstadosNotebook {
+    tinyint       idEstadoNotebook   PK
+    varchar(40)   estadoNotebook
+}
 
-    }
+Notebooks {
+    tinyint   idNotebook         PK
+    tinyint   idCarrito          FK
+    tinyint   idEstadoNotebook   FK
+    boolean   disponibleNotebook
+}
 
-    Carritos {
-        tinyint   idCarrito   PK
-        smallint  idDocente   FK
-        boolean   disponibleCarrito
-    }
+Carritos {
+    tinyint   idCarrito   PK
+    smallint  idDocente   FK
+    tinyint   cantidad
+    boolean   disponibleCarrito
+}
 
-    CarritoNotebooks {
-        tinyint   idCarrito    PK, FK
-        tinyint   idNotebook   PK, FK
-    }
+Cursos {
+    tinyint        idCurso PK
+    varchar(40)    curso
+}
 
-    Prestamos {
-        int           idPrestamo      PK
-        smallint      idDocente       FK
-        tinyint       idCarrito       FK
-        datetime      fechaPrestamo
-        datetime      fechaPactada
-    }
+Prestamos {
+    int           idPrestamo      PK
+    tinyint       idCurso         FK
+    smallint      idDocente       FK
+    tinyint       idCarrito       FK
+    tinyint       idEncargado     FK
+    datetime      fechaPrestamo
+}
 
-    EstadoPrestamo {
-        tinyint       idEstadoPrestamo   PK
-        varchar(40)   estadoPrestamo
-    }
+EstadosPrestamo {
+    tinyint       idEstadoPrestamo   PK
+    varchar(40)   estadoPrestamo
+}
 
-    PrestamoDetalle {
-        int         idPrestamo         PK, FK
-        tinyint     idNotebook         PK, FK
-        tinyint     idEstadoPrestamo   FK
-        datetime    fechaDevolucion
-    }
+PrestamoDetalle {
+    int         idPrestamo         PK, FK
+    tinyint     idNotebook         PK, FK
+    tinyint     idEstadoPrestamo   FK
+}
 
-    Docentes ||--o{ Prestamos : realiza_un
-    Docentes ||--o| Carritos : lleva_un
-    Carritos ||--o{ CarritoNotebooks : contiene
-    Notebooks ||--o{ CarritoNotebooks : estan_en
-    EstadosNotebook ||--o{ Notebooks : esta
-    Carritos ||--o{ Prestamos : esta_usado_en
-    Prestamos ||--o{ PrestamoDetalle : contiene
-    Notebooks ||--o{ PrestamoDetalle : esta_prestado
-    EstadoPrestamo ||--o{ PrestamoDetalle : esta_en
+Devoluciones {
+    int            idDevolucion       PK
+    int            idPrestamo         FK
+    tinyint        idNotebook         FK
+    smallint       idDocente          FK
+    tinyint        idEstadoPrestamo   FK
+    tinyint        idEncargado        FK
+    datetime       fechaDevolucion
+    varchar(200)   observaciones
+}
 
-´´´
+Encargados ||--o{ Prestamos : realiza
+Encargados ||--o{ Devoluciones : recibe
+
+Docentes ||--o{ Carritos : asigna
+Docentes ||--o{ Prestamos : realiza
+Docentes ||--o{ Devoluciones : devuelve
+
+Cursos ||--o{ Prestamos : contiene
+
+Carritos ||--o{ Notebooks : incluye
+Carritos ||--o{ Prestamos : utilizado
+
+Notebooks ||--o{ PrestamoDetalle : detalle
+Notebooks ||--o{ Devoluciones : devuelta_en
+EstadosNotebook ||--o{ Notebooks : tiene
+
+Prestamos ||--o{ PrestamoDetalle : compone
+Prestamos ||--o{ Devoluciones : relacionado_con
+
+EstadosPrestamo ||--o{ PrestamoDetalle : indica
+EstadosPrestamo ||--o{ Devoluciones : estado_devolucion
+``` 
