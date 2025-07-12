@@ -34,7 +34,6 @@ Notebooks {
 
 Carritos {
     tinyint   idCarrito   PK
-    smallint  idDocente   FK
     tinyint   cantidad
     boolean   disponibleCarrito
 }
@@ -78,7 +77,6 @@ Devoluciones {
 Encargados ||--o{ Prestamos : realiza
 Encargados ||--o{ Devoluciones : recibe
 
-Docentes ||--o{ Carritos : asigna
 Docentes ||--o{ Prestamos : realiza
 Docentes ||--o{ Devoluciones : devuelve
 
