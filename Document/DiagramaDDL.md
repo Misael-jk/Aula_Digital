@@ -2,7 +2,7 @@
 
 ```mermaid
 erDiagram
-
+direction LR
 Encargados {
     tinyint      idEncargado   PK
     varchar(40)   usuario
