@@ -1,3 +1,6 @@
+### Diagrama de Base de datos
+
+```mermaid
 erDiagram
 
 Encargados {
@@ -93,3 +96,5 @@ Prestamos ||--o{ Devoluciones : relacionado_con
 
 EstadosPrestamo ||--o{ PrestamoDetalle : indica
 EstadosPrestamo ||--o{ Devoluciones : estado_devolucion
+
+```
