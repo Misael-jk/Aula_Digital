@@ -1,8 +1,9 @@
-﻿using Sistema_de_notebooks.CapaEntidad;
+﻿using CapaEntidad;
 
-namespace Sistema_de_notebooks.CapaDatos.Interfaces;
+namespace CapaDatos.Interfaces;
 
 interface IRepoEstadosPrestamo
 {
-    public IEnumerable<EstadosPrestamo> ListarEstadosPrestamo();
+    public IEnumerable<EstadosPrestamo> GetAll();
+    public EstadosPrestamo? GetById(int idEstadosPrestamo);
 }

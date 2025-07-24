@@ -1,4 +1,4 @@
-﻿namespace Sistema_de_notebooks.CapaEntidad;
+﻿namespace CapaEntidad;
 
 public class PrestamoDetalle
 {

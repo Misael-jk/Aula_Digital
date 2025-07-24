@@ -1,15 +1,15 @@
 ﻿using CapaDatos.DTOs;
-using Sistema_de_notebooks.CapaEntidad;
+using CapaEntidad;
 
-namespace Sistema_de_notebooks.CapaDatos.Interfaces;
+namespace CapaDatos.Interfaces;
 
 interface IRepoPrestamoDetalle
 {
-    public void AltaPrestamoDetalle(PrestamoDetalle prestamoDetalle);
-    public IEnumerable<PrestamoDetalle> ListarPrestamoDetalle();
+    public void Insert(PrestamoDetalle prestamoDetalle);
+    public void Delete(int idPrestamo, int idElemento);
+    public IEnumerable<PrestamoDetalle> GetByPrestamo(int idPrestamo);
+    public IEnumerable<PrestamoDetalle> GetAll();
+    public PrestamoDetalle? GetByIds(int idPrestamo, int idNotebook);
     public IEnumerable<HistorialNotebookDTO> HistorialNotebook(int idNotebook);
-    public void ActualizarDetalle(PrestamoDetalle prestamoDetalle);
-    public PrestamoDetalle? DetallePorPrestamo(int idPrestamo, int idNotebook);
-    public IEnumerable<PrestamoDetalle> ListarDetallesPorPrestamo(int idPrestamo);
 
 }

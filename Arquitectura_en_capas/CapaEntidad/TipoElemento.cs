@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CapaEntidad
+﻿namespace CapaEntidad;
+public class TipoElemento
 {
-    class TipoElemento
-    {
-    }
+    public int IdEstadoElemento {get; set;}
+    public required string EstadoElemento {get; set;}
 }

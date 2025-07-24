@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CapaEntidad
+﻿namespace CapaEntidad;
+public class Encargado
 {
-    class Encargado
-    {
-    }
+    public int IdEncargado {get; set;}
+    public required string Usuario {get; set;}
+    public required string Password {get; set;}
+    public required string Nombre {get; set;}
+    public required string Apellido {get; set;}
+    public required string Email {get; set;}
 }

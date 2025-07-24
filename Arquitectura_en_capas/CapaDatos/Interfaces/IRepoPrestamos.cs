@@ -1,10 +1,13 @@
-﻿using Sistema_de_notebooks.CapaEntidad;
+﻿using CapaEntidad;
 
-namespace Sistema_de_notebooks.CapaDatos.Interfaces;
+namespace CapaDatos.Interfaces;
 
 interface IRepoPrestamos
 {
-    public void AltaPrestamo(Prestamos prestamo);
-    public IEnumerable<Prestamos> ListarPrestamos();
-    public Prestamos? DetallePrestamos(int idPrestamo);
+    public void Insert(Prestamos prestamo);
+    public void Update(Prestamos prestamo);
+    public void Delete(int idPrestamo);
+    public IEnumerable<Prestamos> GetAll();
+    public Prestamos? GetById(int idPrestamo);
+    public IEnumerable<Prestamos> GetByDocente(int idDocente);
 }

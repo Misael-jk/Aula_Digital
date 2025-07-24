@@ -6,7 +6,7 @@ using System.Data;
 
 namespace Sistema_de_notebooks.CapaDatos.Repos;
 
-public class RepoEstadosNotebook : RepoBase, IRepoEstadosNotebook
+public class RepoEstadosNotebook : RepoBase, IRepoEstadosElemento
 {
     public RepoEstadosNotebook(IDbConnection conexion)
    : base(conexion)

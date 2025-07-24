@@ -1,12 +1,12 @@
-﻿using Sistema_de_notebooks.CapaEntidad;
+﻿using CapaEntidad;
 
-namespace Sistema_de_notebooks.CapaDatos.Interfaces;
+namespace CapaDatos.Interfaces;
 
 interface IRepoCarritos
 {
-    public void AltaCarrito(Carritos carrito);
-    public void ActualizarCarrito(Carritos carrito);
-    public void EliminarCarrito(int idCarrito);
-    public IEnumerable<Carritos> ListarCarritos();
-    public Carritos? DetalleCarritos(int idCarrito);
+    public void Insert(Carritos carrito);
+    public void Update(Carritos carrito);
+    public void Delete(int idCarrito);
+    public IEnumerable<Carritos> GetAll();
+    public Carritos? GetById(int idCarrito);
 }
