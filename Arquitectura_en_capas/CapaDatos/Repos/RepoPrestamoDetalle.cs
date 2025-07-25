@@ -52,6 +52,25 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
     }
     #endregion
 
+    #region Eliminar detalles
+    public void Delete(int idPrestamo, int idElemento)
+    {
+        DynamicParameters parametros = new DynamicParameters();
+
+        parametros.Add("unidPrestamo", idPrestamo);
+        parametros.Add("unidElemento", idElemento);
+
+        try
+        {
+            Conexion.Execute("DeletePrestamo", parametros, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al eliminar los detalles del prestamo");
+        }
+    }
+    #endregion
+
     #region ver los datos del detalle
     public IEnumerable<PrestamoDetalle> GetAll()
     {
@@ -68,30 +87,13 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
     }
     #endregion
 
-    #region Historial de la notebook
-    public IEnumerable<HistorialNotebookDTO> HistorialNotebook(int idNotebook)
-    {
-        string query = "select * from WievHistorialNotebook where idNotebook = @idNotebook";
-
-        try
-        {
-            return Conexion.Query<HistorialNotebookDTO>(query, new {idNotebook}).ToList();
-        }
-        catch (Exception)
-        {
-            throw new Exception("Error al obtener el historial de la notebook");
-        }
-    }
-    #endregion
-
     #region Obtener Detalle por prestamos y notebooks
-    public PrestamoDetalle? DetallePorPrestamo(int idPrestamo, int idNotebook)
+    public PrestamoDetalle? GetByPrestamo(int idPrestamo)
     {
-        string query = "select * from PrestamoDetalle where idPrestamo = @idPrestamo and idNotebook = @idNotebook";
+        string query = "select * from PrestamoDetalle where idPrestamo = @idPrestamo";
 
         DynamicParameters parametros = new DynamicParameters();
         parametros.Add("unidPrestamo", idPrestamo);
-        parametros.Add("unidNotebook", idNotebook);
 
         try
         {
@@ -99,29 +101,10 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
         }
         catch (Exception)
         {
-            throw new Exception("Error al obtener los detalles del prestamo y la notebook");
+            throw new Exception("Error al obtener los detalles del prestamo");
         }
     }
     #endregion
 
-    #region Listar por prestamos
-    public IEnumerable<PrestamoDetalle> ListarDetallesPorPrestamo(int idPrestamo)
-    {
-        string query = "select * from PrestamoDetalle where idPrestamo = @unidPrestamo";
-
-        DynamicParameters parametros = new DynamicParameters();
-        parametros.Add("unidPrestamo", idPrestamo);
-
-        try
-        {
-            return Conexion.Query<PrestamoDetalle>(query, parametros);
-        }
-        catch (Exception)
-        {
-            throw new Exception("Error al obtener los detalles del préstamo");
-        }
-    }
-
-    #endregion
 
 }

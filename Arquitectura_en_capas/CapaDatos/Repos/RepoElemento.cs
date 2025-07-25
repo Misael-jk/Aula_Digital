@@ -21,6 +21,8 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
         parametros.Add("unidCarrito", elemento.IdCarrito);
         parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
+        parametros.Add("unnumeroSerie", elemento.numeroSerie);
+        parametros.Add("uncodigoBarra", elemento.codigoBarra);
         parametros.Add("unDisponible", elemento.Disponible);
 
 
@@ -45,6 +47,8 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
         parametros.Add("unidCarrito", elemento.IdCarrito);
         parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
+        parametros.Add("unnumeroSerie", elemento.numeroSerie);
+        parametros.Add("uncodigoBarra", elemento.codigoBarra);
         parametros.Add("unDisponible", elemento.Disponible); ;
 
         try

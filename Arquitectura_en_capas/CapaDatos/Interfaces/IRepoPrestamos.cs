@@ -9,5 +9,5 @@ interface IRepoPrestamos
     public void Delete(int idPrestamo);
     public IEnumerable<Prestamos> GetAll();
     public Prestamos? GetById(int idPrestamo);
-    public IEnumerable<Prestamos> GetByDocente(int idDocente);
+    public Prestamos? GetByDocente(int idDocente);
 }

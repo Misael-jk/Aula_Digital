@@ -1,7 +1,6 @@
 ﻿using Dapper;
-using Sistema_de_notebooks.CapaDatos;
-using Sistema_de_notebooks.CapaDatos.Interfaces;
-using Sistema_de_notebooks.CapaEntidad;
+using CapaDatos.Interfaces;
+using CapaEntidad;
 using System.Data;
 
 namespace CapaDatos.Repos;
@@ -14,16 +13,17 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
     }
 
     #region Alta Prestamo
-    public void AltaPrestamo(Prestamos prestamos)
+    public void Insert(Prestamos prestamos)
     {
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidPrestamo", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
+        parametros.Add("unidCurso", prestamos.IdCurso);
         parametros.Add("unidDocente", prestamos.IdDocente);
         parametros.Add("unidCarrito", prestamos.IdCarrito);
+        parametros.Add("unidEncargado", prestamos.IdEncargado);
         parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
-        parametros.Add("unafechaPactada", prestamos.FechaPactada);
 
         try
         {
@@ -37,10 +37,51 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
     }
     #endregion
 
-    #region ver los prestamos
-    public IEnumerable<Prestamos> ListarPrestamos()
+    #region Actualizar Prestamo
+    public void Update(Prestamos prestamos)
     {
-        string query = "señect * from Prestamos";
+        DynamicParameters parametros = new DynamicParameters();
+
+        parametros.Add("unidPrestamo", prestamos.IdPrestamo);
+        parametros.Add("unidCurso", prestamos.IdCurso);
+        parametros.Add("unidDocente", prestamos.IdDocente);
+        parametros.Add("unidCarrito", prestamos.IdCarrito);
+        parametros.Add("unidEncargado", prestamos.IdEncargado);
+        parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
+
+        try
+        {
+            Conexion.Execute("UpdatePrestamo", parametros, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al Actualizar un Prestamo");
+        }
+    }
+    #endregion
+
+    #region Eliminar Prestamo
+    public void Delete(int idPrestamo)
+    {
+        DynamicParameters parametros = new DynamicParameters();
+
+        parametros.Add("unidPrestamo", idPrestamo);
+
+        try
+        {
+            Conexion.Execute("DeletePrestamo", parametros, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al eliminar un Prestamo");
+        }
+    }
+    #endregion
+
+    #region ver los prestamos
+    public IEnumerable<Prestamos> GetAll()
+    {
+        string query = "select * from Prestamos";
 
         try
         {
@@ -54,7 +95,7 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
     #endregion
 
     #region obtener por Id
-    public Prestamos? DetallePrestamos(int idPrestamo)
+    public Prestamos? GetById(int idPrestamo)
     {
         string query = "select * from Prestamos where idPrestamo = unidPrestamo";
 
@@ -67,6 +108,24 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
         catch (Exception)
         {
             throw new Exception("Error al obtener el id del prestamo");
+        }
+    }
+    #endregion
+
+    #region obtener por id Docente
+    public Prestamos? GetByDocente(int idDocente)
+    {
+        string query = "select * from Prestamos where idDocente = unidDocente";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("unidDocente", idDocente);
+            return Conexion.QueryFirstOrDefault<Prestamos>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el id del Docente en Prestamo");
         }
     }
     #endregion

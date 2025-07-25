@@ -8,5 +8,5 @@ interface IRepoEncargados
     public void Update(Encargado encargados);
     public void Delete(int idEncargado);
     public IEnumerable<Encargado> GetAll();
-    public Docentes? GetById(int idEncargado);
+    public Encargado? GetById(int idEncargado);
 }
