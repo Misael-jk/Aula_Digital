@@ -36,6 +36,8 @@ Elementos {
     tinyint      idTipoElemento     FK
     tinyint      idCarrito          FK
     tinyint      idEstadoElemento   FK
+    varchar(40)  numeroSerie
+    varchar(40)  codigoBarra
     boolean      disponible
 }
 

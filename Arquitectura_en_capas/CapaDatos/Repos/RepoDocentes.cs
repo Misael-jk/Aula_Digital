@@ -1,7 +1,6 @@
 ﻿using Dapper;
-using Sistema_de_notebooks.CapaDatos;
-using Sistema_de_notebooks.CapaDatos.Interfaces;
-using Sistema_de_notebooks.CapaEntidad;
+using CapaDatos.Interfaces;
+using CapaEntidad;
 using System.Data;
 
 namespace CapaDatos.Repos;
@@ -14,7 +13,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     }
 
     #region Alta Docente
-    public void AltaDocente(Docentes docentes)
+    public void Insert(Docentes docentes)
     {
         DynamicParameters parametros = new DynamicParameters();
 
@@ -38,7 +37,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     #endregion
 
     #region Actualizar Docente
-    public void ActualizarDocente(Docentes docentes)
+    public void Update(Docentes docentes)
     {
         DynamicParameters parametros = new DynamicParameters();
 
@@ -60,7 +59,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     #endregion
 
     #region Eliminar Docente
-    public void EliminarDocente(int idDocente)
+    public void Delete(int idDocente)
     {
         DynamicParameters parametros = new DynamicParameters();
 
@@ -78,7 +77,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     #endregion
 
     #region Obtener todo los datos
-    public IEnumerable<Docentes> ListarDocentes()
+    public IEnumerable<Docentes> GetAll()
     {
         string query = "select * from Docentes";
 
@@ -94,7 +93,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     #endregion
 
     #region Obtener por Id
-    public Docentes? DetalleDocentes(int idDocente)
+    public Docentes? GetById(int idDocente)
     {
         string query = "select * from Docentes where idDocente = unidDocente";
 

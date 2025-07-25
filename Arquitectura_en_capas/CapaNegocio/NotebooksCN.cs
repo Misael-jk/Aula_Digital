@@ -6,11 +6,11 @@ namespace CapaNegocio;
 
 public class NotebooksCN
 {
-    private readonly RepoNotebooks repoNotebooks;
+    private readonly RepoElemento repoNotebooks;
 
     public NotebooksCN(IDbConnection conexion)
     {
-        repoNotebooks = new RepoNotebooks(conexion);
+        repoNotebooks = new RepoElemento(conexion);
     }
 
     /*

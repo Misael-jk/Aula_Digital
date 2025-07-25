@@ -9,7 +9,6 @@ interface IRepoPrestamoDetalle
     public void Delete(int idPrestamo, int idElemento);
     public IEnumerable<PrestamoDetalle> GetByPrestamo(int idPrestamo);
     public IEnumerable<PrestamoDetalle> GetAll();
-    public PrestamoDetalle? GetByIds(int idPrestamo, int idNotebook);
-    public IEnumerable<HistorialNotebookDTO> HistorialNotebook(int idNotebook);
+    public PrestamoDetalle? GetByIds(int idPrestamo, int idElemento);
 
 }

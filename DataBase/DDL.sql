@@ -53,9 +53,13 @@ create table Elementos (
     idElemento tinyint not null auto_increment,
     idTipoElemento tinyint not null,
     idCarrito tinyint,
-    idEstadoElemento tinyint,
+    idEstadoElemento tinyint not null,
+    numeroSerie varchar(40) not null,
+    codigoBarra varchar(40) not null,
     disponible boolean not null,
     constraint PK_Elementos primary key (idElemento),
+    constraint UQ_Elementos_numeroSerie unique (numeroSerie),
+    constraint UQ_Elementos_codigoBarra unique (codigoBarra),
     constraint FK_Elementos_TipoElemento foreign key (idTipoElemento)
         references tipoElemento(idTipoElemento),
     constraint FK_Elementos_Carrito foreign key (idCarrito)

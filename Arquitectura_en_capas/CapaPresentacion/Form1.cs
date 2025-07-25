@@ -8,14 +8,14 @@ namespace Sistema_de_notebooks
     public partial class Form1 : Form
     {
         private IDbConnection conexion;
-        private RepoNotebooks repoNotebooks;
+        private RepoElemento repoNotebooks;
         private RepoEstadosNotebook repoEstados;
 
         public Form1(IDbConnection conexion)
         {
             InitializeComponent();
             this.conexion = conexion;
-            this.repoNotebooks = new RepoNotebooks(conexion);
+            this.repoNotebooks = new RepoElemento(conexion);
             this.repoEstados = new RepoEstadosNotebook(conexion);
         }
 

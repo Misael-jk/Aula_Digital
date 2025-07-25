@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Sistema_de_notebooks.CapaDatos;
+namespace CapaDatos;
 
 public abstract class RepoBase
 {

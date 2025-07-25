@@ -1,8 +1,6 @@
-﻿using CapaDatos.DTOs;
-using Dapper;
-using Sistema_de_notebooks.CapaDatos;
-using Sistema_de_notebooks.CapaDatos.Interfaces;
-using Sistema_de_notebooks.CapaEntidad;
+﻿using Dapper;
+using CapaDatos.Interfaces;
+using CapaEntidad;
 using System.Data;
 
 namespace CapaDatos.Repos;
@@ -15,14 +13,13 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
     }
 
     #region Insertar Detalle del Prestamo
-    public void AltaPrestamoDetalle(PrestamoDetalle prestamoDetalle)
+    public void Insert(PrestamoDetalle prestamoDetalle)
     {
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
-        parametros.Add("unidNotebook", prestamoDetalle.IdNotebook);
+        parametros.Add("unidElemento", prestamoDetalle.IdElemento);
         parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
-        parametros.Add("unafechaDevolucion", prestamoDetalle.FechaDevolucion);
 
         try
         {
@@ -30,13 +27,33 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
         }
         catch (Exception)
         {
-            throw new Exception("Hubo un error al insertar una notebook");
+            throw new Exception("Hubo un error al dar de alta el detalle del prestamo");
+        }
+    }
+    #endregion
+
+    #region Actualizar los detalles
+    public void Update(PrestamoDetalle prestamoDetalle)
+    {
+        DynamicParameters parametros = new DynamicParameters();
+
+        parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
+        parametros.Add("unidElemento", prestamoDetalle.IdElemento);
+        parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
+
+        try
+        {
+            Conexion.Execute("UpdatePrestamoDetalle", parametros, commandType: CommandType.StoredProcedure);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al actualizar el Detalle del prestamo");
         }
     }
     #endregion
 
     #region ver los datos del detalle
-    public IEnumerable<PrestamoDetalle> ListarPrestamoDetalle()
+    public IEnumerable<PrestamoDetalle> GetAll()
     {
         string query = "select * from PrestamoDetalle";
 
@@ -107,24 +124,4 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
 
     #endregion
 
-    #region Actualizar los detalles
-    public void ActualizarDetalle(PrestamoDetalle prestamoDetalle)
-    {
-        DynamicParameters parametros = new DynamicParameters();
-
-        parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
-        parametros.Add("unidNotebook", prestamoDetalle.IdNotebook);
-        parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
-        parametros.Add("unafechaDevolucion", prestamoDetalle.FechaDevolucion);
-
-        try
-        {
-            Conexion.Execute("UpdatePrestamoDetalle", parametros, commandType: CommandType.StoredProcedure);
-        }
-        catch (Exception)
-        {
-            throw new Exception("Hubo un error al actualizar el Detalle del prestamo");
-        }
-    }
-    #endregion
 }

@@ -1,7 +1,6 @@
 ﻿using Dapper;
-using Sistema_de_notebooks.CapaDatos;
-using Sistema_de_notebooks.CapaDatos.Interfaces;
-using Sistema_de_notebooks.CapaEntidad;
+using CapaDatos.Interfaces;
+using CapaEntidad;
 using System.Data;
 
 namespace CapaDatos.Repos;
@@ -14,15 +13,12 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     }
 
     #region Alta Carrito
-    public void AltaCarrito(Carritos carritos)
+    public void Insert(Carritos carritos)
     {
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidCarrito", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-        parametros.Add("unidDocente", carritos.IdDocente);
         parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
-
 
         try
         {
@@ -37,12 +33,11 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     #endregion 
 
     #region Actualizar Carrito
-    public void ActualizarCarrito(Carritos carritos)
+    public void Update(Carritos carritos)
     {
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidCarrito", carritos.IdCarrito);
-        parametros.Add("unidDocente", carritos.IdDocente);
         parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
 
 
@@ -58,7 +53,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     #endregion
 
     #region Eliminar Carrito
-    public void EliminarCarrito(int idCarrito)
+    public void Delete(int idCarrito)
     {
         DynamicParameters parametros = new DynamicParameters();
 
@@ -76,7 +71,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     #endregion
 
     #region Obtener todos los datos
-    public IEnumerable<Carritos> ListarCarritos()
+    public IEnumerable<Carritos> GetAll()
     {
         string query = "select * from Carritos";
         try
@@ -91,7 +86,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     #endregion
 
     #region Obtener por Id
-    public Carritos? DetalleCarritos(int idCarrito)
+    public Carritos? GetById(int idCarrito)
     {
         string query = "select * from Carritos where idCarrito = unidCarrito";
 
