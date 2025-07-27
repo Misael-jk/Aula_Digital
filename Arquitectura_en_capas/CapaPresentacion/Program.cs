@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using CapaDatos;
 using System.Data;
-using Sistema_de_notebooks.CapaDatos;
 using MySql.Data.MySqlClient;
 
 namespace Sistema_de_notebooks

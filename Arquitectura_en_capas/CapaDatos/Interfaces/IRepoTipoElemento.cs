@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoTipoElemento
+public interface IRepoTipoElemento
 {
     public void Insert(TipoElemento tipoElemento);
     public void Update(TipoElemento tipoElemento);

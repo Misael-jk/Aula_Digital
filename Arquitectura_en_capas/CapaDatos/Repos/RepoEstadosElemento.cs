@@ -5,7 +5,7 @@ using System.Data;
 
 namespace CapaDatos.Repos;
 
-class RepoEstadosElemento : RepoBase, IRepoEstadosElemento
+public class RepoEstadosElemento : RepoBase, IRepoEstadosElemento
 {
     public RepoEstadosElemento(IDbConnection conexion)
     : base(conexion)
@@ -15,7 +15,7 @@ class RepoEstadosElemento : RepoBase, IRepoEstadosElemento
     #region Mostrar todos los estados de los elementos
     public IEnumerable<EstadosElemento> GetAll()
     {
-        string query = "select * from EstadosElemento";
+        string query = "select idEstadoElemento, estadoElemento AS estadoelementonombre from EstadosElemento";
 
         try
         {

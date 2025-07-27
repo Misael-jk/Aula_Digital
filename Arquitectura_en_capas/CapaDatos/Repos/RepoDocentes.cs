@@ -83,7 +83,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
 
         try
         {
-            return Conexion.Query<Docentes>(query);
+            return Conexion.Query<Docentes>(query).ToList();
         }
         catch (Exception)
         {

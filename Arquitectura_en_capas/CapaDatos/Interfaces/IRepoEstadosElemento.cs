@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoEstadosElemento
+public interface IRepoEstadosElemento
 {
     public IEnumerable<EstadosElemento> GetAll();
     public EstadosElemento? GetById(int idEstadosElemento);

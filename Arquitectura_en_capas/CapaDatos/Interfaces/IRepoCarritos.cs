@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoCarritos
+public interface IRepoCarritos
 {
     public void Insert(Carritos carrito);
     public void Update(Carritos carrito);

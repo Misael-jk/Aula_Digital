@@ -18,7 +18,8 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidCarrito", dbType: DbType.Int32, direction: ParameterDirection.Output);
-        parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
+        parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
+        parametros.Add("undisponibleCarrito", carritos.DisponibleCarrito);
 
         try
         {
@@ -38,6 +39,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidCarrito", carritos.IdCarrito);
+        parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
         parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
 
 

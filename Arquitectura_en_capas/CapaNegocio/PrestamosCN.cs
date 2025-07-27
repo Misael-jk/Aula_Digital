@@ -1,154 +1,154 @@
 ﻿using CapaDatos.Repos;
 using CapaNegocio;
-using Sistema_de_notebooks.CapaEntidad;
+using CapaEntidad;
 using System.Data;
 
 namespace Sistema_de_notebooks.CapaNegocio;
 
 public class PrestamosCN
 {
-    private readonly RepoPrestamos repoPrestamos;
-    private readonly CarritosCN carritoNegocio;
-    private readonly RepoPrestamoDetalle repoPrestamoDetalle;
-    private readonly NotebooksCN notebookCN;
-    private readonly PrestamoDetalleCN prestamoDetalleCN;
-    private readonly CarritoNotebooksCN carritoNotebooksCN;
+    //private readonly RepoPrestamos repoPrestamos;
+    //private readonly CarritosCN carritoNegocio;
+    //private readonly RepoPrestamoDetalle repoPrestamoDetalle;
+    //private readonly ElementosCN notebookCN;
+    //private readonly PrestamoDetalleCN prestamoDetalleCN;
+    //private readonly CarritoNotebooksCN carritoNotebooksCN;
 
-    public PrestamosCN(IDbConnection conexion)
-    {
-        repoPrestamos = new RepoPrestamos(conexion);
-        carritoNegocio = new CarritosCN(conexion);
-        repoPrestamoDetalle = new RepoPrestamoDetalle(conexion);
-        notebookCN = new NotebooksCN(conexion);
-        prestamoDetalleCN = new PrestamoDetalleCN(conexion);
-        carritoNotebooksCN = new CarritoNotebooksCN(conexion);
-    }
+    //public PrestamosCN(IDbConnection conexion)
+    //{
+    //    repoPrestamos = new RepoPrestamos(conexion);
+    //    carritoNegocio = new CarritosCN(conexion);
+    //    repoPrestamoDetalle = new RepoPrestamoDetalle(conexion);
+    //    notebookCN = new ElementosCN(conexion);
+    //    prestamoDetalleCN = new PrestamoDetalleCN(conexion);
+    //    carritoNotebooksCN = new CarritoNotebooksCN(conexion);
+    //}
 
-    // Muestra los datos de los prestamos
-    #region Mostrar los datos del prestamo
-    public IEnumerable<Prestamos> ListarPrestamos()
-    {
-        return repoPrestamos.ListarPrestamos().ToList();
-    }
-    #endregion
-
-
-    /*
-    En esta region se realiza un prestamo con carrito cumpliendo con los requisitos necesario para hacer
-    un prestamo, verifica que la fecha pactada deba ser mayor a la actual y que el carrito que eliga este
-    disponible para luego insertarla en el prestamo, Luego obtiene las notebooks asociadas al carrito para
-    dar de alta tambien al detalle.
-    */
-    #region Hacer un prestamo con carrito
-    public bool HacerPrestamoCarrito(Prestamos newPrestamo)
-    {
-        if (newPrestamo.FechaPactada < DateTime.Now)
-        {
-            throw new Exception("La fecha debe ser fecha mayor a la actual");
-        }
-
-        bool disponible = carritoNegocio.EstaDisponible(newPrestamo.IdCarrito.Value);
-
-        if (disponible != true)
-        {
-            throw new Exception("El carrito que eligio no esta disponible");
-        }
-
-        /*
-        En esta parte cuando elige un carrito disponible ocupa el carrito actualizando la disponibilidad tanto
-        del carrito como de sus notebooks que la componen tambien, luego inserta todos los datos del prestamo para
-        luego obtener las notebooks del carrito e insertar los detalles
-        */
-        carritoNegocio.OcuparCarrito(newPrestamo.IdCarrito.Value);
-
-        newPrestamo.FechaPrestamo = DateTime.Now;
-        repoPrestamos.AltaPrestamo(newPrestamo);
-
-        IEnumerable<int> idNotebooks = carritoNotebooksCN.NotebooksDelCarrito(newPrestamo.IdCarrito.Value);
-        prestamoDetalleCN.AgregarDetalles(newPrestamo.IdPrestamo, idNotebooks);
-
-        return true;
-    }
-    #endregion
+    //// Muestra los datos de los prestamos
+    //#region Mostrar los datos del prestamo
+    //public IEnumerable<Prestamos> ListarPrestamos()
+    //{
+    //    return repoPrestamos.ListarPrestamos().ToList();
+    //}
+    //#endregion
 
 
-    /*
-    Aqui se realiza el prestamo pero sin carrito, es decir que va a pedir prestado al menos una notebook
-    se verifica que haiga una al menos una notebook, la fecha pactada correspondiente, poner el idCarrito en 
-    null e insertar el prestamo y los detalles.
-    */
-    #region Hacer un prestamo individual
-    public bool HacerPrestamoNotebooks(Prestamos newPrestamo, IEnumerable<int> idNotebooks)
-    {
-        if (idNotebooks == null)
-        {
-            throw new Exception("Se debe prestar al menos una notebook");
-        }
+    ///*
+    //En esta region se realiza un prestamo con carrito cumpliendo con los requisitos necesario para hacer
+    //un prestamo, verifica que la fecha pactada deba ser mayor a la actual y que el carrito que eliga este
+    //disponible para luego insertarla en el prestamo, Luego obtiene las notebooks asociadas al carrito para
+    //dar de alta tambien al detalle.
+    //*/
+    //#region Hacer un prestamo con carrito
+    //public bool HacerPrestamoCarrito(Prestamos newPrestamo)
+    //{
+    //    if (newPrestamo.FechaPactada < DateTime.Now)
+    //    {
+    //        throw new Exception("La fecha debe ser fecha mayor a la actual");
+    //    }
 
-        if (newPrestamo.FechaPactada < DateTime.Now)
-        {
-            throw new Exception("la fecha debe ser mayor a la actual");
-        }
+    //    bool disponible = carritoNegocio.EstaDisponible(newPrestamo.IdCarrito.Value);
 
-        newPrestamo.IdCarrito = null; 
-        newPrestamo.FechaPrestamo = DateTime.Now;
+    //    if (disponible != true)
+    //    {
+    //        throw new Exception("El carrito que eligio no esta disponible");
+    //    }
 
-        repoPrestamos.AltaPrestamo(newPrestamo);
-        prestamoDetalleCN.AgregarDetalles(newPrestamo.IdPrestamo, idNotebooks);
+    //    /*
+    //    En esta parte cuando elige un carrito disponible ocupa el carrito actualizando la disponibilidad tanto
+    //    del carrito como de sus notebooks que la componen tambien, luego inserta todos los datos del prestamo para
+    //    luego obtener las notebooks del carrito e insertar los detalles
+    //    */
+    //    carritoNegocio.OcuparCarrito(newPrestamo.IdCarrito.Value);
 
-        return true;
-    }
-    #endregion
+    //    newPrestamo.FechaPrestamo = DateTime.Now;
+    //    repoPrestamos.AltaPrestamo(newPrestamo);
+
+    //    IEnumerable<int> idNotebooks = carritoNotebooksCN.NotebooksDelCarrito(newPrestamo.IdCarrito.Value);
+    //    prestamoDetalleCN.AgregarDetalles(newPrestamo.IdPrestamo, idNotebooks);
+
+    //    return true;
+    //}
+    //#endregion
+
+
+    ///*
+    //Aqui se realiza el prestamo pero sin carrito, es decir que va a pedir prestado al menos una notebook
+    //se verifica que haiga una al menos una notebook, la fecha pactada correspondiente, poner el idCarrito en 
+    //null e insertar el prestamo y los detalles.
+    //*/
+    //#region Hacer un prestamo individual
+    //public bool HacerPrestamoNotebooks(Prestamos newPrestamo, IEnumerable<int> idNotebooks)
+    //{
+    //    if (idNotebooks == null)
+    //    {
+    //        throw new Exception("Se debe prestar al menos una notebook");
+    //    }
+
+    //    if (newPrestamo.FechaPactada < DateTime.Now)
+    //    {
+    //        throw new Exception("la fecha debe ser mayor a la actual");
+    //    }
+
+    //    newPrestamo.IdCarrito = null; 
+    //    newPrestamo.FechaPrestamo = DateTime.Now;
+
+    //    repoPrestamos.AltaPrestamo(newPrestamo);
+    //    prestamoDetalleCN.AgregarDetalles(newPrestamo.IdPrestamo, idNotebooks);
+
+    //    return true;
+    //}
+    //#endregion
 
   
 
 
-    /*
-    Esta region se realizara la devolucion, verificando si existe el prestamo y que ese prestamo tenga detalles
-    Luego hace las funciones de cuando se devuelve un prestamo como cambiar su estado y la fecha de la devolucion
-    para actualizarla en el detalle. Tambien verificamos si llevo carrito o no, si la llevo se cambia su disponibilidad
-    tanto del carrito y sus respectivas notebook y sino pidio carrito tambien va a cambiar el estado de las notebook que 
-    se llevo ya sea una o algunas sin carrito.
-    */
-    #region Devolucion del Prestamo
-    public bool HacerDevolucion(int idPrestamo, int idEstadoDevuelto)
-    {
-        Prestamos? prestamo = repoPrestamos.DetallePrestamos(idPrestamo);
+    ///*
+    //Esta region se realizara la devolucion, verificando si existe el prestamo y que ese prestamo tenga detalles
+    //Luego hace las funciones de cuando se devuelve un prestamo como cambiar su estado y la fecha de la devolucion
+    //para actualizarla en el detalle. Tambien verificamos si llevo carrito o no, si la llevo se cambia su disponibilidad
+    //tanto del carrito y sus respectivas notebook y sino pidio carrito tambien va a cambiar el estado de las notebook que 
+    //se llevo ya sea una o algunas sin carrito.
+    //*/
+    //#region Devolucion del Prestamo
+    //public bool HacerDevolucion(int idPrestamo, int idEstadoDevuelto)
+    //{
+    //    Prestamos? prestamo = repoPrestamos.DetallePrestamos(idPrestamo);
 
-        if (prestamo == null)
-        {
-            throw new Exception("El prestamo que eligiste no existe");
-        }
+    //    if (prestamo == null)
+    //    {
+    //        throw new Exception("El prestamo que eligiste no existe");
+    //    }
 
-        // cambia el estado de las notebooks devueltas y la fecha para luego actualizarlas
-        IEnumerable<PrestamoDetalle> detalles = repoPrestamoDetalle.ListarDetallesPorPrestamo(idPrestamo);
+    //    // cambia el estado de las notebooks devueltas y la fecha para luego actualizarlas
+    //    IEnumerable<PrestamoDetalle> detalles = repoPrestamoDetalle.ListarDetallesPorPrestamo(idPrestamo);
 
-        foreach (PrestamoDetalle detalle in detalles)
-        {
-            detalle.IdEstadoPrestamo = idEstadoDevuelto;
-            detalle.FechaDevolucion = DateTime.Now;
-            repoPrestamoDetalle.ActualizarDetalle(detalle);
-        }
+    //    foreach (PrestamoDetalle detalle in detalles)
+    //    {
+    //        detalle.IdEstadoPrestamo = idEstadoDevuelto;
+    //        detalle.FechaDevolucion = DateTime.Now;
+    //        repoPrestamoDetalle.ActualizarDetalle(detalle);
+    //    }
 
-        /*
-        Aqui se utiliza una funcion LINQ para traer las notebooks del detalle. Luego verifica si llevo
-        carrito para desocuparla (cambia tambien a las notebooks que traia con ella) y si no llevo 
-        cambia la disponibilidad de las notebooks del detalle (osea de las notebooks que se prestaron)
-        */
-        IEnumerable<int> idNotebooks = detalles.Select(d => d.IdNotebook).ToList();
+    //    /*
+    //    Aqui se utiliza una funcion LINQ para traer las notebooks del detalle. Luego verifica si llevo
+    //    carrito para desocuparla (cambia tambien a las notebooks que traia con ella) y si no llevo 
+    //    cambia la disponibilidad de las notebooks del detalle (osea de las notebooks que se prestaron)
+    //    */
+    //    IEnumerable<int> idNotebooks = detalles.Select(d => d.IdNotebook).ToList();
 
-        if (prestamo.IdCarrito != null)
-        {
-            carritoNegocio.DesocuparCarrito(prestamo.IdCarrito.Value);
-        }
-        else
-        {
-            notebookCN.CambiarDisponibilidadNotebooks(idNotebooks, true);
-        }
+    //    if (prestamo.IdCarrito != null)
+    //    {
+    //        carritoNegocio.DesocuparCarrito(prestamo.IdCarrito.Value);
+    //    }
+    //    else
+    //    {
+    //        notebookCN.CambiarDisponibilidadNotebooks(idNotebooks, true);
+    //    }
 
-        return true;
-    }
-    #endregion
+    //    return true;
+    //}
+    //#endregion
 
 
 }

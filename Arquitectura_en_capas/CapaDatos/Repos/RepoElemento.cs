@@ -96,20 +96,38 @@ public class RepoElemento : RepoBase, IRepoElemento
     }
     #endregion
 
-    #region Obtener por Id
-    public Elemento? GetById(int idElemento)
+    #region Obtener por codigo de Barra
+    public Elemento? GetByCodigoBarra(string codigoBarra)
     {
-        string query = "select * from Elementos where idElemento = unidElemento";
+        string query = "select * from Elementos where codigoBarra = @codigoBarra";
 
         DynamicParameters parametros = new DynamicParameters();
         try
         {
-            parametros.Add("unidElemento", idElemento);
+            parametros.Add("codigoBarra", codigoBarra);
             return Conexion.QueryFirstOrDefault<Elemento>(query, parametros);
         }
         catch (Exception)
         {
-            throw new Exception("Error al obtener el id del Elemento");
+            throw new Exception("No se encontro el elemento con su codigo de barra");
+        }
+    }
+    #endregion
+
+    #region Obtener por Carrito
+    public IEnumerable<Elemento> GetByCarrito(int idCarrito)
+    {
+        string query = "select * from Elementos where idCarrito = @idCarrito";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("idCarrito", idCarrito);
+            return Conexion.Query<Elemento>(query, parametros).ToList();
+        }
+        catch (Exception)
+        {
+            throw new Exception("No se encontro el carrito de los elementos");
         }
     }
     #endregion

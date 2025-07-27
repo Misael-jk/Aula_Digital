@@ -5,7 +5,7 @@ using System.Data;
 
 namespace CapaDatos.Repos;
 
-class RepoTipoElemento : RepoBase, IRepoTipoElemento
+public class RepoTipoElemento : RepoBase, IRepoTipoElemento
 {
     public RepoTipoElemento( IDbConnection conexion) 
     : base(conexion)
@@ -18,7 +18,7 @@ class RepoTipoElemento : RepoBase, IRepoTipoElemento
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidTipoElemento", tipoElemento.IdTipoElemento);
-        parametros.Add("unidElemento", tipoElemento.tipoElemento);
+        parametros.Add("unidElemento", tipoElemento.ElementoTipo);
 
         try
         {
@@ -37,7 +37,7 @@ class RepoTipoElemento : RepoBase, IRepoTipoElemento
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidTipoElemento", tipoElemento.IdTipoElemento);
-        parametros.Add("unidElemento", tipoElemento.tipoElemento);
+        parametros.Add("unidElemento", tipoElemento.ElementoTipo);
 
         try
         {
@@ -71,7 +71,8 @@ class RepoTipoElemento : RepoBase, IRepoTipoElemento
     #region ver los datos los tipos de los elementos
     public IEnumerable<TipoElemento> GetAll()
     {
-        string query = "select * from TipoElemento";
+
+        string query = "select idTipoElemento, elemento AS elementoTipo from tipoElemento";
 
         try
         {

@@ -1,5 +1,4 @@
-﻿using CapaDatos.DTOs;
-using CapaEntidad;
+﻿using CapaEntidad;
 
 namespace CapaDatos.Interfaces;
 
