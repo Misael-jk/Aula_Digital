@@ -18,14 +18,14 @@ namespace CapaNegocio.MappersDTO
             }).ToList();
         }
 
-        public ElementosDTO ToDTO(Elemento entidad, string tipoNombre, string carritoNombre, string estadoNombre)
+        public ElementosDTO ToDTO(Elemento entidad, Dictionary<int, string> tipos, Dictionary<int, string> estados, Dictionary<int, string> carritos)
         {
             return new ElementosDTO
             {
                 IdElemento = entidad.IdElemento,
-                TipoElemento = tipoNombre,
-                Carrito = carritoNombre,
-                Estado = estadoNombre,
+                TipoElemento = tipos.GetValueOrDefault(entidad.IdElemento),
+                Carrito = estados.GetValueOrDefault(entidad.IdEstadoElemento),
+                Estado = entidad.IdCarrito.HasValue ? carritos.GetValueOrDefault(entidad.IdCarrito.Value) : "Sin carrito",
                 NumeroSerie = entidad.numeroSerie,
                 CodigoBarra = entidad.codigoBarra
             };

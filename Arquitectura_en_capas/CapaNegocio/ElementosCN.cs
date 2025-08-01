@@ -58,12 +58,7 @@ public class ElementosCN
         var estados = _repoEstado.GetAll().ToDictionary(e => e.IdEstadoElemento, e => e.EstadoElementoNombre);
         var carritos = _repoCarrito.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
 
-        return elementosMapper.ToDTO(
-            elemento,
-            tipos.GetValueOrDefault(elemento.IdTipoElemento),
-            elemento.IdCarrito.HasValue ? carritos.GetValueOrDefault(elemento.IdCarrito.Value) : "Sin carrito",
-            estados.GetValueOrDefault(elemento.IdEstadoElemento)
-        );
+        return elementosMapper.ToDTO(elemento,tipos, estados, carritos);
     }
 
 

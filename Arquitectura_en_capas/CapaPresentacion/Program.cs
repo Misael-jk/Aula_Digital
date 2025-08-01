@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using CapaDatos;
 using System.Data;
 using MySql.Data.MySqlClient;
+using CapaPresentacion;
 
 namespace Sistema_de_notebooks
 {
@@ -26,7 +27,7 @@ namespace Sistema_de_notebooks
                 // To customize application configuration such as set high DPI settings or default font,
                 // see https://aka.ms/applicationconfiguration.
                 ApplicationConfiguration.Initialize();
-                Application.Run(new Form1(dbConnection));
+                Application.Run(new frmLogin());
         }
     }
 }

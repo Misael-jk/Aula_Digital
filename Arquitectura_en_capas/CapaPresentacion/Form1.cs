@@ -6,6 +6,7 @@ using MySql.Data.MySqlClient;
 using CapaDatos.Interfaces;
 using System.Windows.Forms;
 using CapaNegocio.DTOs;
+using CapaPresentacion;
 
 namespace Sistema_de_notebooks
 {
@@ -38,6 +39,11 @@ namespace Sistema_de_notebooks
 
             var elementos = _elementoService.ObtenerTodosParaMostrar();
             dataGridView1.DataSource = elementos;
+
+            frmLogin login = new frmLogin();
+
+            login.Show();
+            this.Hide();
 
         }
 
@@ -123,7 +129,7 @@ namespace Sistema_de_notebooks
             carritos.Insert(0, new Carritos
             {
                 IdCarrito = 0,
-                NumeroSerieCarrito = "Seleccionar carrito...",
+                NumeroSerieCarrito = "Se",
                 DisponibleCarrito = true
             });
 
