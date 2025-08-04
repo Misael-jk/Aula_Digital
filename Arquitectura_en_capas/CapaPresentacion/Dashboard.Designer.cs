@@ -35,7 +35,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Name = "Dashboard";
-            Size = new Size(850, 600);
+            Size = new Size(864, 606);
             ResumeLayout(false);
         }
 

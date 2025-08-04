@@ -40,11 +40,6 @@ namespace Sistema_de_notebooks
             var elementos = _elementoService.ObtenerTodosParaMostrar();
             dataGridView1.DataSource = elementos;
 
-            frmLogin login = new frmLogin();
-
-            login.Show();
-            this.Hide();
-
         }
 
         private void CargarCombos()

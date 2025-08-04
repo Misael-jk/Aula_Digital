@@ -7,7 +7,7 @@ public class Devolucion
     public int IdElemento {get; set;}
     public int IdDocente {get; set;}
     public int IdEstadoPrestamo {get; set;}
-    public int IdEncargado {get; set;}
+    public int IdUsuario {get; set;}
     public DateTime FechaDevolucion {get; set;}
     public required string Observaciones {get; set;}
 }

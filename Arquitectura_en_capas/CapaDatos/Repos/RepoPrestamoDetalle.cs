@@ -88,16 +88,17 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
     #endregion
 
     #region Obtener Detalle por prestamos y notebooks
-    public PrestamoDetalle? GetByPrestamo(int idPrestamo)
+    public IEnumerable<PrestamoDetalle> GetByPrestamo(int idPrestamo)
     {
         string query = "select * from PrestamoDetalle where idPrestamo = @idPrestamo";
 
         DynamicParameters parametros = new DynamicParameters();
-        parametros.Add("unidPrestamo", idPrestamo);
+        
 
         try
         {
-            return Conexion.QueryFirstOrDefault<PrestamoDetalle>(query, parametros);
+            parametros.Add("unidPrestamo", idPrestamo);
+            return Conexion.Query<PrestamoDetalle>(query, parametros);
         }
         catch (Exception)
         {

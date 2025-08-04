@@ -22,7 +22,7 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
         parametros.Add("unidCurso", prestamos.IdCurso);
         parametros.Add("unidDocente", prestamos.IdDocente);
         parametros.Add("unidCarrito", prestamos.IdCarrito);
-        parametros.Add("unidEncargado", prestamos.IdEncargado);
+        parametros.Add("unidEncargado", prestamos.IdUsuario);
         parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
 
         try
@@ -46,7 +46,7 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
         parametros.Add("unidCurso", prestamos.IdCurso);
         parametros.Add("unidDocente", prestamos.IdDocente);
         parametros.Add("unidCarrito", prestamos.IdCarrito);
-        parametros.Add("unidEncargado", prestamos.IdEncargado);
+        parametros.Add("unidEncargado", prestamos.IdUsuario);
         parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
 
         try
@@ -113,7 +113,7 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
     #endregion
 
     #region obtener por id Docente
-    public Prestamos? GetByDocente(int idDocente)
+    public IEnumerable<Prestamos> GetByDocente(int idDocente)
     {
         string query = "select * from Prestamos where idDocente = unidDocente";
 
@@ -121,11 +121,29 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
         try
         {
             parametros.Add("unidDocente", idDocente);
-            return Conexion.QueryFirstOrDefault<Prestamos>(query, parametros);
+            return Conexion.Query<Prestamos>(query, parametros);
         }
         catch (Exception)
         {
             throw new Exception("Error al obtener el id del Docente en Prestamo");
+        }
+    }
+    #endregion
+
+    #region Obtener por id del Encargado/Usuario
+    public IEnumerable<Prestamos> GetByEncargado(int idEncargado)
+    {
+        string query = "select * from Prestamos where idUsuario = unidUsuario";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("unidUsuario", idEncargado);
+            return Conexion.Query<Prestamos>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el id del Usuario en Prestamo");
         }
     }
     #endregion
