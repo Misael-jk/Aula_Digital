@@ -3,15 +3,25 @@ create database aula_digital;
 use aula_digital;
 
 
-create table Encargados (
-    idEncargado tinyint not null auto_increment,
+create table Rol(
+idRol tinyint not null auto_increment,
+rol varchar(40) not null,
+constraint PK_Rol primary key (idRol)
+);
+
+
+create table Usuarios (
+    idUsuario tinyint not null auto_increment,
     usuario varchar(40) not null,
-    password varchar(70) not null,
+    pass varchar(70) not null,
     nombre varchar(40) not null,
     apellido varchar(40) not null,
+    idRol tinyint not null,
     email varchar(70),
-    constraint PK_Encargados primary key (idEncargado),
-    constraint UQ_Encargados unique (usuario)
+    constraint PK_Usuarios primary key (idUsuario),
+    constraint UQ_Usuarios unique (usuario),
+    constraint FK_Usuarios_Rol foreign key (idRol)
+    	references Rol (idRol)
 );
 
 
@@ -43,7 +53,7 @@ create table EstadosElemento (
 
 create table Carritos (
     idCarrito tinyint not null auto_increment,
-    cantidad tinyint not null,
+    numeroSerieCarrito varchar(40)not null,
     disponibleCarrito boolean not null,
     constraint PK_Carritos primary key (idCarrito)
 );
@@ -66,9 +76,6 @@ create table Elementos (
         references Carritos(idCarrito),
     constraint FK_Elementos_EstadoNotebook foreign key (idEstadoElemento)
         references EstadosElemento(idEstadoElemento)
---     constraint CHK_Carrito_Solo_Para_Notebooks check (
---         (idCarrito is null) or (idTipoElemento = 1)
---     )
 );
 
 
@@ -85,7 +92,7 @@ create table Prestamos (
     idCurso tinyint,
     idDocente smallint not null,
     idCarrito tinyint,
-    idEncargado tinyint not null,
+    idUsuario tinyint not null,
     fechaPrestamo datetime not null,
     constraint PK_Prestamos primary key (idPrestamo),
     constraint FK_Prestamos_Docentes foreign key (idDocente)
@@ -94,8 +101,8 @@ create table Prestamos (
         references Cursos(idCurso),
     constraint FK_Prestamos_Carritos foreign key (idCarrito) 
         references Carritos(idCarrito),
-    constraint FK_Prestamos_Encargados foreign key (idEncargado)
-    	references Encargados(idEncargado)
+    constraint FK_Prestamos_Usuarios foreign key (idUsuario)
+    	references Usuarios(idUsuario)
 );
 
 
@@ -127,7 +134,7 @@ create table Devoluciones (
     idElemento tinyint not null,
     idDocente smallint not null,
     idEstadoPrestamo tinyint not null,
-    idEncargado tinyint not null,
+    idUsuario tinyint not null,
     fechaDevolucion datetime not null,
     observaciones varchar(200),
     constraint PK_Devoluciones primary key (idDevolucion),
@@ -139,8 +146,8 @@ create table Devoluciones (
         references Docentes(idDocente),
     constraint FK_Devoluciones_EstadosPrestamo foreign key (idEstadoPrestamo)
         references EstadosPrestamo(idEstadoPrestamo),
-    constraint FK_Devoluciones_Encargados foreign key (idEncargado)
-        references Encargados(idEncargado)
+    constraint FK_Devoluciones_Usuarios foreign key (idUsuario)
+        references Usuarios(idUsuario)
 );
 
 
