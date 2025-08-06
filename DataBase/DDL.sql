@@ -47,7 +47,7 @@ create table tipoElemento (
 create table EstadosElemento (
     idEstadoElemento tinyint not null auto_increment,
     estadoElemento varchar(40) not null,
-    constraint PK_EstadosNotebook primary key (idEstadoElemento)
+    constraint PK_EstadosElemento primary key (idEstadoElemento)
 );
 
 
@@ -106,7 +106,7 @@ create table Prestamos (
 );
 
 
-CREATE TABLE EstadosPrestamo (
+create table EstadosPrestamo (
     idEstadoPrestamo tinyint not null auto_increment,
     estadoPrestamo varchar(40) not null,
     constraint PK_EstadoPrestamo primary key (idEstadoPrestamo),
@@ -117,37 +117,43 @@ CREATE TABLE EstadosPrestamo (
 create table PrestamoDetalle (
     idPrestamo int not null,
     idElemento tinyint not null,
-    idEstadoPrestamo tinyint not null,
     constraint PK_PrestamoDetalle primary key (idPrestamo, idElemento),
     constraint FK_PrestamoDetalle_Prestamos foreign key (idPrestamo)
         references Prestamos(idPrestamo),
     constraint FK_PrestamoDetalle_Elementos foreign key (idElemento)
-        references Elementos(idElemento),
-    constraint FK_PrestamoDetalle_EstadosPrestamo foreign key (idEstadoPrestamo)
-        references EstadosPrestamo(idEstadoPrestamo)
+        references Elementos(idElemento)
 );
 
 
 create table Devoluciones (
     idDevolucion int auto_increment,
     idPrestamo int not null,
-    idElemento tinyint not null,
     idDocente smallint not null,
-    idEstadoPrestamo tinyint not null,
     idUsuario tinyint not null,
     fechaDevolucion datetime not null,
     observaciones varchar(200),
     constraint PK_Devoluciones primary key (idDevolucion),
     constraint FK_Devoluciones_Prestamo foreign key (idPrestamo)
         references Prestamos(idPrestamo),
-    constraint FK_Devoluciones_Elemento foreign key (idElemento)
-        references Elementos(idElemento),
     constraint FK_Devoluciones_Docentes foreign key (idDocente)
         references Docentes(idDocente),
-    constraint FK_Devoluciones_EstadosPrestamo foreign key (idEstadoPrestamo)
-        references EstadosPrestamo(idEstadoPrestamo),
     constraint FK_Devoluciones_Usuarios foreign key (idUsuario)
-        references Usuarios(idUsuario)
+        references Usuarios(idUsuario),
+    constraint UQ_Devoluciones unique (idPrestamo)
+);
+
+
+create table DevolucionDetalle (
+    idDevolucion int not null,
+    idElemento tinyint not null,
+    idEstadoPrestamo tinyint not null,
+    constraint PK_DevolucionDetalle primary key (idDevolucion, idElemento),
+    constraint FK_DevolucionDetalle_Devoluciones foreign key (idDevolucion)
+        references Devoluciones(idDevolucion),
+    constraint FK_DevolucionDetalle_Elementos foreign key (idElemento)
+        references Elementos(idElemento),
+    constraint FK_DevolucionDetalle_EstadoPrestamo foreign key (idEstadoPrestamo)
+        references EstadosPrestamo(idEstadoPrestamo)
 );
 
 
