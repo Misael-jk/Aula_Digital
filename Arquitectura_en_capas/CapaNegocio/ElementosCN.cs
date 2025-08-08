@@ -1,10 +1,7 @@
-﻿using CapaDatos;
-using CapaDatos.Interfaces;
-using CapaDatos.Repos;
+﻿using CapaDatos.Interfaces;
 using CapaEntidad;
 using CapaNegocio.DTOs;
 using CapaNegocio.MappersDTO;
-using System.Data;
 
 namespace CapaNegocio;
 

@@ -1,5 +1,5 @@
 ﻿
-namespace CapaNegocio.DTOs;
+namespace CapaDTO.DTOs;
 
 public class UsuariosDTO
 {

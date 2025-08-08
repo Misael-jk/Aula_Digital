@@ -10,4 +10,5 @@ public interface IRepoElemento
     public IEnumerable<Elemento> GetAll();
     public Elemento? GetByCodigoBarra(string codigoBarra);
     public IEnumerable<Elemento> GetByCarrito(int idCarrito);
+
 }

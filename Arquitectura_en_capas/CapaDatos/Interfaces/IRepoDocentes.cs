@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoDocentes
+public interface IRepoDocentes
 {
     public void Insert(Docentes docente);
     public void Update(Docentes docente);

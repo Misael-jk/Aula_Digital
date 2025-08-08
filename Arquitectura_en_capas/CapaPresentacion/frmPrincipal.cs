@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CapaDatos.Interfaces;
+using CapaNegocio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,13 +14,17 @@ namespace CapaPresentacion
 {
     public partial class frmPrincipal : Form
     {
+        
         public frmPrincipal()
         {
             InitializeComponent();
+           
         }
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
+            
+
             panel1.BackColor = ColorTranslator.FromHtml("#F5A623");
             panel2.BackColor = ColorTranslator.FromHtml("#4A1F47");
             //btnElementos.BackColor = ColorTranslator.FromHtml("#F5A623");

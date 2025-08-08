@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoCursos
+public interface IRepoCursos
 {
     public Curso? GetById(int idCurso);
     public IEnumerable<Curso> GetAll();

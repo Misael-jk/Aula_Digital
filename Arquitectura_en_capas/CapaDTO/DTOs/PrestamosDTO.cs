@@ -1,6 +1,6 @@
-﻿namespace CapaNegocio.DTOs;
+﻿namespace CapaDTO.DTOs;
 
-class PrestamosDTO
+public class PrestamosDTO
 {
     public int IdPrestamo { get; set; }
     public string? NombreCurso { get; set; }

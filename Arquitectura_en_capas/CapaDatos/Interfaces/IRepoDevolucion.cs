@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoDevolucion
+public interface IRepoDevolucion
 {
     public void Insert(Devolucion devolucion);
     public Devolucion? GetById(int idDevolucion);

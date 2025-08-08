@@ -2,7 +2,7 @@
 
 namespace CapaDatos.Interfaces;
 
-interface IRepoPrestamos
+public interface IRepoPrestamos
 {
     public void Insert(Prestamos prestamo);
     public void Update(Prestamos prestamo);

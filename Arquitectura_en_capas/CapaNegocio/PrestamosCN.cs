@@ -2,27 +2,65 @@
 using CapaNegocio;
 using CapaEntidad;
 using System.Data;
+using CapaDatos.Interfaces;
+using CapaNegocio.MappersDTO;
+using CapaNegocio.DTOs;
 
-namespace Sistema_de_notebooks.CapaNegocio;
+namespace CapaNegocio;
 
 public class PrestamosCN
 {
-    //private readonly RepoPrestamos repoPrestamos;
-    //private readonly CarritosCN carritoNegocio;
-    //private readonly RepoPrestamoDetalle repoPrestamoDetalle;
-    //private readonly ElementosCN notebookCN;
-    //private readonly PrestamoDetalleCN prestamoDetalleCN;
-    //private readonly CarritoNotebooksCN carritoNotebooksCN;
+    private readonly PrestamosMapper prestamosMapper;
+    private readonly IRepoPrestamos repoPrestamos;
+    private readonly IRepoCarritos repoCarritos;
+    private readonly IRepoCursos repoCursos;
+    private readonly IRepoDocentes repoDocentes;
+    private readonly IRepoUsuarios repoUsuarios;
 
-    //public PrestamosCN(IDbConnection conexion)
-    //{
-    //    repoPrestamos = new RepoPrestamos(conexion);
-    //    carritoNegocio = new CarritosCN(conexion);
-    //    repoPrestamoDetalle = new RepoPrestamoDetalle(conexion);
-    //    notebookCN = new ElementosCN(conexion);
-    //    prestamoDetalleCN = new PrestamoDetalleCN(conexion);
-    //    carritoNotebooksCN = new CarritoNotebooksCN(conexion);
-    //}
+    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, 
+        IRepoCursos repoCursos, IRepoDocentes repoDocentes, IRepoUsuarios repoUsuarios)
+    {
+        this.repoPrestamos = repoPrestamos;
+        this.repoCarritos = repoCarritos;
+        this.repoCursos = repoCursos;
+        this.repoDocentes = repoDocentes;
+        this.repoUsuarios = repoUsuarios;
+        prestamosMapper = new PrestamosMapper();
+    }
+
+    public void HacerPrestamo(Prestamos prestamos)
+    {
+        repoPrestamos.Insert(prestamos);
+    }
+
+    public IEnumerable<PrestamosDTO> GetsAll()
+    {
+        IEnumerable<Prestamos> lista = repoPrestamos.GetAll();
+
+        return MapearLista(lista);
+    }
+
+    private PrestamosDTO MapearDTO(Prestamos prestamos)
+    {
+        Dictionary<int, string> usuarios = repoUsuarios.GetAll().ToDictionary(u => u.IdUsuario, u => u.Apellido);
+        Dictionary<int, string> docentes = repoDocentes.GetAll().ToDictionary(d => d.IdDocente, d => d.Apellido);
+        Dictionary<int, string> carritos = repoCarritos.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
+        Dictionary<int, string> cursos = repoCursos.GetAll().ToDictionary(cs => cs.IdCurso, cs => cs.NombreCurso);
+
+        return prestamosMapper.MapearDTO(prestamos, usuarios, docentes, cursos, carritos);
+    }
+
+
+    private IEnumerable<PrestamosDTO> MapearLista(IEnumerable<Prestamos> lista)
+    {
+        Dictionary<int, string> usuario = repoUsuarios.GetAll().ToDictionary(u => u.IdUsuario, u => u.Apellido);
+        Dictionary<int, string> docente = repoDocentes.GetAll().ToDictionary(d => d.IdDocente, d => d.Apellido);
+        Dictionary<int, string> carrito = repoCarritos.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
+        Dictionary<int, string> curso = repoCursos.GetAll().ToDictionary(cs => cs.IdCurso, cs => cs.NombreCurso);
+
+        return prestamosMapper.MapearLista(lista, curso, docente, carrito, usuario);
+    }
+
 
     //// Muestra los datos de los prestamos
     //#region Mostrar los datos del prestamo
@@ -100,7 +138,7 @@ public class PrestamosCN
     //}
     //#endregion
 
-  
+
 
 
     ///*
@@ -152,3 +190,4 @@ public class PrestamosCN
 
 
 }
+

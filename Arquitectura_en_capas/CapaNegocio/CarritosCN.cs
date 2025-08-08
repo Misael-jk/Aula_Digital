@@ -3,7 +3,7 @@ using System.Data;
 using CapaDatos.Repos;
 using CapaNegocio;
 
-namespace Sistema_de_notebooks.CapaNegocio;
+namespace CapaNegocio;
 
 class CarritosCN
 {
