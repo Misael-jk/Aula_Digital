@@ -49,10 +49,12 @@
             btnCarritos = new Button();
             btnElementos = new Button();
             pictureBox1 = new PictureBox();
+            dataGridView1 = new DataGridView();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Et12).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // lbExit
@@ -292,11 +294,20 @@
             pictureBox1.TabIndex = 2;
             pictureBox1.TabStop = false;
             // 
+            // dataGridView1
+            // 
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(358, 117);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(572, 227);
+            dataGridView1.TabIndex = 3;
+            // 
             // frmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1100, 650);
+            Controls.Add(dataGridView1);
             Controls.Add(panel1);
             Controls.Add(panel2);
             FormBorderStyle = FormBorderStyle.None;
@@ -309,6 +320,7 @@
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)Et12).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
@@ -335,5 +347,6 @@
         private Panel panel6;
         private Panel panel5;
         private PictureBox Et12;
+        private DataGridView dataGridView1;
     }
 }

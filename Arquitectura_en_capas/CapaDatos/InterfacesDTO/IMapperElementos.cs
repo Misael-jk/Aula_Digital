@@ -1,6 +1,5 @@
-﻿using CapaDTO.DTOs;
-
-namespace CapaDTO.Interface;
+﻿using CapaDTOs;
+namespace CapaDatos.InterfacesDTO;
 
 public interface IMapperElementos
 {

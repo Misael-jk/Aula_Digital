@@ -1,4 +1,4 @@
-﻿namespace CapaDTO.DTOs;
+﻿namespace CapaDTOs;
 
 public class DevolucionesDTO
 {
@@ -9,3 +9,4 @@ public class DevolucionesDTO
     public DateTime FechaDevolucion { get; set; }
     public required string Observaciones { get; set; }
 }
+

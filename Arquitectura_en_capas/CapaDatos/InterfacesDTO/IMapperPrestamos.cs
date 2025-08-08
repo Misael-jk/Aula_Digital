@@ -1,6 +1,6 @@
-﻿using CapaDTO.DTOs;
+﻿using CapaDTOs;
 
-namespace CapaDTO.Interface;
+namespace CapaDatos.InterfacesDTO;
 
 public interface IMapperPrestamos
 {

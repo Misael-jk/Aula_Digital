@@ -1,11 +1,11 @@
 ﻿using CapaDatos;
-using CapaDTO.DTOs;
-using CapaDTO.Interface;
+using CapaDTOs;
+using CapaDatos.InterfacesDTO;
 using CapaEntidad;
 using Dapper;
 using System.Data;
 
-namespace CapaDTO;
+namespace CapaDatos.MappersDTO;
 
 public class MapperPrestamoDetalle : RepoBase, IMapperPrestamoDetalle
 {

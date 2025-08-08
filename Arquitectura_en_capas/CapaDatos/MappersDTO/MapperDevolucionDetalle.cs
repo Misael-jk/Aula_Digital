@@ -1,11 +1,11 @@
 ﻿using CapaEntidad;
 using CapaDatos;
-using CapaDTO.DTOs;
-using CapaDTO.Interface;
 using Dapper;
+using CapaDatos.InterfacesDTO;
+using CapaDTOs;
 using System.Data;
 
-namespace CapaDTO;
+namespace CapaDatos.MappersDTO;
 
 public class MapperDevolucionDetalle : RepoBase, IMapperDevolucionDetalle
 {

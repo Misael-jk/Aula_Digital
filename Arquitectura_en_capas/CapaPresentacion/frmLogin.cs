@@ -1,7 +1,6 @@
 ﻿using CapaDatos.Interfaces;
 using CapaDatos.Repos;
 using CapaNegocio;
-using CapaNegocio.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,10 +15,10 @@ namespace CapaPresentacion
 {
     public partial class frmLogin : Form
     {
-        private IDbConnection conexion;
+        private readonly IDbConnection conexion;
         private readonly RepoRoles repoRoles;
         private readonly RepoUsuarios repoUsuarios;
-        private readonly UsuariosCN usuariosCN;
+        //private readonly UsuariosCN usuariosCN;
 
         public frmLogin(IDbConnection conexion)
         {
@@ -28,7 +27,7 @@ namespace CapaPresentacion
 
             repoUsuarios = new RepoUsuarios(conexion);
             repoRoles = new RepoRoles(conexion);
-            usuariosCN = new UsuariosCN(repoUsuarios, repoRoles);
+            //usuariosCN = new UsuariosCN(repoUsuarios, repoRoles);
         }
 
         private void frmLogin_Load(object sender, EventArgs e)
@@ -40,21 +39,21 @@ namespace CapaPresentacion
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string usuario = txtUsuario.Text.Trim();
-            string password = txtPassword.Text.Trim();
+            //string usuario = txtUsuario.Text.Trim();
+            //string password = txtPassword.Text.Trim();
 
-            var verificarLogin = usuariosCN.ObtenerLogin(usuario, password);
+            //var verificarLogin = usuariosCN.ObtenerLogin(usuario, password);
 
-            if (verificarLogin is not null)
-            {
-                frmPrincipal principal = new frmPrincipal();
-                principal.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Usuario o contraseña incorrectos");
-            }
+            //if (verificarLogin is not null)
+            //{
+            frmPrincipal principal = new frmPrincipal(conexion);
+            principal.Show();
+            this.Hide();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Usuario o contraseña incorrectos");
+            //}
         }
 
         private void lbExit_Click(object sender, EventArgs e)

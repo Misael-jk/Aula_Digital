@@ -1,4 +1,4 @@
-﻿namespace CapaDTO.DTOs;
+﻿namespace CapaDTOs;
 
 public class ElementosDTO
 {
