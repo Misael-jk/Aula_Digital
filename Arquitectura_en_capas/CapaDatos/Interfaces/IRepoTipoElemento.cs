@@ -9,4 +9,5 @@ public interface IRepoTipoElemento
     public void Delete(int idTipoElemento);
     public IEnumerable<TipoElemento> GetAll();
     public TipoElemento? GetById(int idTipoElemento);
+    public TipoElemento? GetByTipo(string elementoTipo);
 }

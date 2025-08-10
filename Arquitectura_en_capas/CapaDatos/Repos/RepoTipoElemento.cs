@@ -103,4 +103,21 @@ public class RepoTipoElemento : RepoBase, IRepoTipoElemento
         }
     }
     #endregion
+
+    public TipoElemento? GetByTipo(string elementoTipo)
+    {
+        string query = "select * from TipoElemento where tipoElemento = @elementoTipo";
+
+        DynamicParameters parametros = new DynamicParameters();
+        parametros.Add("@elementoTipo", elementoTipo);
+
+        try
+        {
+            return Conexion.QueryFirstOrDefault<TipoElemento>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el tipo del Elemento");
+        }
+    }
 }

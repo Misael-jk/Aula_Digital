@@ -1,5 +1,4 @@
-﻿using CapaDatos;
-using CapaDTOs;
+﻿using CapaDTOs;
 using CapaDatos.InterfacesDTO;
 using CapaEntidad;
 using Dapper;
@@ -70,6 +69,29 @@ public class MapperPrestamos : RepoBase, IMapperPrestamos
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
                 FechaPrestamo = prestamo.FechaPrestamo
             },
+            parametros,
+            commandType: CommandType.StoredProcedure,
+            splitOn: "NombreCurso, Apellido, Apellido, NumeroSerieCarrito"
+        ).ToList();
+    }
+
+    public IEnumerable<PrestamosDTO> GetByPaginas(int limit, int offset)
+    {
+        DynamicParameters parametros = new DynamicParameters();
+        parametros.Add("@limit", limit, DbType.Int32, ParameterDirection.Input);
+        parametros.Add("@offset", offset, DbType.Int32, ParameterDirection.Input);
+
+        return Conexion.Query<Prestamos, Curso, Docentes, Usuarios, Carritos, PrestamosDTO>(
+        "GetPrestamosDTOByPaginas",
+        (prestamo, curso, docente, usuario, carrito) => new PrestamosDTO
+        {
+            IdPrestamo = prestamo.IdPrestamo,
+            NombreCurso = curso?.NombreCurso ?? " - ",
+            ApellidoDocente = docente.Apellido,
+            ApellidoEncargado = usuario.Apellido,
+            NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
+            FechaPrestamo = prestamo.FechaPrestamo
+        },
             parametros,
             commandType: CommandType.StoredProcedure,
             splitOn: "NombreCurso, Apellido, Apellido, NumeroSerieCarrito"

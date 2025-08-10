@@ -1,5 +1,4 @@
 ﻿using CapaEntidad;
-using CapaDatos;
 using Dapper;
 using CapaDatos.InterfacesDTO;
 using CapaDTOs;

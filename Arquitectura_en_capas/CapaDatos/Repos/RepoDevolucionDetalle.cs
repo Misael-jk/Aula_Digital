@@ -1,10 +1,6 @@
 ﻿using CapaDatos.Interfaces;
 using CapaEntidad;
 using Dapper;
-using System;
-using Dapper;
-using CapaDatos.Interfaces;
-using CapaEntidad;
 using System.Data;
 
 namespace CapaDatos.Repos;

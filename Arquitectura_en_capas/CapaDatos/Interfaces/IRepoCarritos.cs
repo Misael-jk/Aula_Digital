@@ -9,4 +9,5 @@ public interface IRepoCarritos
     public void Delete(int idCarrito);
     public IEnumerable<Carritos> GetAll();
     public Carritos? GetById(int idCarrito);
+    public Carritos? GetByNumeroSerie(string numeroSerieCarrito);
 }

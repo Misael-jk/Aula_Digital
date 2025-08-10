@@ -80,22 +80,6 @@ public class RepoUsuarios : RepoBase, IRepoUsuarios
     }
     #endregion
 
-    #region Obtener los datos
-    public IEnumerable<Usuarios> GetAll()
-    {
-        string query = "select * from Usuarios";
-
-        try
-        {
-            return Conexion.Query<Usuarios>(query);
-        }
-        catch (Exception)
-        {
-            throw new Exception("Error al obtener los datos de los Usuarios");
-        }
-    }
-    #endregion
-
     #region Obtener por usuario y contraseña
     public Usuarios? GetByUserPass(string user, string pass)
     {
@@ -112,6 +96,60 @@ public class RepoUsuarios : RepoBase, IRepoUsuarios
         catch (Exception)
         {
             throw new Exception("Error al obtener el usuario y contraseña");
+        }
+    }
+    #endregion
+
+    #region Obtener por Email
+    public Usuarios? GetByEmail(string Email)
+    {
+        string query = "select * from Usuarios where email = @email";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("@email", Email);
+            return Conexion.QueryFirstOrDefault<Usuarios>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el email del Usuario");
+        }
+    }
+    #endregion
+
+    #region Obtener por ID
+    public Usuarios? GetById(int idUsuario)
+    {
+        string query = "select * from Usuarios where idUsuario = @idUsuario";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("@idUsuario", idUsuario);
+            return Conexion.QueryFirstOrDefault<Usuarios>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el ID del Usuario");
+        }
+    }
+    #endregion
+
+    #region Obtener por Usuario
+    public Usuarios? GetByUser(string user)
+    {
+        string query = "select * from Usuarios where usuario = @usuario";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("@usuario", user);
+            return Conexion.QueryFirstOrDefault<Usuarios>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el user del Usuario");
         }
     }
     #endregion

@@ -2,40 +2,80 @@
 using System.Data;
 using CapaDatos.Repos;
 using CapaNegocio;
+using CapaDatos.Interfaces;
 
 namespace CapaNegocio;
 
-class CarritosCN
+public class CarritosCN
 {
-    //private readonly RepoCarritos repoCarritos;
-    //private readonly CarritoNotebooksCN carritoNotebooksCN;
+    private readonly IRepoCarritos repoCarrito;
 
-    //public CarritosCN(IDbConnection conexion)
-    //{
-    //    repoCarritos = new RepoCarritos(conexion);
-    //    carritoNotebooksCN = new CarritoNotebooksCN(conexion);
-    //}
+    public CarritosCN(IRepoCarritos repoCarrito)
+    {
+        this.repoCarrito = repoCarrito;
+    }
 
-    ///*
-    //En esta region se crea el carrito con la disponibilidad
-    //con true para que este por default.
-    //*/
-    //#region Dar alta al carrito
-    //public void CrearCarrito(Carritos newCarrito)
-    //{
-    //    newCarrito.DisponibleCarrito = true;
-    //    repoCarritos.AltaCarrito(newCarrito);
-    //}
-    //#endregion
+    #region INSERT CARRITO
+    public void CrearCarrito(Carritos CarritoNEW)
+    {
+        if(string.IsNullOrWhiteSpace(CarritoNEW.NumeroSerieCarrito))
+        {
+            throw new Exception("El numero de serie del carrito es obligatorio");
+        }
 
+        if(repoCarrito.GetByNumeroSerie(CarritoNEW.NumeroSerieCarrito) != null)
+        {
+            throw new Exception("Ya existe un carrito con ese numero de serie, por favor elija uno nuevo");
+        }
 
-    //// Aqui se imprime todos los datos del carrito para mostrarlo a la UI.
-    //#region Listar Carrito
-    //public IEnumerable<Carritos> ListarCarritos()
-    //{
-    //    return repoCarritos.ListarCarritos().ToList();
-    //}
-    //#endregion
+        repoCarrito.Insert(CarritoNEW);
+    }
+    #endregion
+
+    #region UPDATE CARRITO
+    public void ActualizarCarrito(Carritos carritoNEW)
+    {
+        if (string.IsNullOrWhiteSpace(carritoNEW.NumeroSerieCarrito))
+        {
+            throw new Exception("El numero de serie del carrito es obligatorio");
+        } 
+
+        Carritos? carritoOLD = repoCarrito.GetById(carritoNEW.IdCarrito);
+
+        if (carritoOLD == null)
+        {
+            throw new Exception("El carrito no existe");
+        }
+
+        if (carritoOLD.NumeroSerieCarrito != carritoNEW.NumeroSerieCarrito && repoCarrito.GetByNumeroSerie(carritoNEW.NumeroSerieCarrito) != null)
+        {
+            throw new Exception("Ya existe otro carrito con el mismo numero de serie");
+        }
+
+        repoCarrito.Update(carritoNEW);
+    }
+    #endregion
+
+    #region DELETE CARRITO
+    public void EliminarCarrito(int idCarrito)
+    {
+        Carritos? carrito = repoCarrito.GetById(idCarrito);
+
+        if (carrito == null)
+        {
+            throw new Exception("El carrito no existe");
+        }
+
+        repoCarrito.Delete(idCarrito);
+    }
+    #endregion
+
+    #region READ CARRITO
+    public IEnumerable<Carritos> ListarCarritos()
+    {
+        return repoCarrito.GetAll();
+    }
+    #endregion
 
 
     ///*
@@ -45,7 +85,7 @@ class CarritosCN
     //#region Ocupar Carrito
     //public void OcuparCarrito(int idCarrito)
     //{
-    //    Carritos? carritoOcupado = repoCarritos.DetalleCarritos(idCarrito); 
+    //    Carritos? carritoOcupado = repoCarritos.DetalleCarritos(idCarrito);
 
     //    if (carritoOcupado == null)
     //    {
@@ -66,7 +106,7 @@ class CarritosCN
     //#region Desocupar Carrito
     //public void DesocuparCarrito(int idCarrito)
     //{
-    //    Carritos? carritoDesocupado = repoCarritos.DetalleCarritos(idCarrito); 
+    //    Carritos? carritoDesocupado = repoCarritos.DetalleCarritos(idCarrito);
 
     //    if (carritoDesocupado == null)
     //    {
@@ -75,22 +115,6 @@ class CarritosCN
     //    carritoDesocupado.DisponibleCarrito = true;
     //    repoCarritos.ActualizarCarrito(carritoDesocupado);
     //    carritoNotebooksCN.DisponibilidadCarritoNotebook(idCarrito, true);
-    //}
-    //#endregion
-
-
-    ////Este metodo nos indica si el carrito existe, sino nos devuelve la disponibilidad del carrito
-    //#region Disponibilidad del carrito
-    //public bool EstaDisponible(int idCarrito)
-    //{
-    //    Carritos? carrito = repoCarritos.DetalleCarritos(idCarrito);
-
-    //    if(carrito == null)
-    //    {
-    //        throw new Exception("El carrito no existe. Ubicacion: CapaNegocio");
-    //    }
-
-    //    return carrito.DisponibleCarrito;
     //}
     //#endregion
 

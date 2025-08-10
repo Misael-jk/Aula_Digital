@@ -106,4 +106,24 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         
     }
     #endregion
+
+    #region Obtener por Numero de Serie
+    public Carritos? GetById(string numeroSerie)
+    {
+        string query = "select * from Carritos where numeroSerieCarrito = @numeroSerie";
+
+        DynamicParameters parametros = new DynamicParameters();
+
+        try
+        {
+            parametros.Add("numeroSerie", numeroSerie);
+            return Conexion.QueryFirstOrDefault<Carritos>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el numero de serie del carrito");
+        }
+
+    }
+    #endregion
 }

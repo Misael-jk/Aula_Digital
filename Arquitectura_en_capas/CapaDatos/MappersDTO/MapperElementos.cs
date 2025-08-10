@@ -6,7 +6,7 @@ using System.Data;
 
 namespace CapaDatos.MappersDTO;
 
-public class MapperElementos : RepoBase, IMapperElementos 
+public class MapperElementos : RepoBase, IMapperElementos
 {
     public MapperElementos(IDbConnection conexion)
     : base(conexion)
@@ -104,6 +104,30 @@ public class MapperElementos : RepoBase, IMapperElementos
             commandType: CommandType.StoredProcedure,
             splitOn: "ElementoTipo,EstadoElementoNombre,NumeroSerieCarrito"
         ).ToList();
+    }
+    #endregion
+
+    #region Mostrar datos por el codigo de barra
+    public ElementosDTO? GetByCodigoBarraDTO(string codigoBarra)
+    {
+        DynamicParameters parametros = new DynamicParameters();
+        parametros.Add("@codigoBarra", codigoBarra, DbType.String, ParameterDirection.Input);
+
+        return Conexion.Query<Elemento, TipoElemento, EstadosElemento, Carritos, ElementosDTO>(
+            "GetElementosByCodigoBarraDTO",
+            (elemento, tipo, estado, carrito) => new ElementosDTO
+            {
+                IdElemento = elemento.IdElemento,
+                NumeroSerie = elemento.numeroSerie,
+                CodigoBarra = elemento.codigoBarra,
+                TipoElemento = tipo.ElementoTipo,
+                Estado = estado.EstadoElementoNombre,
+                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito"
+            },
+            parametros,
+            commandType: CommandType.StoredProcedure,
+            splitOn: "ElementoTipo,EstadoElementoNombre,NumeroSerieCarrito"
+        ).FirstOrDefault();
     }
     #endregion
 }

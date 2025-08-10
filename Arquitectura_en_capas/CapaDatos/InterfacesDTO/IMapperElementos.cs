@@ -7,4 +7,5 @@ public interface IMapperElementos
     ElementosDTO? GetByIdDTO(int idElemento);
     IEnumerable<ElementosDTO> GetByCarritoDTO(int idCarrito);
     IEnumerable<ElementosDTO> GetByTipoDTO(int idTipoElemento);
+    ElementosDTO? GetByCodigoBarraDTO(string codigoBarra);
 }

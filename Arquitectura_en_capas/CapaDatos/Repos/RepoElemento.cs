@@ -80,18 +80,20 @@ public class RepoElemento : RepoBase, IRepoElemento
     }
     #endregion
 
-    #region Obtener los datos
-    public IEnumerable<Elemento> GetAll()
+    #region Obtener por numero de serie
+    public Elemento? GetByNumeroSerie(string numeroSerieElemento)
     {
-        string query = "select * from Elementos";
+        string query = "select * from Elementos where numeroSerie = @numeroSerieElemento";
 
+        DynamicParameters parametros = new DynamicParameters();
         try
         {
-            return Conexion.Query<Elemento>(query);
+            parametros.Add("@numeroSerieElemento", numeroSerieElemento);
+            return Conexion.QueryFirstOrDefault<Elemento>(query, parametros);
         }
         catch (Exception)
         {
-            throw new Exception("Error al obtener los datos de los Elementos");
+            throw new Exception("No se encontro el elemento con su numero de serie");
         }
     }
     #endregion
@@ -110,6 +112,24 @@ public class RepoElemento : RepoBase, IRepoElemento
         catch (Exception)
         {
             throw new Exception("No se encontro el elemento con su codigo de barra");
+        }
+    }
+    #endregion
+
+    #region Obtener por Id elemento
+    public Elemento? GetById(int idElemento)
+    {
+        string query = "select * from Elementos where idElemento = @idElemento";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("@idElemento", idElemento);
+            return Conexion.QueryFirstOrDefault<Elemento>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("No se encontro el id del elemento");
         }
     }
     #endregion

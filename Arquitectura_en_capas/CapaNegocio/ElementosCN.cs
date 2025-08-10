@@ -1,112 +1,140 @@
 ﻿using CapaDatos.Interfaces;
-using CapaEntidad;
 using CapaDatos.InterfacesDTO;
+using CapaDatos.Repos;
 using CapaDTOs;
+using CapaEntidad;
 
-
-namespace CapaNegocio;
-
-public class ElementosCN
+namespace CapaNegocio
 {
-    private readonly IMapperElementos _mapperElementos;
-
-    public ElementosCN(IMapperElementos _mapperElementos)
+    public class ElementosCN
     {
-        this._mapperElementos = _mapperElementos;
-    }
+        private readonly IMapperElementos _mapperElementos;
+        private readonly IRepoElemento _repoElemento;
 
-    public IEnumerable<ElementosDTO> ObtenerElementos()
-    {
-        return _mapperElementos.GetAllDTO();
+        public ElementosCN(IMapperElementos mapperElementos, IRepoElemento repoElemento)
+        {
+            _mapperElementos = mapperElementos;
+            _repoElemento = repoElemento;
+        }
+
+        #region Metodos de Lectura para la UI DTOs
+
+        #region Mostrar Elementos completos
+        public IEnumerable<ElementosDTO> ObtenerElementos()
+        {
+            return _mapperElementos.GetAllDTO();
+        }
+        #endregion
+
+        #region mostrar por carrito 
+        public IEnumerable<ElementosDTO> ObtenerPorCarrito(int idCarrito)
+        {
+            return _mapperElementos.GetByCarritoDTO(idCarrito);
+        }
+        #endregion
+
+        #region mostrar por Codigo de Barra
+        public ElementosDTO? ObtenerPorCodigoBarra(string codigoBarra)
+        {
+            return _mapperElementos.GetByCodigoBarraDTO(codigoBarra);
+        }
+        #endregion
+
+        #region mostrar por tipo
+        public IEnumerable<ElementosDTO> ObtenerPorTipo(int idTipoElemento)
+        {
+            return _mapperElementos.GetByTipoDTO(idTipoElemento);
+        }
+        #endregion
+
+        #endregion
+
+
+        #region INSERT ELEMENTO
+        public void CrearElemento(Elemento elementoNEW)
+        {
+            if(string.IsNullOrEmpty(elementoNEW.numeroSerie))
+            {
+                throw new Exception("El numero de serie es obligatorio");
+            }
+
+            if(string.IsNullOrEmpty(elementoNEW.codigoBarra))
+            {
+                throw new Exception("El código de barras es obligatorio");
+            }
+
+            if (_repoElemento.GetByNumeroSerie(elementoNEW.numeroSerie) != null)
+            {
+                throw new Exception("Ya existe un elemento con ese numero de serie, por favor elija uno nuevo");
+            }
+
+            if (_repoElemento.GetByCodigoBarra(elementoNEW.codigoBarra) != null)
+            {
+                throw new Exception("Ya existe un elemento con el mismo código de barras.");
+            }
+
+            _repoElemento.Insert(elementoNEW);
+        }
+        #endregion
+
+        #region UPDATE ELEMENTO
+        public void ActualizarElemento(Elemento elementoNEW)
+        {
+
+            if (string.IsNullOrEmpty(elementoNEW.numeroSerie))
+            {
+                throw new Exception("El numero de serie es obligatorio");
+            }
+
+            if (string.IsNullOrEmpty(elementoNEW.codigoBarra))
+            {
+                throw new Exception("El código de barras es obligatorio");
+            }
+
+            Elemento? elementoOLD = _repoElemento.GetById(elementoNEW.IdElemento);
+
+            if (elementoOLD == null)
+            {
+                throw new Exception("El elemento no existe");
+            }
+
+            if (elementoOLD.numeroSerie != elementoNEW.numeroSerie && _repoElemento.GetByNumeroSerie(elementoNEW.numeroSerie) != null)
+            {
+                throw new Exception("Ya existe otro elemento con el mismo numero de serie");
+            }
+
+            if (elementoOLD.codigoBarra != elementoNEW.codigoBarra && _repoElemento.GetByCodigoBarra(elementoNEW.codigoBarra) != null)
+            {
+                throw new Exception("Ya existe otro elemento con el mismo codigo de barras.");
+            }
+
+            if (elementoOLD.IdEstadoElemento != elementoNEW.IdEstadoElemento && elementoOLD.IdEstadoElemento == 2)
+            {
+                throw new Exception("No se puede cambiar el estado de un elemento en prestamo sin terminar su devolucion");
+            }
+
+            _repoElemento.Update(elementoNEW);
+        }
+        #endregion
+
+        #region DELETE ELEMENTO 
+        public void EliminarElemento(int idElemento)
+        {
+            Elemento? elementoOLD = _repoElemento.GetById(idElemento);
+
+            if (elementoOLD == null)
+            {
+                throw new Exception("El elemento no existe.");
+            }
+
+            if (elementoOLD.IdEstadoElemento == 2)
+            {
+                throw new Exception("No se puede eliminar un elemento que está en prestamo");
+            }
+
+            _repoElemento.Delete(idElemento);
+        }
+        #endregion
+
     }
 }
-//    private readonly IRepoElemento _repoElemento;
-//    private readonly IRepoTipoElemento _repoTipo;
-//    private readonly IRepoEstadosElemento _repoEstado;
-//    private readonly IRepoCarritos _repoCarrito;
-//    private readonly ElementosMapper elementosMapper;
-
-//    public ElementosCN(IRepoElemento repoElemento, IRepoTipoElemento repoTipo,
-//        IRepoEstadosElemento repoEstado, IRepoCarritos repoCarrito)
-//    {
-//        _repoElemento = repoElemento;
-//        _repoTipo = repoTipo;
-//        _repoEstado = repoEstado;
-//        _repoCarrito = repoCarrito;
-//        elementosMapper = new ElementosMapper();
-//    }
-
-//    public void CrearElemento(Elemento elemento)
-//    {
-//        _repoElemento.Insert(elemento);
-//    }
-
-//    public IEnumerable<ElementosDTO> ObtenerTodosParaMostrar()
-//    {
-//        var lista = _repoElemento.GetAll();
-//        return MapearAListaDTO(lista);
-//    }
-
-//    public IEnumerable<ElementosDTO> ObtenerPorCarrito(int idCarrito)
-//    {
-//        var lista = _repoElemento.GetByCarrito(idCarrito);
-//        return MapearAListaDTO(lista);
-//    }
-
-//    public ElementosDTO? ObtenerPorCodigoBarra(string codigoBarra)
-//    {
-//        var elemento = _repoElemento.GetByCodigoBarra(codigoBarra);
-//        if (elemento == null) return null;
-
-//        return MapearAUnDTO(elemento);
-//    }
-
-
-//    private ElementosDTO MapearAUnDTO(Elemento elemento)
-//    {
-//        var tipos = _repoTipo.GetAll().ToDictionary(t => t.IdTipoElemento, t => t.ElementoTipo);
-//        var estados = _repoEstado.GetAll().ToDictionary(e => e.IdEstadoElemento, e => e.EstadoElementoNombre);
-//        var carritos = _repoCarrito.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
-
-//        return elementosMapper.ToDTO(elemento,tipos, estados, carritos);
-//    }
-
-
-//    private IEnumerable<ElementosDTO> MapearAListaDTO(IEnumerable<Elemento> lista)
-//    {
-//        var tipos = _repoTipo.GetAll().ToDictionary(t => t.IdTipoElemento, t => t.ElementoTipo);
-//        var estados = _repoEstado.GetAll().ToDictionary(e => e.IdEstadoElemento, e => e.EstadoElementoNombre);
-//        var carritos = _repoCarrito.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
-
-//        return elementosMapper.Mapear(lista, tipos, estados, carritos);
-//    }
-
-
-//    ///*
-//    //En esta region lo que hace es cambiar la disponibilidad de las notebooks que se pidan ya sea
-//    //individual o con carrito, si lo pidio con carrito este metodo cambiara los estados de varias notebooks
-//    //y si pidio algunas notebooks sin carrito tambien lo validara.
-//    //*/
-//    //#region Cambiar estados de varias o una notebook
-//    //public void CambiarDisponibilidadNotebooks(IEnumerable<int> idNotebooks, bool disponible)
-//    //{
-//    //    repoNotebooks.CambiarDisponibilidad(idNotebooks, disponible);
-//    //}
-//    //#endregion
-
-
-//    // Este metodo nos retorna la disponibilidad de la notebook para poder reutilizarla en el detalle
-//    //    #region Disponibilidad de la notebook
-//    //    public bool EstaDisponible(int idNotebook)
-//    //    {
-//    //        Notebook? notebook = repoNotebooks.DetalleNotebooks(idNotebook);
-
-//    //        if (notebook == null)
-//    //        {
-//    //            throw new Exception("La notebook no existe");
-//    //        }
-
-//    //        return notebook.DisponibleNotebook;
-//    //    }
-//    //    #endregion
-//}

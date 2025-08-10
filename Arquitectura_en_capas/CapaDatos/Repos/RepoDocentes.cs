@@ -76,22 +76,6 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     }
     #endregion
 
-    #region Obtener todo los datos
-    public IEnumerable<Docentes> GetAll()
-    {
-        string query = "select * from Docentes";
-
-        try
-        {
-            return Conexion.Query<Docentes>(query).ToList();
-        }
-        catch (Exception)
-        {
-            throw new Exception("Error al obtener los datos de los docentes");
-        }
-    }
-    #endregion
-
     #region Obtener por Id
     public Docentes? GetById(int idDocente)
     {
@@ -106,6 +90,42 @@ public class RepoDocentes : RepoBase, IRepoDocentes
         catch (Exception)
         {
             throw new Exception("Error al obtener el id del docente");
+        }
+    }
+    #endregion
+
+    #region Obtener por Dni
+    public Docentes? GetByDni(string Dni)
+    {
+        string query = "select * from Docentes where dni = @dni";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("@dni", Dni);
+            return Conexion.QueryFirstOrDefault<Docentes>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el dni del docente");
+        }
+    }
+    #endregion
+
+    #region Obteber por Email
+    public Docentes? GetByEmail(string Email)
+    {
+        string query = "select * from Docentes where email = @email";
+
+        DynamicParameters parametros = new DynamicParameters();
+        try
+        {
+            parametros.Add("@email", Email);
+            return Conexion.QueryFirstOrDefault<Docentes>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el email del docente");
         }
     }
     #endregion
