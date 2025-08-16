@@ -17,19 +17,19 @@ public class MapperDevoluciones : RepoBase, IMapperDevoluciones
     public IEnumerable<DevolucionesDTO> GetAllDTO()
     {
         return Conexion.Query<Devolucion, Prestamos, Docentes, Usuarios, DevolucionesDTO>(
-            "GetDevolucionesDTO",
-            (devolucion, prestamo, docente, Usuarios) => new DevolucionesDTO
-            {
-                IdDevolucion = devolucion.IdDevolucion,
-                ApellidoDocente = docente.Apellido,
-                ApellidoEncargado = Usuarios.Apellido,
-                FechaPrestamo = prestamo.FechaPrestamo,
-                FechaDevolucion = devolucion.FechaDevolucion,
-                Observaciones = devolucion.Observaciones
-            },
-            commandType: CommandType.StoredProcedure,
-            splitOn: "Apellido, Apellido, FechaPrestamo" 
-        ).ToList();
+    "GetDevolucionesDTO",
+    (devolucion, prestamo, docente, usuario) => new DevolucionesDTO
+    {
+        IdDevolucion = devolucion.IdDevolucion,
+        FechaDevolucion = devolucion.FechaDevolucion,
+        Observaciones = devolucion.Observaciones,
+        FechaPrestamo = prestamo.FechaPrestamo,
+        ApellidoDocente = docente.Apellido,
+        ApellidoEncargado = usuario.Apellido
+    },
+    commandType: CommandType.StoredProcedure,
+    splitOn: "FechaPrestamo,Apellido,Apellido"
+).ToList();
     }
     #endregion
 

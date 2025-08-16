@@ -129,4 +129,19 @@ public class RepoDocentes : RepoBase, IRepoDocentes
         }
     }
     #endregion
+
+    #region Obtener Todos
+    public IEnumerable<Docentes> GetAll()
+    {
+        string query = "select * from Docentes";
+        try
+        {
+            return Conexion.Query<Docentes>(query);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener todos los docentes");
+        }
+    }
+    #endregion
 }

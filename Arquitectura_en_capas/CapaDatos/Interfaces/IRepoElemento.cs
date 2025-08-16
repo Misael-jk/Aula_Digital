@@ -11,5 +11,7 @@ public interface IRepoElemento
     public Elemento? GetByCodigoBarra(string codigoBarra);
     public Elemento? GetById(int idElemento);
     public IEnumerable<Elemento> GetByCarrito(int idCarrito);
+    public bool GetDisponible(int idElemento);
+    public void UpdateEstado(int idElemento, bool disponible);
 
 }

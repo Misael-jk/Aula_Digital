@@ -1,75 +1,138 @@
-﻿//using CapaDatos.Repos;
-//using CapaNegocio;
-//using CapaEntidad;
-//using System.Data;
-//using CapaDatos.Interfaces;
-//using CapaNegocio.MappersDTO;
-//using CapaNegocio.DTOs;
+﻿using CapaDatos.Repos;
+using CapaNegocio;
+using CapaEntidad;
+using System.Data;
+using CapaDatos.Interfaces;
+using CapaDatos.InterfacesDTO;
+using CapaDTOs;
+using System.Transactions;
+using System.Data.Common;
 
-//namespace CapaNegocio;
+namespace CapaNegocio;
 
-//public class PrestamosCN
-//{
-//    private readonly PrestamosMapper prestamosMapper;
-//    private readonly IRepoPrestamos repoPrestamos;
-//    private readonly IRepoCarritos repoCarritos;
-//    private readonly IRepoCursos repoCursos;
-//    private readonly IRepoDocentes repoDocentes;
-//    private readonly IRepoUsuarios repoUsuarios;
+public class PrestamosCN
+{
+    private readonly IRepoPrestamos repoPrestamos;
+    private readonly IRepoCarritos repoCarritos;
+    private readonly IRepoElemento repoElemento;
+    private readonly IRepoPrestamoDetalle repoPrestamoDetalle;
+    private readonly IMapperPrestamos mapperPrestamos;
 
-//    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, 
-//        IRepoCursos repoCursos, IRepoDocentes repoDocentes, IRepoUsuarios repoUsuarios)
-//    {
-//        this.repoPrestamos = repoPrestamos;
-//        this.repoCarritos = repoCarritos;
-//        this.repoCursos = repoCursos;
-//        this.repoDocentes = repoDocentes;
-//        this.repoUsuarios = repoUsuarios;
-//        prestamosMapper = new PrestamosMapper();
-//    }
+    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, IRepoElemento repoElemento, IRepoPrestamoDetalle repoPrestamoDetalle,IMapperPrestamos mapperPrestamos)
+    {
+        this.repoPrestamos = repoPrestamos;
+        this.mapperPrestamos = mapperPrestamos;
+        this.repoCarritos = repoCarritos;
+        this.repoElemento = repoElemento;
+        this.repoPrestamoDetalle = repoPrestamoDetalle;
+    }
 
-//    public void HacerPrestamo(Prestamos prestamos)
-//    {
-//        repoPrestamos.Insert(prestamos);
-//    }
+    public IEnumerable<PrestamosDTO> ObtenerTodo()
+    {
+        return mapperPrestamos.GetAllDTO();
+    }
 
-//    public IEnumerable<PrestamosDTO> GetsAll()
-//    {
-//        IEnumerable<Prestamos> lista = repoPrestamos.GetAll();
+    public void CrearPrestamo(Prestamos prestamo, IEnumerable<int> idsElementos, int? idCarrito)
+    {
+        if (idCarrito.HasValue)
+        {
+            if (!repoCarritos.GetDisponible(idCarrito.Value))
+            {
+                throw new Exception("El carrito no está disponible.");
+            }
 
-//        return MapearLista(lista);
-//    }
+            prestamo.IdCarrito = idCarrito.Value;
 
-//    private PrestamosDTO MapearDTO(Prestamos prestamos)
-//    {
-//        Dictionary<int, string> usuarios = repoUsuarios.GetAll().ToDictionary(u => u.IdUsuario, u => u.Apellido);
-//        Dictionary<int, string> docentes = repoDocentes.GetAll().ToDictionary(d => d.IdDocente, d => d.Apellido);
-//        Dictionary<int, string> carritos = repoCarritos.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
-//        Dictionary<int, string> cursos = repoCursos.GetAll().ToDictionary(cs => cs.IdCurso, cs => cs.NombreCurso);
+            repoCarritos.UpdateDisponible(idCarrito.Value, false);
+        }
 
-//        return prestamosMapper.MapearDTO(prestamos, usuarios, docentes, cursos, carritos);
-//    }
+        foreach (int idElemento in idsElementos)
+        {
+            if (!repoElemento.GetDisponible(idElemento))
+            {
+                throw new Exception($"El elemento {idElemento} no esta disponible.");
+            }
+        }
 
+        repoPrestamos.Insert(prestamo);
 
-//    private IEnumerable<PrestamosDTO> MapearLista(IEnumerable<Prestamos> lista)
-//    {
-//        Dictionary<int, string> usuario = repoUsuarios.GetAll().ToDictionary(u => u.IdUsuario, u => u.Apellido);
-//        Dictionary<int, string> docente = repoDocentes.GetAll().ToDictionary(d => d.IdDocente, d => d.Apellido);
-//        Dictionary<int, string> carrito = repoCarritos.GetAll().ToDictionary(c => c.IdCarrito, c => c.NumeroSerieCarrito);
-//        Dictionary<int, string> curso = repoCursos.GetAll().ToDictionary(cs => cs.IdCurso, cs => cs.NombreCurso);
+        foreach (int idElemento in idsElementos)
+        {
+            repoPrestamoDetalle.Insert(new PrestamoDetalle
+            {
+                IdPrestamo = prestamo.IdPrestamo,
+                IdElemento = idElemento
+            });
 
-//        return prestamosMapper.MapearLista(lista, curso, docente, carrito, usuario);
-//    }
+            repoElemento.UpdateEstado(idElemento, false); 
+        }
+    }
 
+    public void ActualizarPrestamo(Prestamos prestamo, IEnumerable<int> nuevosIdsElementos, int? nuevoIdCarrito)
+    {
+        if (nuevoIdCarrito.HasValue)
+        {
+            if (!repoCarritos.GetDisponible(nuevoIdCarrito.Value))
+            {
+                throw new Exception("El carrito no esta disponible");
+            }
+            prestamo.IdCarrito = nuevoIdCarrito.Value;
 
-//    //// Muestra los datos de los prestamos
-//    //#region Mostrar los datos del prestamo
-//    //public IEnumerable<Prestamos> ListarPrestamos()
-//    //{
-//    //    return repoPrestamos.ListarPrestamos().ToList();
-//    //}
-//    //#endregion
+            repoCarritos.UpdateDisponible(nuevoIdCarrito.Value, false);
+        }
 
+ 
+        foreach (int idElemento in nuevosIdsElementos)
+        {
+            if (!repoElemento.GetDisponible(idElemento))
+            {
+                throw new Exception($"El elemento {idElemento} no esta disponible");
+            }
+        }
+
+        repoPrestamos.Update(prestamo);
+
+        repoPrestamoDetalle.Delete(prestamo.IdPrestamo);
+
+        foreach (int idElemento in nuevosIdsElementos)
+        {
+            repoPrestamoDetalle.Insert(new PrestamoDetalle
+            {
+                IdPrestamo = prestamo.IdPrestamo,
+                IdElemento = idElemento,
+            });
+
+            repoElemento.UpdateEstado(idElemento, false);
+        }
+    }
+
+    public void EliminarPrestamo(int idPrestamo)
+    {
+        Prestamos? prestamo = repoPrestamos.GetById(idPrestamo);
+
+        if (prestamo == null)
+        {
+            throw new Exception("El prestamo no existe.");
+        }
+
+        if (prestamo.IdCarrito.HasValue)
+        {
+            repoCarritos.UpdateDisponible(prestamo.IdCarrito.Value, true);
+        }
+
+        IEnumerable<PrestamoDetalle> detalles = repoPrestamoDetalle.GetByPrestamo(idPrestamo);
+
+        foreach (var detalle in detalles)
+        {
+            repoElemento.UpdateEstado(detalle.IdElemento, true);
+        }
+
+        repoPrestamoDetalle.Delete(idPrestamo);
+
+        repoPrestamos.Delete(idPrestamo);
+    }
+
+}
 
 //    ///*
 //    //En esta region se realiza un prestamo con carrito cumpliendo con los requisitos necesario para hacer

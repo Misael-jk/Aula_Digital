@@ -21,10 +21,10 @@ public class MapperPrestamoDetalle : RepoBase, IMapperPrestamoDetalle
             {
                 NumeroSerieElemento = elemento.numeroSerie,
                 TipoElemento = tipo.ElementoTipo,
-                NumeroSerieCarrito = carrito?.NumeroSerieCarrito
+                NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito"
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "numeroSerie, ElementoTipo, NumeroSerieCarrito"
+            splitOn: "numeroSerie,ElementoTipo, NumeroSerieCarrito"
         ).ToList();
     }
 

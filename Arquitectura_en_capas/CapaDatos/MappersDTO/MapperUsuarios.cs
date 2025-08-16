@@ -24,8 +24,8 @@ public class MapperUsuarios : RepoBase, IMapperUsuarios
                 Password = usuario.Password,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
-                Rol = rol.Rol,
-                Email = usuario.Email
+                Email = usuario.Email,
+                Rol = rol.Rol
             },
             commandType: CommandType.StoredProcedure,
             splitOn: "Rol"

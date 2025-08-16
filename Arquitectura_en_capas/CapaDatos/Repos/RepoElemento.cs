@@ -2,6 +2,7 @@
 using CapaDatos.Interfaces;
 using CapaEntidad;
 using System.Data;
+using System.Data.Common;
 
 namespace CapaDatos.Repos;
 
@@ -151,4 +152,32 @@ public class RepoElemento : RepoBase, IRepoElemento
         }
     }
     #endregion
+
+    public bool GetDisponible(int idElemento)
+    {
+
+        string sql = "select * from Elementos where IdElemento = @IdElemento and IdEstadoElemento = 1 and Disponible = true limit 1;";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("IdElemento", idElemento);
+
+        int disponible = Conexion.ExecuteScalar<int>(sql, parameters);
+
+        return disponible > 0;
+    }
+
+    public void UpdateEstado(int idElemento, bool disponible)
+    {
+        string sql = @"update Elementos
+                       set idEstadoElemento = 2, Disponible = @Disponible
+                       where idElemento = @IdElemento";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("@Disponible", disponible);
+        parameters.Add("@IdElemento", idElemento);
+
+        Conexion.Execute(sql, parameters);
+    }
 }

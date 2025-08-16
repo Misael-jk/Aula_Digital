@@ -6,4 +6,5 @@ public interface IRepoEstadosElemento
 {
     public IEnumerable<EstadosElemento> GetAll();
     public EstadosElemento? GetById(int idEstadosElemento);
+    public int GetByIdDisponible(string estadoElementoNombre);
 }

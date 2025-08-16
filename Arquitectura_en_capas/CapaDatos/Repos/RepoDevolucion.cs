@@ -5,7 +5,7 @@ using System.Data;
 
 namespace CapaDatos.Repos;
 
-class RepoDevolucion : RepoBase, IRepoDevolucion
+public class RepoDevolucion : RepoBase, IRepoDevolucion
 {
     public RepoDevolucion(IDbConnection conexion) 
     : base(conexion)

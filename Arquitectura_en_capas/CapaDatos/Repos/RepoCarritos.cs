@@ -9,7 +9,9 @@ public class RepoCarritos : RepoBase, IRepoCarritos
 {
     public RepoCarritos(IDbConnection conexion)
    : base(conexion)
-    {
+    { 
+        if(conexion == null)
+            throw new ArgumentNullException(nameof(conexion), "La conexión no puede ser null");
     }
 
     #region Alta Carrito
@@ -78,6 +80,9 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         string query = "select * from Carritos";
         try
         {
+            if (Conexion.State != ConnectionState.Open)
+                Conexion.Open();
+
             return Conexion.Query<Carritos>(query);
         }
         catch (Exception)
@@ -108,7 +113,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     #endregion
 
     #region Obtener por Numero de Serie
-    public Carritos? GetById(string numeroSerie)
+    public Carritos? GetByNumeroSerie(string numeroSerie)
     {
         string query = "select * from Carritos where numeroSerieCarrito = @numeroSerie";
 
@@ -126,4 +131,34 @@ public class RepoCarritos : RepoBase, IRepoCarritos
 
     }
     #endregion
+
+    public void UpdateDisponible(int idCarrito, bool disponible)
+    {
+        string sql = @"update Carritos
+                       Disponible = @Disponible
+                       where idCarrito = @IdCarrito";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("@Disponible", disponible);
+        parameters.Add("@IdCarritoo", idCarrito);
+
+        Conexion.Execute(sql, parameters);
+    }
+
+    public bool GetDisponible(int idCarrito)
+    {
+
+        string sql = "select * from Carritos where idCarrito = @IdCarrito and DisponibleCarrito = 1 limit 1;";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("@IdCarrito", idCarrito);
+
+        int disponible = Conexion.ExecuteScalar<int>(sql, parameters);
+
+        return disponible > 0;
+    }
+
+
 }

@@ -25,7 +25,7 @@ public class MapperDevolucionDetalle : RepoBase, IMapperDevolucionDetalle
                 FechaDevolucion = devolucion.FechaDevolucion,
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo, numeroSerie, NumeroSerieCarrito, FechaDevolucion"
+            splitOn: "FechaDevolucion,numeroSerie,ElementoTipo, NumeroSerieCarrito"
         ).ToList();
     }
 

@@ -46,4 +46,16 @@ public class RepoEstadosElemento : RepoBase, IRepoEstadosElemento
         }
     }
     #endregion
+
+    #region Obtener ID del estado disponible para los prestamos
+    public int GetByIdDisponible(string DisponibleID)
+    {
+        string sql = "select IdEstadoElemento from EstadosElemento where estadosElemento = @Disponible";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("Disponible", DisponibleID);
+        return Conexion.ExecuteScalar<int>(sql, parameters);
+    }
+    #endregion
 }

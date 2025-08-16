@@ -19,7 +19,6 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
 
         parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
         parametros.Add("unidElemento", prestamoDetalle.IdElemento);
-        parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
 
         try
         {
@@ -39,7 +38,6 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
 
         parametros.Add("unidPrestamo", prestamoDetalle.IdPrestamo);
         parametros.Add("unidElemento", prestamoDetalle.IdElemento);
-        parametros.Add("unidEstadoPrestamo", prestamoDetalle.IdEstadoPrestamo);
 
         try
         {
@@ -53,12 +51,11 @@ public class RepoPrestamoDetalle : RepoBase, IRepoPrestamoDetalle
     #endregion
 
     #region Eliminar detalles
-    public void Delete(int idPrestamo, int idElemento)
+    public void Delete(int idPrestamo)
     {
         DynamicParameters parametros = new DynamicParameters();
 
         parametros.Add("unidPrestamo", idPrestamo);
-        parametros.Add("unidElemento", idElemento);
 
         try
         {
