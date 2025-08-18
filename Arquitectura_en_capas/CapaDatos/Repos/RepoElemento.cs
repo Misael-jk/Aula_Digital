@@ -153,6 +153,7 @@ public class RepoElemento : RepoBase, IRepoElemento
     }
     #endregion
 
+    #region Obtener Elementos Disponibles
     public bool GetDisponible(int idElemento)
     {
 
@@ -166,7 +167,9 @@ public class RepoElemento : RepoBase, IRepoElemento
 
         return disponible > 0;
     }
+    #endregion
 
+    #region Cambiar Estado de Elemento
     public void UpdateEstado(int idElemento, bool disponible)
     {
         string sql = @"update Elementos
@@ -180,4 +183,5 @@ public class RepoElemento : RepoBase, IRepoElemento
 
         Conexion.Execute(sql, parameters);
     }
+    #endregion
 }

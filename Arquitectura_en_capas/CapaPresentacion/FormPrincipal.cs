@@ -78,7 +78,7 @@ namespace CapaPresentacion
             mapperUsuarios = new MapperUsuarios(conexion);
 
             elementoCN = new ElementosCN(mapperElementos, repoElementos);
-            carritosCN = new CarritosCN(repoCarritos);
+            carritosCN = new CarritosCN(repoCarritos, repoElementos);
             docentesCN = new DocentesCN(repoDocentes);
             prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, mapperPrestamos);
             tiposElementoCN = new TiposElementoCN(repoTipoElemento);
@@ -88,6 +88,7 @@ namespace CapaPresentacion
         private void BtnCerrar1_Click(object sender, EventArgs e)
         {
             Application.Exit();
+            
         }
 
         private void BtnDashboard_Click(object sender, EventArgs e)

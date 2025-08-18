@@ -34,102 +34,117 @@ public class PrestamosCN
 
     public void CrearPrestamo(Prestamos prestamo, IEnumerable<int> idsElementos, int? idCarrito)
     {
-        if (idCarrito.HasValue)
+        using (TransactionScope scope = new TransactionScope())
         {
-            if (!repoCarritos.GetDisponible(idCarrito.Value))
+            if (idCarrito.HasValue)
             {
-                throw new Exception("El carrito no está disponible.");
+                if (!repoCarritos.GetDisponible(idCarrito.Value))
+                {
+                    throw new Exception("El carrito no esta disponible.");
+                }
+
+                prestamo.IdCarrito = idCarrito.Value;
+
+                repoCarritos.UpdateDisponible(idCarrito.Value, false);
             }
 
-            prestamo.IdCarrito = idCarrito.Value;
-
-            repoCarritos.UpdateDisponible(idCarrito.Value, false);
-        }
-
-        foreach (int idElemento in idsElementos)
-        {
-            if (!repoElemento.GetDisponible(idElemento))
+            foreach (int idElemento in idsElementos)
             {
-                throw new Exception($"El elemento {idElemento} no esta disponible.");
+                if (!repoElemento.GetDisponible(idElemento))
+                {
+                    throw new Exception($"El elemento {idElemento} no esta disponible.");
+                }
             }
-        }
 
-        repoPrestamos.Insert(prestamo);
+            repoPrestamos.Insert(prestamo);
 
-        foreach (int idElemento in idsElementos)
-        {
-            repoPrestamoDetalle.Insert(new PrestamoDetalle
+            foreach (int idElemento in idsElementos)
             {
-                IdPrestamo = prestamo.IdPrestamo,
-                IdElemento = idElemento
-            });
+                repoPrestamoDetalle.Insert(new PrestamoDetalle
+                {
+                    IdPrestamo = prestamo.IdPrestamo,
+                    IdElemento = idElemento
+                });
 
-            repoElemento.UpdateEstado(idElemento, false); 
+                repoElemento.UpdateEstado(idElemento, false);
+            }
+
+            scope.Complete();
         }
     }
 
     public void ActualizarPrestamo(Prestamos prestamo, IEnumerable<int> nuevosIdsElementos, int? nuevoIdCarrito)
     {
-        if (nuevoIdCarrito.HasValue)
+        using (TransactionScope scope = new TransactionScope())
         {
-            if (!repoCarritos.GetDisponible(nuevoIdCarrito.Value))
+            if (nuevoIdCarrito.HasValue)
             {
-                throw new Exception("El carrito no esta disponible");
+                if (!repoCarritos.GetDisponible(nuevoIdCarrito.Value))
+                {
+                    throw new Exception("El carrito no esta disponible");
+                }
+                prestamo.IdCarrito = nuevoIdCarrito.Value;
+
+                repoCarritos.UpdateDisponible(nuevoIdCarrito.Value, false);
             }
-            prestamo.IdCarrito = nuevoIdCarrito.Value;
 
-            repoCarritos.UpdateDisponible(nuevoIdCarrito.Value, false);
-        }
 
- 
-        foreach (int idElemento in nuevosIdsElementos)
-        {
-            if (!repoElemento.GetDisponible(idElemento))
+            foreach (int idElemento in nuevosIdsElementos)
             {
-                throw new Exception($"El elemento {idElemento} no esta disponible");
+                if (!repoElemento.GetDisponible(idElemento))
+                {
+                    throw new Exception($"El elemento {idElemento} no esta disponible");
+                }
             }
-        }
 
-        repoPrestamos.Update(prestamo);
+            repoPrestamos.Update(prestamo);
 
-        repoPrestamoDetalle.Delete(prestamo.IdPrestamo);
+            repoPrestamoDetalle.Delete(prestamo.IdPrestamo);
 
-        foreach (int idElemento in nuevosIdsElementos)
-        {
-            repoPrestamoDetalle.Insert(new PrestamoDetalle
+            foreach (int idElemento in nuevosIdsElementos)
             {
-                IdPrestamo = prestamo.IdPrestamo,
-                IdElemento = idElemento,
-            });
+                repoPrestamoDetalle.Insert(new PrestamoDetalle
+                {
+                    IdPrestamo = prestamo.IdPrestamo,
+                    IdElemento = idElemento,
+                });
 
-            repoElemento.UpdateEstado(idElemento, false);
+                repoElemento.UpdateEstado(idElemento, false);
+            }
+
+            scope.Complete();
         }
     }
 
     public void EliminarPrestamo(int idPrestamo)
     {
-        Prestamos? prestamo = repoPrestamos.GetById(idPrestamo);
-
-        if (prestamo == null)
+        using (TransactionScope scope = new TransactionScope())
         {
-            throw new Exception("El prestamo no existe.");
+            Prestamos? prestamo = repoPrestamos.GetById(idPrestamo);
+
+            if (prestamo == null)
+            {
+                throw new Exception("El prestamo no existe.");
+            }
+
+            if (prestamo.IdCarrito.HasValue)
+            {
+                repoCarritos.UpdateDisponible(prestamo.IdCarrito.Value, true);
+            }
+
+            IEnumerable<PrestamoDetalle> detalles = repoPrestamoDetalle.GetByPrestamo(idPrestamo);
+
+            foreach (var detalle in detalles)
+            {
+                repoElemento.UpdateEstado(detalle.IdElemento, true);
+            }
+
+            repoPrestamoDetalle.Delete(idPrestamo);
+
+            repoPrestamos.Delete(idPrestamo);
+
+            scope.Complete();
         }
-
-        if (prestamo.IdCarrito.HasValue)
-        {
-            repoCarritos.UpdateDisponible(prestamo.IdCarrito.Value, true);
-        }
-
-        IEnumerable<PrestamoDetalle> detalles = repoPrestamoDetalle.GetByPrestamo(idPrestamo);
-
-        foreach (var detalle in detalles)
-        {
-            repoElemento.UpdateEstado(detalle.IdElemento, true);
-        }
-
-        repoPrestamoDetalle.Delete(idPrestamo);
-
-        repoPrestamos.Delete(idPrestamo);
     }
 
 }

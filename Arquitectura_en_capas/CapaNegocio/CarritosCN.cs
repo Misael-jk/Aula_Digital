@@ -3,16 +3,20 @@ using System.Data;
 using CapaDatos.Repos;
 using CapaNegocio;
 using CapaDatos.Interfaces;
+using System.Transactions;
+using System.Xml.Linq;
 
 namespace CapaNegocio;
 
 public class CarritosCN
 {
     private readonly IRepoCarritos repoCarrito;
+    private readonly IRepoElemento repoElementos;
 
-    public CarritosCN(IRepoCarritos repoCarrito)
+    public CarritosCN(IRepoCarritos repoCarrito, IRepoElemento repoElementos)
     {
         this.repoCarrito = repoCarrito;
+        this.repoElementos = repoElementos;
     }
 
     #region INSERT CARRITO
@@ -77,46 +81,67 @@ public class CarritosCN
     }
     #endregion
 
+    #region Manejo de Notebooks en Carrito
+    public void AgregarNotebookAlCarrito(int idCarrito, int idElemento)
+    {
+        using (TransactionScope scope = new TransactionScope())
+        {
+            Carritos? carrito = repoCarrito.GetById(idCarrito);
 
-    ///*
-    //En esta parte si el docente eligio en el prestamo llevar por carrito se
-    //va a invocar este metodo para el prestamo.
-    //*/
-    //#region Ocupar Carrito
-    //public void OcuparCarrito(int idCarrito)
-    //{
-    //    Carritos? carritoOcupado = repoCarritos.DetalleCarritos(idCarrito);
+            if (carrito == null)
+            {
+                throw new Exception("El carrito no existe");
+            }
 
-    //    if (carritoOcupado == null)
-    //    {
-    //        throw new Exception("No se pudo encontrar el carrito. Ubicacion: capaNegocio");
-    //    }
+            Elemento? elemento = repoElementos.GetById(idElemento);
 
-    //    carritoOcupado.DisponibleCarrito = false;
-    //    repoCarritos.ActualizarCarrito(carritoOcupado);
-    //    carritoNotebooksCN.DisponibilidadCarritoNotebook(idCarrito, false);
-    //}
-    //#endregion
+            if (elemento == null)
+            {
+                throw new Exception("Elemento no encontrado");
+            }
 
+            if (!repoElementos.GetDisponible(idElemento))
+            {
+                throw new Exception("La notebook no esta disponible");
+            }
 
-    ///*
-    //Esta parte cuando se haga la devolucion del carrito se debe invocar este metodo
-    //en la clase de prestamo para cambiar su disponibilidad para el carrito y las notebooks del carrito
-    //*/
-    //#region Desocupar Carrito
-    //public void DesocuparCarrito(int idCarrito)
-    //{
-    //    Carritos? carritoDesocupado = repoCarritos.DetalleCarritos(idCarrito);
+            if (elemento.IdCarrito.HasValue && elemento.IdCarrito != idCarrito)
+            {
+                throw new Exception("La notebook ya esta en otro carrito.");
+            }
 
-    //    if (carritoDesocupado == null)
-    //    {
-    //        throw new Exception("No se pudo encontrar el carrito. Ubicacion: capaNegocio");
-    //    }
-    //    carritoDesocupado.DisponibleCarrito = true;
-    //    repoCarritos.ActualizarCarrito(carritoDesocupado);
-    //    carritoNotebooksCN.DisponibilidadCarritoNotebook(idCarrito, true);
-    //}
-    //#endregion
+            int totalNotebooks = repoElementos.GetByCarrito(idCarrito).Count();
 
+            if (totalNotebooks >= 25)
+            {
+                throw new Exception("El carrito ya contiene el máximo de 25 notebooks");
+            }
+
+            elemento.IdCarrito = idCarrito;
+
+            repoElementos.Update(elemento);
+
+            scope.Complete();
+        }
+    }
+
+    public void QuitarNotebookDelCarrito(int idCarrito, int idElemento)
+    {
+        Elemento? elemento = repoElementos.GetById(idElemento);
+
+        if (elemento == null || elemento.IdCarrito != idCarrito)
+        {
+            throw new Exception("La notebook no esta asignada a este carrito");
+        }
+
+        using (TransactionScope scope = new TransactionScope())
+        {
+            elemento.IdCarrito = null;
+            repoElementos.Update(elemento); 
+            scope.Complete();
+        }
+    }
+
+    #endregion
 }
 
