@@ -80,7 +80,7 @@ namespace CapaPresentacion
             elementoCN = new ElementosCN(mapperElementos, repoElementos);
             carritosCN = new CarritosCN(repoCarritos, repoElementos);
             docentesCN = new DocentesCN(repoDocentes);
-            prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, mapperPrestamos);
+            prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, repoUsuarios, repoDocentes, mapperPrestamos);
             tiposElementoCN = new TiposElementoCN(repoTipoElemento);
             usuariosCN = new UsuariosCN(repoUsuarios, repoRoles, mapperUsuarios);
         }

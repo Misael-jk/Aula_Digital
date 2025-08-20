@@ -73,6 +73,26 @@ namespace CapaNegocio
                 throw new Exception("Ya existe un elemento con el mismo código de barras.");
             }
 
+            if(elementoNEW.IdTipoElemento <= 0)
+            {
+                throw new Exception("El tipo de elemento es obligatorio");
+            }
+
+            if (elementoNEW.IdCarrito <= 0)
+            {
+                throw new Exception("Debe elegir un carrito");
+            }
+            
+            if(elementoNEW.IdEstadoElemento != 1)
+            {
+                throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
+            }
+
+            if (elementoNEW.Disponible == false)
+            {
+                throw new Exception("El elemento debe estar disponible al momento de crearlo");
+            }
+
             _repoElemento.Insert(elementoNEW);
         }
         #endregion
@@ -112,6 +132,8 @@ namespace CapaNegocio
             {
                 throw new Exception("No se puede cambiar el estado de un elemento en prestamo sin terminar su devolucion");
             }
+
+
 
             _repoElemento.Update(elementoNEW);
         }

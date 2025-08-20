@@ -127,17 +127,17 @@ public class CarritosCN
 
     public void QuitarNotebookDelCarrito(int idCarrito, int idElemento)
     {
-        Elemento? elemento = repoElementos.GetById(idElemento);
-
-        if (elemento == null || elemento.IdCarrito != idCarrito)
-        {
-            throw new Exception("La notebook no esta asignada a este carrito");
-        }
-
         using (TransactionScope scope = new TransactionScope())
         {
+            Elemento? elemento = repoElementos.GetById(idElemento);
+
+            if (elemento == null || elemento.IdCarrito != idCarrito)
+            {
+                throw new Exception("La notebook no esta asignada a este carrito");
+            }
+
             elemento.IdCarrito = null;
-            repoElementos.Update(elemento); 
+            repoElementos.Update(elemento);
             scope.Complete();
         }
     }

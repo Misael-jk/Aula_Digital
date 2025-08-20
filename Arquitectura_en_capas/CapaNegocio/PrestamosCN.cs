@@ -7,6 +7,7 @@ using CapaDatos.InterfacesDTO;
 using CapaDTOs;
 using System.Transactions;
 using System.Data.Common;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace CapaNegocio;
 
@@ -15,15 +16,19 @@ public class PrestamosCN
     private readonly IRepoPrestamos repoPrestamos;
     private readonly IRepoCarritos repoCarritos;
     private readonly IRepoElemento repoElemento;
+    private readonly IRepoDocentes repoDocentes;
     private readonly IRepoPrestamoDetalle repoPrestamoDetalle;
+    private readonly IRepoUsuarios repoUsuarios;
     private readonly IMapperPrestamos mapperPrestamos;
 
-    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, IRepoElemento repoElemento, IRepoPrestamoDetalle repoPrestamoDetalle,IMapperPrestamos mapperPrestamos)
+    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, IRepoElemento repoElemento, IRepoPrestamoDetalle repoPrestamoDetalle, IRepoUsuarios repoUsuarios, IRepoDocentes repoDocentes, IMapperPrestamos mapperPrestamos)
     {
         this.repoPrestamos = repoPrestamos;
         this.mapperPrestamos = mapperPrestamos;
         this.repoCarritos = repoCarritos;
         this.repoElemento = repoElemento;
+        this.repoDocentes = repoDocentes;
+        this.repoUsuarios = repoUsuarios;
         this.repoPrestamoDetalle = repoPrestamoDetalle;
     }
 
@@ -36,6 +41,22 @@ public class PrestamosCN
     {
         using (TransactionScope scope = new TransactionScope())
         {
+
+            if(repoDocentes.GetById(prestamo.IdDocente) == null)
+            {
+                throw new Exception("El docente no existe");
+            }
+
+            if (repoUsuarios.GetById(prestamo.IdUsuario) == null)
+            {
+                throw new Exception("El usuario no existe");
+            }
+
+            if (idsElementos == null || !idsElementos.Any())
+            {
+                throw new Exception("Debe prestar al menos un elemento.");
+            }
+
             if (idCarrito.HasValue)
             {
                 if (!repoCarritos.GetDisponible(idCarrito.Value))
@@ -77,6 +98,21 @@ public class PrestamosCN
     {
         using (TransactionScope scope = new TransactionScope())
         {
+            if (repoDocentes.GetById(prestamo.IdDocente) == null)
+            {
+                throw new Exception("El docente no existe");
+            }
+
+            if (repoUsuarios.GetById(prestamo.IdUsuario) == null)
+            {
+                throw new Exception("El usuario no existe");
+            }
+
+            if (nuevosIdsElementos == null || !nuevosIdsElementos.Any())
+            {
+                throw new Exception("Debe prestar al menos un elemento.");
+            }
+
             if (nuevoIdCarrito.HasValue)
             {
                 if (!repoCarritos.GetDisponible(nuevoIdCarrito.Value))

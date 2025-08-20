@@ -7,5 +7,5 @@ public class Devolucion
     public int IdDocente {get; set;}
     public int IdUsuario {get; set;}
     public DateTime FechaDevolucion {get; set;}
-    public required string Observaciones {get; set;}
+    public string? Observaciones {get; set;}
 }
