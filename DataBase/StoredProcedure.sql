@@ -7,13 +7,13 @@ BEGIN
     SELECT 
         u.idUsuario,
         u.usuario,
-        u.pass,
+        u.pass as Password,
         u.nombre,
         u.apellido,
-        r.rol,
-        u.email
+        u.email as Email,
+        r.rol
     FROM Usuarios u
-    INNER JOIN Rol r ON u.idRol = r.idRol;
+    JOIN Rol r ON u.idRol = r.idRol;
 END$$
 
 
@@ -21,21 +21,24 @@ END$$
 delimiter $$
 drop procedure if exists GetPrestamosDTO $$
 CREATE PROCEDURE GetPrestamosDTO()
-BEGIN
-    SELECT 
-        p.idPrestamo,
-        c.curso AS Curso,
-        d.apellido AS ApellidoDocente,
-        u.apellido AS ApellidoEncargado,
-        ca.numeroSerieCarrito AS NumeroSerieCarrito,
-        p.fechaPrestamo
-    FROM prestamos p 
-    LEFT JOIN Cursos c using (idCurso)
-    INNER JOIN docentes d using (idDocente)
-    INNER JOIN usuarios u using (idUsuario)
-    LEFT JOIN carritos ca using (idCarritos);
+begin
+
+SELECT 
+    p.idPrestamo,
+    p.fechaPrestamo,
+    c.curso AS NombreCurso,
+    concat(d.nombre, ' ', d.apellido) AS Apellido,
+    concat(u.nombre, ' ', u.apellido) AS Apellido,
+    ca.numeroSerieCarrito AS NumeroSerieCarrito
+FROM prestamos p
+JOIN docentes d on p.idDocente = d.idDocente
+JOIN usuarios u on p.idUsuario = u.idUsuario
+LEFT JOIN Cursos c using (idCurso)
+LEFT JOIN carritos ca using (idCarrito);
    
 END$$
+
+select * from usuarios u 
 
 
 -- SP PrestamosDetalle DTO 
@@ -44,17 +47,18 @@ drop procedure if exists GetPrestamoDetalleDTO $$
 CREATE PROCEDURE GetPrestamoDetalleDTO()
 BEGIN
     SELECT 
-        pd.idPrestamo,
-        e.numeroSerie AS NumeroSerieElemento,
-        te.elemento AS TipoElemento,
+    	e.numeroSerie as numeroSerie,
+        te.elemento AS ElementoTipo,
         c.numeroSerieCarrito AS NumeroSerieCarrito
     FROM PrestamoDetalle pd
-    INNER JOIN Elementos e ON pd.idElemento = e.idElemento
-    INNER JOIN tipoElemento te ON e.idTipoElemento = te.idTipoElemento
+    JOIN Elementos e ON pd.idElemento = e.idElemento
+    JOIN tipoElemento te ON e.idTipoElemento = te.idTipoElemento
     LEFT JOIN Carritos c ON e.idCarrito = c.idCarrito;
 END$$
 
+call GetPrestamoDetalleDTO;
 
+select * from tipoelemento t 
 -- SP Devolucion DTO
 
 DELIMITER $$
@@ -62,16 +66,16 @@ drop procedure if exists GetDevolucionesDTO $$
 CREATE PROCEDURE GetDevolucionesDTO()
 BEGIN
     SELECT 
-        d.idDevolucion,
-        p.fechaPrestamo,
-        doc.apellido AS ApellidoDocente,
-        u.apellido AS ApellidoEncargado,
-        d.fechaDevolucion,
-        d.observaciones
+        d.IdDevolucion,
+    d.FechaDevolucion,
+    d.Observaciones,
+    p.FechaPrestamo,
+    doc.Apellido AS Apellido,
+    u.Apellido AS Apellido
     FROM Devoluciones d
-    INNER JOIN Prestamos p ON d.idPrestamo = p.idPrestamo
-    INNER JOIN Docentes doc ON d.idDocente = doc.idDocente
-    INNER JOIN Usuarios u ON d.idUsuario = u.idUsuario;
+    JOIN Prestamos p ON d.idPrestamo = p.idPrestamo
+    JOIN Docentes doc ON d.idDocente = doc.idDocente
+    JOIN Usuarios u ON d.idUsuario = u.idUsuario;
 END$$
 
 
@@ -82,17 +86,15 @@ drop procedure if exists GetDevolucionDetalleDTO $$
 CREATE PROCEDURE GetDevolucionDetalleDTO()
 BEGIN
     SELECT 
-        dd.idDevolucion,
-        tp.tipoElemento,
-        e.numeroSerie,
-        c.numeroSerieCarrito,
-        d.fechaDevolucion
+    	d.fechaDevolucion,
+    	e.numeroSerie,
+    	tp.elemento as ElementoTipo,
+        c.numeroSerieCarrito as NumeroSerieCarrito
     FROM DevolucionDetalle dd
     join devoluciones d using (idDevolucion)
     join Elementos e using (idElemento)
-    join TipoElemento tp using (idTipoElemento)
-    left join carrito c using (idCarrito);
-  
+    join tipoelemento tp using (idTipoElemento)
+    left join carritos c using (idCarrito);
 END$$
 
 
@@ -115,5 +117,5 @@ BEGIN
     LEFT JOIN Carritos c ON e.idCarrito = c.idCarrito;
 END$$
 
-
+select * from Carritos
 
