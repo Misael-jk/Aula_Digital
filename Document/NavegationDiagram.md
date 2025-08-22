@@ -1,22 +1,20 @@
 ```mermaid
 
-graph TD
-    Login(Login)
-    Menu(Menu Principal)
-    GestionDocentes(Gestion de Docentes)
-    GestionAlumnos(Gestion de Alumnos)
-    Prestamos(Gestion de Prestamos)
-    DetallePrestamo(Detalle del Prestamo)
-    Carritos(Gestion de Carritos)
-    Notebooks(Gestion de Notebooks)
+flowchart TD
+    Login[Login] --> Menu[Menu Principal]
 
-    Login --> Menu
-    Menu --> GestionDocentes
-    Menu --> GestionAlumnos
-    Menu --> Prestamos
-    Prestamos --> DetallePrestamo
-    Menu --> Carritos
-    Menu --> Notebooks
+    Menu --> Docentes[Docentes]
+    Menu --> Elementos[Elementos]
+    Menu --> Carritos[Carritos]
+    Menu --> Prestamos[Prestamos]
+    Menu --> Devoluciones[Devoluciones]
+    Menu --> Categorias[Categorias]
+    Menu --> Usuarios[Usuarios]
+    Menu --> Mantenimiento[Mantenimiento]
 
+    Elementos --> HistorialElemento[Historial Elemento]
+
+    Prestamos --> DetallePrestamoDevolucion[Detalle Préstamo/Devolución]
+    Devoluciones --> DetallePrestamoDevolucion
 
 ```
