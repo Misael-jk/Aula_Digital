@@ -119,3 +119,25 @@ END$$
 
 select * from Carritos
 
+select * from elementos e 
+
+
+-- SP Historial Elemento DTO
+
+delimiter $$ 
+drop procedure if exists GetHistorialElementoDTO $$
+create procedure GetHistorialElementoDTO()
+begin
+	SELECT he.IdHistorialElemento,
+       he.FechaHora,
+       he.Observacion,
+       e.IdElemento,
+       te.Elemento AS TipoElemento,
+       e.NumeroSerie,
+       ee.EstadoElemento
+FROM HistorialElementos he
+JOIN Elementos e ON he.IdElemento = e.IdElemento
+JOIN TipoElemento te ON e.IdTipoElemento = te.IdTipoElemento
+JOIN EstadosElemento ee ON he.IdEstadoElemento = ee.IdEstadoElemento;
+end $$
+

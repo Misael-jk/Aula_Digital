@@ -146,14 +146,27 @@ create table Devoluciones (
 create table DevolucionDetalle (
     idDevolucion int not null,
     idElemento tinyint not null,
-    idEstadoPrestamo tinyint not null,
     constraint PK_DevolucionDetalle primary key (idDevolucion, idElemento),
     constraint FK_DevolucionDetalle_Devoluciones foreign key (idDevolucion)
         references Devoluciones(idDevolucion),
     constraint FK_DevolucionDetalle_Elementos foreign key (idElemento)
-        references Elementos(idElemento),
-    constraint FK_DevolucionDetalle_EstadoPrestamo foreign key (idEstadoPrestamo)
-        references EstadosPrestamo(idEstadoPrestamo)
+        references Elementos(idElemento)
 );
+
+
+create table HistorialElementos (
+    idHistorialElemento int unsigned not null auto_increment,
+    idElemento tinyint not null,
+    idEstadoElemento tinyint not null,
+    fechaHora datetime not null,
+    observacion varchar(200),
+    constraint PK_HistorialElementos primary key (idHistorialElemento),
+    constraint FK_HistorialElemento_Elemento foreign key (idElemento)
+        references Elementos(idElemento),
+    constraint FK_HistorialElemento_Estado foreign key (idEstadoElemento)
+        references EstadosElemento(idEstadoElemento)
+);
+
+
 
 
