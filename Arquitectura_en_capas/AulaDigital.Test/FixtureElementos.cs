@@ -19,10 +19,12 @@ public class ElementoTests : IClassFixture<TestBase>
     public ElementoTests(TestBase fixture)
     {
         _fixture = fixture;
-        var repo = new RepoElemento(fixture.Conexion);
-        var mapper = new MapperElementos(fixture.Conexion);
+        RepoElemento repoElementos = new RepoElemento(fixture.Conexion);
+        RepoCarritos repoCarritos = new RepoCarritos(fixture.Conexion);
+        MapperElementos mapper = new MapperElementos(fixture.Conexion);
 
-        _elementoCN = new ElementosCN(mapper, repo);
+
+        _elementoCN = new ElementosCN(mapper, repoElementos, repoCarritos);
     }
 
     [Fact]
@@ -73,6 +75,9 @@ public class ElementoTests : IClassFixture<TestBase>
 
         NewElemento.numeroSerie = "NB003";
         NewElemento.codigoBarra = "CB005";
+        NewElemento.IdCarrito = 2;
+        //NewElemento.IdEstadoElemento = 2;
+        //NewElemento.Disponible = false;
 
         _elementoCN.ActualizarElemento(NewElemento);
 
@@ -85,46 +90,15 @@ public class ElementoTests : IClassFixture<TestBase>
         trasaction.Rollback();
     }
 
-    //[Fact]
-    //public void Obtener_Elementos_Por_Carrito_OK()
-    //{
-    //    var elementos = _elementoCN.ObtenerPorCarrito(1);
-    //    Assert.NotEmpty(elementos);
-    //}
+    [Fact]
+    public void EliminarElemento()
+    {
+        using IDbTransaction transaction = _fixture.Conexion.BeginTransaction();
 
-    //[Fact]
-    //public void Obtener_Elementos_Por_Tipo_OK()
-    //{
-    //    var elementos = _elementoCN.ObtenerPorTipo(1);
-    //    Assert.NotEmpty(elementos);
-    //}
+        Assert.Throws<Exception>(() => _elementoCN.EliminarElemento(9999));
 
-    //[Fact]
-    //public void Obtener_Elemento_Por_Codigo_Barra_OK()
-    //{
-    //    var elemento = _elementoCN.ObtenerPorCodigoBarra("CB004");
-    //    Assert.NotNull(elemento);
-    //    Assert.Equal("CB004", elemento.CodigoBarra);
-    //}
+        _elementoCN.EliminarElemento(1);
 
-    //[Fact]
-    //public void Crear_Elemento_Sin_Numero_Serie_Falla()
-    //{
-    //    var nuevoElemento = new Elemento
-    //    {
-    //        IdTipoElemento = 1,
-    //        IdCarrito = 1,
-    //        IdEstadoElemento = 1,
-    //        numeroSerie = "",
-    //        codigoBarra = "CB006",
-    //        Disponible = true
-    //    };
-    //    Assert.Throws<Exception>(() => _elementoCN.CrearElemento(nuevoElemento));
-    //}
-
-    //[Fact]
-    //public void Eliminar_Elemento_Inexistente_Falla()
-    //{
-    //    Assert.Throws<Exception>(() => _elementoCN.EliminarElemento(9999)); 
-    //}
+        transaction.Rollback();
+    }
 }

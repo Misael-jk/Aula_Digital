@@ -22,7 +22,7 @@ public class MapperDevoluciones : RepoBase, IMapperDevoluciones
     {
         IdDevolucion = devolucion.IdDevolucion,
         FechaDevolucion = devolucion.FechaDevolucion,
-        Observaciones = devolucion.Observaciones,
+        Observaciones = devolucion?.Observaciones ?? "-",
         FechaPrestamo = prestamo.FechaPrestamo,
         ApellidoDocente = docente.Apellido,
         ApellidoEncargado = usuario.Apellido
@@ -36,7 +36,8 @@ public class MapperDevoluciones : RepoBase, IMapperDevoluciones
     #region Obtener por Id de prestamo
     public DevolucionesDTO? GetByIdDTO(int idPrestamo)
     {
-        var parametros = new DynamicParameters();
+        DynamicParameters parametros = new DynamicParameters();
+
         parametros.Add("@idPrestamo", idPrestamo, DbType.Int32, ParameterDirection.Input);
 
         return Conexion.Query<Devolucion, Prestamos, Docentes, Usuarios, DevolucionesDTO>(
@@ -48,7 +49,7 @@ public class MapperDevoluciones : RepoBase, IMapperDevoluciones
                 ApellidoEncargado = encargado.Apellido,
                 FechaPrestamo = prestamos.FechaPrestamo,
                 FechaDevolucion = devolucion.FechaDevolucion,
-                Observaciones = devolucion.Observaciones
+                Observaciones = devolucion?.Observaciones ?? "-"    
             },
             parametros,
             commandType: CommandType.StoredProcedure,
@@ -60,7 +61,8 @@ public class MapperDevoluciones : RepoBase, IMapperDevoluciones
     #region Obtener por Id de docente
     public IEnumerable<DevolucionesDTO> GetByDocenteDTO(int idDocente)
     {
-        var parametros = new DynamicParameters();
+        DynamicParameters parametros = new DynamicParameters();
+
         parametros.Add("@idDocente", idDocente, DbType.Int32, ParameterDirection.Input);
 
         return Conexion.Query<Devolucion, Prestamos, Docentes, Usuarios, DevolucionesDTO>(
@@ -72,7 +74,7 @@ public class MapperDevoluciones : RepoBase, IMapperDevoluciones
                 ApellidoEncargado = encargado.Apellido,
                 FechaPrestamo = prestamos.FechaPrestamo,
                 FechaDevolucion = devolucion.FechaDevolucion,
-                Observaciones = devolucion.Observaciones
+                Observaciones = devolucion?.Observaciones ?? "-"
             },
             parametros,
             commandType: CommandType.StoredProcedure,

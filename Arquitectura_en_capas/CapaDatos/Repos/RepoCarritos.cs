@@ -95,7 +95,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     #region Obtener por Id
     public Carritos? GetById(int idCarrito)
     {
-        string query = "select * from Carritos where idCarrito = unidCarrito";
+        string query = "select * from Carritos where idCarrito = @unidCarrito";
 
         DynamicParameters parametros = new DynamicParameters();
 
@@ -160,5 +160,22 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         return disponible > 0;
     }
 
+    public int GetCountByCarrito(int idCarrito)
+    {
+        string query = "select COUNT(*) from Elementos where idCarrito = @idCarrito";
 
+        DynamicParameters parametros = new DynamicParameters();
+
+        try
+        {
+            parametros.Add("idCarrito", idCarrito);
+            int cantidad = Conexion.ExecuteScalar<int>(query, parametros);
+
+            return cantidad;
+        }
+        catch (Exception)
+        {
+            throw new Exception("Error al obtener el numero de serie del carrito");
+        }
+    }
 }

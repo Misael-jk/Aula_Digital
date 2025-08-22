@@ -10,11 +10,13 @@ namespace CapaNegocio
     {
         private readonly IMapperElementos _mapperElementos;
         private readonly IRepoElemento _repoElemento;
+        private readonly IRepoCarritos _repoCarritos;
 
-        public ElementosCN(IMapperElementos mapperElementos, IRepoElemento repoElemento)
+        public ElementosCN(IMapperElementos mapperElementos, IRepoElemento repoElemento, IRepoCarritos repoCarritos)
         {
             _mapperElementos = mapperElementos;
             _repoElemento = repoElemento;
+            _repoCarritos = repoCarritos;
         }
 
         #region Metodos de Lectura para la UI DTOs
@@ -73,24 +75,29 @@ namespace CapaNegocio
                 throw new Exception("Ya existe un elemento con el mismo código de barras.");
             }
 
-            if(elementoNEW.IdTipoElemento <= 0)
+            if (elementoNEW.IdTipoElemento <= 0)
             {
                 throw new Exception("El tipo de elemento es obligatorio");
             }
 
-            if (elementoNEW.IdCarrito <= 0)
-            {
-                throw new Exception("Debe elegir un carrito");
-            }
-            
-            if(elementoNEW.IdEstadoElemento != 1)
-            {
-                throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
-            }
+            //if (elementoNEW.IdEstadoElemento != 1)
+            //{
+            //    throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
+            //}
 
-            if (elementoNEW.Disponible == false)
+            //if (elementoNEW.Disponible == false)
+            //{
+            //    throw new Exception("El elemento debe estar disponible al momento de crearlo");
+            //}
+
+            //if(_repoCarritos.GetCountByCarrito(elementoNEW.IdCarrito ?? 0) >= 25 && elementoNEW.IdCarrito != null)
+            //{
+            //    throw new Exception("El carrito que selecciono esta al maximo de notebooks");
+            //}
+
+            if(elementoNEW.IdTipoElemento != 1 && elementoNEW.IdCarrito != null)
             {
-                throw new Exception("El elemento debe estar disponible al momento de crearlo");
+                throw new Exception("Solo las notebooks pueden seleccionar un carrito");
             }
 
             _repoElemento.Insert(elementoNEW);
@@ -133,7 +140,32 @@ namespace CapaNegocio
                 throw new Exception("No se puede cambiar el estado de un elemento en prestamo sin terminar su devolucion");
             }
 
+            if(elementoNEW.IdEstadoElemento == 2 && elementoOLD.IdEstadoElemento != 2)
+            {
+                throw new Exception("No se puede cambiar el estado a 'En Prestamo' por que no se hiso un prestamo");
+            }
 
+            if(elementoNEW.IdEstadoElemento != 2 && elementoOLD.IdEstadoElemento == 2)
+            {
+                throw new Exception("No se puede cambiar el estado de un elemento en prestamo sin terminar su devolucion");
+            }
+
+            if(elementoNEW.IdEstadoElemento == 2 && elementoNEW.IdCarrito != null)
+            {
+                throw new Exception("Un elemento en prestamo no puede estar asignado a un carrito");
+            }
+
+            if (_repoCarritos.GetById(elementoNEW.IdCarrito ?? 0) == null && elementoNEW.IdCarrito != null)
+            {
+                throw new Exception("El carrito asignado no existe");
+            }
+
+            int cantidad = _repoCarritos.GetCountByCarrito(elementoNEW.IdCarrito ?? 0);
+
+            if(cantidad >= 25 && elementoNEW.IdCarrito != null)
+            {
+                throw new Exception("El carrito ya tiene el maximo de elementos permitidos");
+            }
 
             _repoElemento.Update(elementoNEW);
         }
@@ -153,6 +185,7 @@ namespace CapaNegocio
             {
                 throw new Exception("No se puede eliminar un elemento que está en prestamo");
             }
+
 
             _repoElemento.Delete(idElemento);
         }

@@ -77,7 +77,7 @@ namespace CapaPresentacion
             mapperDevoluciones = new MapperDevoluciones(conexion);
             mapperUsuarios = new MapperUsuarios(conexion);
 
-            elementoCN = new ElementosCN(mapperElementos, repoElementos);
+            elementoCN = new ElementosCN(mapperElementos, repoElementos, repoCarritos);
             carritosCN = new CarritosCN(repoCarritos, repoElementos);
             docentesCN = new DocentesCN(repoDocentes);
             prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, repoUsuarios, repoDocentes, mapperPrestamos);
