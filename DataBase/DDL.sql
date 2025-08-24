@@ -67,6 +67,7 @@ create table Elementos (
     numeroSerie varchar(40) not null,
     codigoBarra varchar(40) not null,
     disponible boolean not null,
+    fechaBaja datetime,
     constraint PK_Elementos primary key (idElemento),
     constraint UQ_Elementos_numeroSerie unique (numeroSerie),
     constraint UQ_Elementos_codigoBarra unique (codigoBarra),
@@ -86,6 +87,13 @@ create table Cursos (
 );
 
 
+create table EstadosPrestamo (
+    idEstadoPrestamo tinyint not null auto_increment,
+    estadoPrestamo varchar(40) not null,
+    constraint PK_EstadoPrestamo primary key (idEstadoPrestamo),
+    constraint UQ_EstadoPrestamo unique (estadoPrestamo)
+);
+
 
 create table Prestamos (
     idPrestamo int auto_increment,
@@ -93,6 +101,7 @@ create table Prestamos (
     idDocente smallint not null,
     idCarrito tinyint,
     idUsuario tinyint not null,
+    idEstadoPrestamo tinyint not null,
     fechaPrestamo datetime not null,
     constraint PK_Prestamos primary key (idPrestamo),
     constraint FK_Prestamos_Docentes foreign key (idDocente)
@@ -102,15 +111,9 @@ create table Prestamos (
     constraint FK_Prestamos_Carritos foreign key (idCarrito) 
         references Carritos(idCarrito),
     constraint FK_Prestamos_Usuarios foreign key (idUsuario)
-    	references Usuarios(idUsuario)
-);
-
-
-create table EstadosPrestamo (
-    idEstadoPrestamo tinyint not null auto_increment,
-    estadoPrestamo varchar(40) not null,
-    constraint PK_EstadoPrestamo primary key (idEstadoPrestamo),
-    constraint UQ_EstadoPrestamo unique (estadoPrestamo)
+    	references Usuarios(idUsuario),
+    constraint FK_Prestamos_Estado foreign key (idEstadoPrestamo)
+    	references EstadosPrestamo (idEstadoPrestamo)
 );
 
 
@@ -130,6 +133,7 @@ create table Devoluciones (
     idPrestamo int not null,
     idDocente smallint not null,
     idUsuario tinyint not null,
+    idEstadoPrestamo tinyint not null,
     fechaDevolucion datetime not null,
     observaciones varchar(200),
     constraint PK_Devoluciones primary key (idDevolucion),
@@ -139,24 +143,32 @@ create table Devoluciones (
         references Docentes(idDocente),
     constraint FK_Devoluciones_Usuarios foreign key (idUsuario)
         references Usuarios(idUsuario),
-    constraint UQ_Devoluciones unique (idPrestamo)
+    constraint UQ_Devoluciones unique (idPrestamo),
+    constraint FK_Devoluciones_Estado foreign key (idEstadoPrestamo)
+    	references EstadosPrestamo (idEstadoPrestamo)
 );
 
 
 create table DevolucionDetalle (
     idDevolucion int not null,
     idElemento tinyint not null,
+    idEstadoElemento tinyint not null,
+    observaciones varchar(200),
     constraint PK_DevolucionDetalle primary key (idDevolucion, idElemento),
     constraint FK_DevolucionDetalle_Devoluciones foreign key (idDevolucion)
         references Devoluciones(idDevolucion),
     constraint FK_DevolucionDetalle_Elementos foreign key (idElemento)
-        references Elementos(idElemento)
+        references Elementos(idElemento),
+    constraint FK_DevolucionDetalle_EstadoElemento foreign key (idEstadoElemento)
+    	references EstadosElemento (idEstadoElemento)
 );
 
 
 create table HistorialElementos (
     idHistorialElemento int unsigned not null auto_increment,
     idElemento tinyint not null,
+    idCarrito tinyint,
+    idUsuario tinyint not null,
     idEstadoElemento tinyint not null,
     fechaHora datetime not null,
     observacion varchar(200),
@@ -164,7 +176,11 @@ create table HistorialElementos (
     constraint FK_HistorialElemento_Elemento foreign key (idElemento)
         references Elementos(idElemento),
     constraint FK_HistorialElemento_Estado foreign key (idEstadoElemento)
-        references EstadosElemento(idEstadoElemento)
+        references EstadosElemento(idEstadoElemento),
+    constraint FK_HistorialElemento_Carritos foreign key (idCarrito)
+    	references Carritos (idCarrito),
+    constraint FK_HistorialElemento_Usuario foreign key (idUsuario)
+    	references Usuarios (idUsuario)
 );
 
 

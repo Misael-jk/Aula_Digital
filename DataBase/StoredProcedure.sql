@@ -59,6 +59,7 @@ END$$
 call GetPrestamoDetalleDTO;
 
 select * from tipoelemento t 
+
 -- SP Devolucion DTO
 
 DELIMITER $$
@@ -114,7 +115,8 @@ BEGIN
     FROM Elementos e
     INNER JOIN tipoElemento te ON e.idTipoElemento = te.idTipoElemento
     INNER JOIN EstadosElemento ee ON e.idEstadoElemento = ee.idEstadoElemento
-    LEFT JOIN Carritos c ON e.idCarrito = c.idCarrito;
+    LEFT JOIN Carritos c ON e.idCarrito = c.idCarrito
+    where e.disponible = 1;
 END$$
 
 select * from Carritos
@@ -125,19 +127,39 @@ select * from elementos e
 -- SP Historial Elemento DTO
 
 delimiter $$ 
-drop procedure if exists GetHistorialElementoDTO $$
-create procedure GetHistorialElementoDTO()
+drop procedure if exists GetHistorialElementosDTO $$
+create procedure GetHistorialElementosDTO()
 begin
-	SELECT he.IdHistorialElemento,
-       he.FechaHora,
-       he.Observacion,
-       e.IdElemento,
-       te.Elemento AS TipoElemento,
-       e.NumeroSerie,
-       ee.EstadoElemento
+	SELECT he.idHistorialElemento,
+       he.fechaHora,
+       he.observacion,
+       te.elemento AS ElementoTipo,
+       e.numeroSerie,
+       c.numeroSerieCarrito,
+       ee.estadoElemento as EstadoElementoNombre
 FROM HistorialElementos he
-JOIN Elementos e ON he.IdElemento = e.IdElemento
-JOIN TipoElemento te ON e.IdTipoElemento = te.IdTipoElemento
-JOIN EstadosElemento ee ON he.IdEstadoElemento = ee.IdEstadoElemento;
+JOIN Elementos e ON he.idElemento = e.idElemento
+join carritos c on he.idCarrito = c.idCarrito
+JOIN TipoElemento te ON e.idTipoElemento = te.idTipoElemento
+JOIN EstadosElemento ee ON he.idEstadoElemento = ee.idEstadoElemento;
 end $$
 
+
+-- SP Mantenimiento Elementos DTO
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetElementosMantenimientoDTO $$
+CREATE PROCEDURE GetElementosMantenimientoDTO()
+BEGIN
+    SELECT e.idElemento,
+           e.numeroSerie,
+           e.disponible,
+           e.fechaBaja,
+           t.elemento as ElementoTipo,
+           est.estadoElemento as EstadoElementoNombre
+    FROM Elementos e
+    INNER JOIN TipoElemento t ON e.idTipoElemento = t.idTipoElemento
+    INNER JOIN EstadosElemento est ON e.idEstadoElemento = est.idEstadoElemento
+    WHERE e.disponible = 0;
+END $$
