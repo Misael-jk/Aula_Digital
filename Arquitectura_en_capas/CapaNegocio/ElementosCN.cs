@@ -1,6 +1,5 @@
 ﻿using CapaDatos.Interfaces;
 using CapaDatos.InterfacesDTO;
-using CapaDatos.Repos;
 using CapaDTOs;
 using CapaEntidad;
 
@@ -11,12 +10,14 @@ namespace CapaNegocio
         private readonly IMapperElementos _mapperElementos;
         private readonly IRepoElemento _repoElemento;
         private readonly IRepoCarritos _repoCarritos;
+        private readonly IRepoHistorialElemento _repoHistorialElementos;
 
-        public ElementosCN(IMapperElementos mapperElementos, IRepoElemento repoElemento, IRepoCarritos repoCarritos)
+        public ElementosCN(IMapperElementos mapperElementos, IRepoElemento repoElemento, IRepoCarritos repoCarritos, IRepoHistorialElemento repoHistorialElementos)
         {
             _mapperElementos = mapperElementos;
             _repoElemento = repoElemento;
             _repoCarritos = repoCarritos;
+            _repoHistorialElementos = repoHistorialElementos;
         }
 
         #region Metodos de Lectura para la UI DTOs
@@ -53,7 +54,7 @@ namespace CapaNegocio
 
 
         #region INSERT ELEMENTO
-        public void CrearElemento(Elemento elementoNEW)
+        public void CrearElemento(Elemento elementoNEW, int idUsuario)
         {
             if(string.IsNullOrEmpty(elementoNEW.numeroSerie))
             {
@@ -65,14 +66,32 @@ namespace CapaNegocio
                 throw new Exception("El código de barras es obligatorio");
             }
 
-            if (_repoElemento.GetByNumeroSerie(elementoNEW.numeroSerie) != null)
+            Elemento? nroSerieHabilitado = _repoElemento.GetByNumeroSerie(elementoNEW.numeroSerie);
+
+            if(nroSerieHabilitado != null)
             {
-                throw new Exception("Ya existe un elemento con ese numero de serie, por favor elija uno nuevo");
+                if(nroSerieHabilitado.Disponible == true)
+                {
+                    throw new Exception("El elemento ya existe y está habilitado.");
+                }
+                else
+                {
+                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
+                }
             }
 
-            if (_repoElemento.GetByCodigoBarra(elementoNEW.codigoBarra) != null)
+            Elemento? codigoBarraHabilitado = _repoElemento.GetByCodigoBarra(elementoNEW.codigoBarra);
+
+            if(codigoBarraHabilitado != null)
             {
-                throw new Exception("Ya existe un elemento con el mismo código de barras.");
+                if (codigoBarraHabilitado.Disponible == true)
+                {
+                    throw new Exception("El elemento ya existe y está habilitado.");
+                }
+                else
+                {
+                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
+                }
             }
 
             if (elementoNEW.IdTipoElemento <= 0)
@@ -101,11 +120,23 @@ namespace CapaNegocio
             }
 
             _repoElemento.Insert(elementoNEW);
+
+            HistorialElemento historialElemento = new HistorialElemento
+            {
+                IdElemento = elementoNEW.IdElemento,
+                IdCarrito = elementoNEW.IdCarrito,
+                idUsuario = idUsuario,
+                IdEstadoElemento = elementoNEW.IdEstadoElemento,
+                FechaHora = DateTime.Now,
+                Observacion = "Creación del elemento"
+            };
+
+            _repoHistorialElementos.Insert(historialElemento);
         }
         #endregion
 
         #region UPDATE ELEMENTO
-        public void ActualizarElemento(Elemento elementoNEW)
+        public void ActualizarElemento(Elemento elementoNEW, int idUsuario)
         {
 
             if (string.IsNullOrEmpty(elementoNEW.numeroSerie))
@@ -125,14 +156,32 @@ namespace CapaNegocio
                 throw new Exception("El elemento no existe");
             }
 
-            if (elementoOLD.numeroSerie != elementoNEW.numeroSerie && _repoElemento.GetByNumeroSerie(elementoNEW.numeroSerie) != null)
+            Elemento? nroSerieHabilitado = _repoElemento.GetByNumeroSerie(elementoNEW.numeroSerie);
+
+            if (elementoOLD.numeroSerie != elementoNEW.numeroSerie && nroSerieHabilitado != null)
             {
-                throw new Exception("Ya existe otro elemento con el mismo numero de serie");
+                if (nroSerieHabilitado.Disponible == true)
+                {
+                    throw new Exception("Ya existe otro elemento con el mismo numero de serie.");
+                }
+                else
+                {
+                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de actualizar uno nuevo.");
+                }
             }
 
-            if (elementoOLD.codigoBarra != elementoNEW.codigoBarra && _repoElemento.GetByCodigoBarra(elementoNEW.codigoBarra) != null)
+            Elemento? codigoBarraHabilitado = _repoElemento.GetByCodigoBarra(elementoNEW.codigoBarra);
+
+            if (elementoOLD.codigoBarra != elementoNEW.codigoBarra && codigoBarraHabilitado != null)
             {
-                throw new Exception("Ya existe otro elemento con el mismo codigo de barras.");
+                if (codigoBarraHabilitado.Disponible == true)
+                {
+                    throw new Exception("Ya existe otro elemento con el mismo código de barras.");
+                }
+                else
+                {
+                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de actualizar uno nuevo.");
+                }
             }
 
             if (elementoOLD.IdEstadoElemento != elementoNEW.IdEstadoElemento && elementoOLD.IdEstadoElemento == 2)
@@ -168,28 +217,55 @@ namespace CapaNegocio
             }
 
             _repoElemento.Update(elementoNEW);
+
+            HistorialElemento historialElemento = new HistorialElemento
+            {
+                IdElemento = elementoNEW.IdElemento,
+                IdCarrito = elementoNEW.IdCarrito,
+                idUsuario = idUsuario,
+                IdEstadoElemento = elementoNEW.IdEstadoElemento,
+                FechaHora = DateTime.Now,
+                Observacion = "Actualización del elemento"
+            };
+
+            _repoHistorialElementos.Insert(historialElemento);
         }
         #endregion
 
-        #region DELETE ELEMENTO 
-        public void EliminarElemento(int idElemento)
+        public void DeshabilitarElemento(int idElemento, int idUsuario)
         {
-            Elemento? elementoOLD = _repoElemento.GetById(idElemento);
+            Elemento? elemento = _repoElemento.GetById(idElemento);
 
-            if (elementoOLD == null)
+            if (elemento == null)
             {
                 throw new Exception("El elemento no existe.");
             }
 
-            if (elementoOLD.IdEstadoElemento == 2)
+            if (elemento.IdEstadoElemento == 2)
             {
-                throw new Exception("No se puede eliminar un elemento que está en prestamo");
+                throw new Exception("No se puede deshabilitar un elemento que está en préstamo.");
             }
 
+            if (!elemento.Disponible)
+            {
+                throw new Exception("El elemento ya está deshabilitado.");
+            }
 
-            _repoElemento.Delete(idElemento);
+            _repoElemento.CambiarDisponible(idElemento, false);
+
+            HistorialElemento historialElemento = new HistorialElemento
+            {
+                IdElemento = elemento.IdElemento,
+                IdCarrito = elemento.IdCarrito,
+                idUsuario = idUsuario,
+                IdEstadoElemento = elemento.IdEstadoElemento,
+                FechaHora = DateTime.Now,
+                Observacion = "Deshabilitación del elemento"
+            };
+
+            _repoHistorialElementos.Insert(historialElemento);
         }
-        #endregion
+
 
     }
 }

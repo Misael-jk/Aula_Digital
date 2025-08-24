@@ -44,7 +44,6 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
         parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
 
-
         try
         {
             Conexion.Execute("UpdateCarrito", parametros, commandType: CommandType.StoredProcedure);
@@ -80,8 +79,6 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         string query = "select * from Carritos";
         try
         {
-            if (Conexion.State != ConnectionState.Open)
-                Conexion.Open();
 
             return Conexion.Query<Carritos>(query);
         }

@@ -4,6 +4,6 @@ namespace CapaDatos.InterfacesDTO;
 
 public interface IMapperUsuarios
 {
-    IEnumerable<UsuariosDTO> GetAllDTO();
-    UsuariosDTO? GetById(int idUsuario);
+    public IEnumerable<UsuariosDTO> GetAllDTO();
+    public UsuariosDTO? GetById(int idUsuario);
 }

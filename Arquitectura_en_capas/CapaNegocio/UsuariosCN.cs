@@ -13,9 +13,10 @@ namespace CapaNegocio;
 public class UsuariosCN
 {
     private readonly IRepoUsuarios repoUsuarios;
-    private readonly MapperUsuarios mapperUsuarios;
+    private readonly IMapperUsuarios mapperUsuarios;
 
-    public UsuariosCN(IRepoUsuarios repoUsuarios, IRepoRoles repoRoles, MapperUsuarios mapperUsuarios)
+
+    public UsuariosCN(IRepoUsuarios repoUsuarios, IRepoRoles repoRoles, IMapperUsuarios mapperUsuarios)
     {
         this.repoUsuarios = repoUsuarios;
         this.mapperUsuarios = mapperUsuarios;

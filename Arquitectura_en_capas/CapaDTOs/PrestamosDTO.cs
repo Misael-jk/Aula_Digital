@@ -7,5 +7,6 @@ public class PrestamosDTO
     public required string ApellidoDocentes { get; set; }
     public required string ApellidoEncargado { get; set; }
     public string? NumeroSerieCarrito { get; set; }
+    public required string EstadoPrestamo { get; set; }
     public DateTime FechaPrestamo { get; set; }
 }

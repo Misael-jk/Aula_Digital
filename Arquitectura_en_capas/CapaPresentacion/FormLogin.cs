@@ -1,7 +1,7 @@
 ﻿using CapaDatos.Interfaces;
 using CapaDatos.Repos;
 using CapaNegocio;
-//using CapaNegocio.DTOs;
+using CapaDatos.MappersDTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using CapaDatos.InterfacesDTO;
+using CapaEntidad;
 
 namespace CapaPresentacion
 {
@@ -21,6 +23,7 @@ namespace CapaPresentacion
         private readonly RepoRoles repoRoles;
         private readonly RepoUsuarios repoUsuarios;
         private readonly UsuariosCN usuariosCN;
+        private readonly IMapperUsuarios mapperUsuarios;
         public LoginState(IDbConnection conexion)
         {
             InitializeComponent();
@@ -28,7 +31,8 @@ namespace CapaPresentacion
 
             repoUsuarios = new RepoUsuarios(conexion);
             repoRoles = new RepoRoles(conexion);
-            //usuariosCN = new UsuariosCN(repoUsuarios, repoRoles);
+            mapperUsuarios = new MapperUsuarios(conexion);
+            usuariosCN = new UsuariosCN(repoUsuarios, repoRoles, mapperUsuarios);
         }
 
         private void iconButton1_Click(object sender, EventArgs e)
@@ -50,23 +54,23 @@ namespace CapaPresentacion
 
         private void BtnLogin_Click(object sender, EventArgs e)
         {
-            //string usuario = TxtUser.Text.Trim();
-            //string password = TxtPass.Text.Trim();
+            string usuario = TxtUser.Text.Trim();
+            string password = TxtPass.Text.Trim();
 
-            //var verificarLogin = usuariosCN.ObtenerLogin(usuario, password);
+            Usuarios? userVerificado = usuariosCN.Login(usuario, password);
 
-            FormPrincipal principal = new FormPrincipal(conexion);
-            principal.Show();
-            this.Hide();
+            if (userVerificado != null)
+            {
+                Roles? rolUserVerificado = repoRoles.GetById(userVerificado.IdRol);
 
-            //if (verificarLogin is not null)
-            //{
-            //    F
-            //}
-            //else
-            //{
-            //    TxtError.Visible = true;
-            //}
+                FormPrincipal principal = new FormPrincipal(conexion, userVerificado, rolUserVerificado);
+                principal.Show();
+                this.Hide();
+            }
+            else
+            {
+                TxtError.Visible = true;
+            }
         }
 
         private void TxtUser_KeyDown(object sender, KeyEventArgs e)

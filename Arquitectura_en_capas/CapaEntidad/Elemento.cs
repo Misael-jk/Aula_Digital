@@ -8,4 +8,5 @@ public class Elemento
     public required string numeroSerie {get; set;}
     public required string codigoBarra {get; set;}
     public bool Disponible {get; set;}
+    public DateTime? FechaBaja { get; set; }
 }

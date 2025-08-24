@@ -82,7 +82,7 @@ public class CarritosCN
     #endregion
 
     #region Manejo de Notebooks en Carrito
-    public void AgregarNotebookAlCarrito(int idCarrito, int idElemento)
+    public void AgregarNotebookAlCarrito(int idCarrito, int idElemento, int idUsuario)
     {
         using (TransactionScope scope = new TransactionScope())
         {
@@ -121,11 +121,21 @@ public class CarritosCN
 
             repoElementos.Update(elemento);
 
+            HistorialElemento historial = new HistorialElemento
+            {
+                IdElemento = idElemento,
+                IdEstadoElemento = elemento.IdEstadoElemento,
+                IdCarrito = idCarrito,
+                idUsuario = idUsuario,
+                FechaHora = DateTime.Now,
+                Observacion = "Notebook agregada al carrito"
+            };
+
             scope.Complete();
         }
     }
 
-    public void QuitarNotebookDelCarrito(int idCarrito, int idElemento)
+    public void QuitarNotebookDelCarrito(int idCarrito, int idElemento, int idUsuario)
     {
         using (TransactionScope scope = new TransactionScope())
         {
@@ -136,8 +146,23 @@ public class CarritosCN
                 throw new Exception("La notebook no esta asignada a este carrito");
             }
 
+            if (!repoElementos.GetDisponible(idElemento))
+            {
+                throw new Exception("La notebook no esta disponible para quitar del carrito");
+            }
+
             elemento.IdCarrito = null;
             repoElementos.Update(elemento);
+
+            HistorialElemento historial = new HistorialElemento
+            {
+                IdElemento = idElemento,
+                IdEstadoElemento = elemento.IdEstadoElemento,
+                IdCarrito = idCarrito,
+                idUsuario = idUsuario,
+                FechaHora = DateTime.Now,
+                Observacion = "Notebook quitada del carrito"
+            };
             scope.Complete();
         }
     }

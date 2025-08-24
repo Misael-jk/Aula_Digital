@@ -6,4 +6,6 @@ public class DevolucionDetalleDTO
     public required string NumeroSerieElemento { get; set; }
     public required string NumeroSerieCarrito { get; set; }
     public DateTime FechaDevolucion { get; set; }
+    public required string EstadoElemento { get; set; }
+    public required string Observacion { get; set; }
 }

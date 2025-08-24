@@ -1,4 +1,5 @@
-﻿using CapaEntidad;
+﻿using CapaDatos.MappersDTO;
+using CapaEntidad;
 using CapaNegocio;
 using Google.Protobuf.Collections;
 using System;
@@ -15,9 +16,18 @@ namespace CapaPresentacion
 {
     public partial class Dashboard : UserControl
     {
-        public Dashboard()
+        private readonly MapperHistorialElemento mapperHistorialElemento;
+        public Dashboard(MapperHistorialElemento mapperHistorialElemento)
         {
             InitializeComponent();
+            this.mapperHistorialElemento = mapperHistorialElemento;
+
+        }
+
+        public void MostrarDatos()
+        {
+            var elemento = mapperHistorialElemento.GetAllDTO();
+            dataGridView1.DataSource = elemento.ToList();
         }
     }
 }

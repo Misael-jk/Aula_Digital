@@ -8,22 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CapaDatos.MappersDTO;
+using CapaNegocio;
 
 namespace CapaPresentacion
 {
     public partial class DevolucionUC: UserControl
     {
-        private readonly MapperDevoluciones mapperDevoluciones = null!;
-        public DevolucionUC(MapperDevoluciones mapperDevoluciones)
+        private readonly DevolucionCN devolucionCN = null!;
+        public DevolucionUC(DevolucionCN devolucionCN)
         {
             InitializeComponent();
 
-            this.mapperDevoluciones = mapperDevoluciones;
+            this.devolucionCN = devolucionCN;
         }
 
         public void MostrarDevoluciones()
         {
-            dataGridView1.DataSource = mapperDevoluciones.GetAllDTO();
+            dataGridView1.DataSource = devolucionCN.ObtenerElementos();
         }
     }
 }

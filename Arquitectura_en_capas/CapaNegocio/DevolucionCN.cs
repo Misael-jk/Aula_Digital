@@ -20,8 +20,9 @@ public class DevolucionCN
     private readonly IRepoEstadosPrestamo repoEstadosPrestamo;
     private readonly IRepoDevolucionDetalle repoDevolucionDetalle;
     private readonly IMapperDevoluciones mapperDevolucion;
+    private readonly IRepoHistorialElemento repoHistorialElemento;
 
-    public DevolucionCN(IRepoDevolucion repoDevolucion, IRepoPrestamos repoPrestamos, IRepoUsuarios repoUsuarios, IRepoElemento repoElementos, IRepoEstadosPrestamo repoEstadosPrestamo, IRepoDocentes repoDocentes, IRepoDevolucionDetalle repoDevolucionDetalle, IMapperDevoluciones mapperDevolucion)
+    public DevolucionCN(IRepoDevolucion repoDevolucion, IRepoPrestamos repoPrestamos, IRepoUsuarios repoUsuarios, IRepoElemento repoElementos, IRepoEstadosPrestamo repoEstadosPrestamo, IRepoDocentes repoDocentes, IRepoDevolucionDetalle repoDevolucionDetalle, IRepoHistorialElemento repoHistorialElemento, IMapperDevoluciones mapperDevolucion)
     {
         this.repoDevolucion = repoDevolucion;
         this.repoPrestamos = repoPrestamos;
@@ -31,6 +32,7 @@ public class DevolucionCN
         this.repoEstadosPrestamo = repoEstadosPrestamo;
         this.repoDevolucionDetalle = repoDevolucionDetalle;
         this.mapperDevolucion = mapperDevolucion;
+        this.repoHistorialElemento = repoHistorialElemento;
     }
 
     public IEnumerable<DevolucionesDTO> ObtenerElementos()
@@ -39,7 +41,7 @@ public class DevolucionCN
     }
 
     #region INSERT DEVOLUCION
-    public void CrearDevolucion(Devolucion devolucionNEW, IEnumerable<int> idsElementos, IEnumerable<int> idsEstadosElemento)
+    public void CrearDevolucion(Devolucion devolucionNEW, IEnumerable<int> idsElementos, IEnumerable<int> idsEstadosElemento, IEnumerable<string>? Observaciones)
     {
         using (TransactionScope scope = new TransactionScope())
         {
@@ -79,26 +81,43 @@ public class DevolucionCN
                 throw new Exception("Error: el número de elementos y estados no coincide.");
             }
 
-            if (idsElementos.Count() == 0)
+            if (idsElementos.Any())
             {
                 throw new Exception("Debe seleccionar al menos un elemento para devolver.");
             }
 
             repoDevolucion.Insert(devolucionNEW);
 
-            //foreach (int idElemento in idsElementos)
-            //{
-            //    repoDevolucionDetalle.Insert(new DevolucionDetalle
-            //    {
-            //        IdDevolucion = devolucionNEW.IdDevolucion,
-            //        IdElemento = idElemento,
-            //        IdEstadoElemento = idsEstadosElemento.First()
-            //    });
+            int cont = 0;
+            foreach (int idElemento in idsElementos)
+            {
+                int estadoElemento = idsEstadosElemento.ElementAt(cont);
+                string? obs = Observaciones?.ElementAtOrDefault(cont);
 
-            //    repoElementos.UpdateEstado(idElemento, true);
-            //}
+                repoDevolucionDetalle.Insert(new DevolucionDetalle
+                {
+                    IdDevolucion = devolucionNEW.IdDevolucion,
+                    IdElemento = idElemento,
+                    IdEstadoElemento = estadoElemento,
+                    Observaciones = obs
+                });
 
-            
+                repoElementos.UpdateEstado(idElemento, estadoElemento);
+
+                repoHistorialElemento.Insert(new HistorialElemento
+                {
+                    IdElemento = idElemento,
+                    IdCarrito = prestamo.IdCarrito,
+                    idUsuario = devolucionNEW.IdUsuario,
+                    IdEstadoElemento = estadoElemento,
+                    FechaHora = DateTime.Now,
+                    Observacion = obs ?? "Devolución realizada"
+                });
+
+                cont++;
+            }
+
+
             scope.Complete();
         }
     }

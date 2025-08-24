@@ -7,6 +7,7 @@ public class DevolucionesDTO
     public required string ApellidoEncargado { get; set; }
     public DateTime FechaPrestamo { get; set; }
     public DateTime FechaDevolucion { get; set; }
+    public required string EstadoPrestamo { get; set; }
     public required string Observaciones { get; set; }
 }
 

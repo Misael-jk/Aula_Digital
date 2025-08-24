@@ -23,6 +23,7 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
         parametros.Add("unidDocente", prestamos.IdDocente);
         parametros.Add("unidCarrito", prestamos.IdCarrito);
         parametros.Add("unidEncargado", prestamos.IdUsuario);
+        parametros.Add("unidEstadoPrestamo", prestamos.IdEstadoPrestamo);
         parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
 
         try
@@ -47,6 +48,7 @@ public class RepoPrestamos : RepoBase, IRepoPrestamos
         parametros.Add("unidDocente", prestamos.IdDocente);
         parametros.Add("unidCarrito", prestamos.IdCarrito);
         parametros.Add("unidEncargado", prestamos.IdUsuario);
+        parametros.Add("unidEstadoPrestamo", prestamos.IdEstadoPrestamo);
         parametros.Add("unafechaPrestamo", prestamos.FechaPrestamo);
 
         try

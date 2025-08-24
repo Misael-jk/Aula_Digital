@@ -18,6 +18,8 @@ public class RepoHistorialElemento : RepoBase, IRepoHistorialElemento
 
         parametros.Add("unidHistorialElemento", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("unidElemento", historialElemento.IdElemento);
+        parametros.Add("unidCarrito", historialElemento.IdCarrito);
+        parametros.Add("unidUsuario", historialElemento.idUsuario);
         parametros.Add("unidEstadoElemento", historialElemento.IdEstadoElemento);
         parametros.Add("unFechaHora", historialElemento.FechaHora);
         parametros.Add("unObservacion", historialElemento.Observacion);
@@ -43,12 +45,7 @@ public class RepoHistorialElemento : RepoBase, IRepoHistorialElemento
 
         try
         {
-            var result = Conexion.QueryFirstOrDefault<HistorialElemento>(query, parameters);
-            if (result == null)
-            {
-                throw new Exception("No se encontró el historial del elemento con el id proporcionado");
-            }
-            return result;
+            return Conexion.QueryFirstOrDefault<HistorialElemento>(query, parameters);
         }
         catch (Exception)
         {

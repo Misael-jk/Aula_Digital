@@ -2,7 +2,6 @@
 using CapaDatos.Interfaces;
 using CapaEntidad;
 using System.Data;
-using System.Data.Common;
 
 namespace CapaDatos.Repos;
 
@@ -25,7 +24,7 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unnumeroSerie", elemento.numeroSerie);
         parametros.Add("uncodigoBarra", elemento.codigoBarra);
         parametros.Add("unDisponible", elemento.Disponible);
-
+        parametros.Add("unafechaBaja", elemento.FechaBaja);
 
         try
         {
@@ -50,7 +49,8 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
         parametros.Add("unnumeroSerie", elemento.numeroSerie);
         parametros.Add("uncodigoBarra", elemento.codigoBarra);
-        parametros.Add("unDisponible", elemento.Disponible); ;
+        parametros.Add("unDisponible", elemento.Disponible);
+        parametros.Add("unafechaBaja", elemento.FechaBaja);
 
         try
         {
@@ -170,19 +170,35 @@ public class RepoElemento : RepoBase, IRepoElemento
     #endregion
 
     #region Cambiar Estado de Elemento
-    public void UpdateEstado(int idElemento, bool disponible)
+    public void UpdateEstado(int idElemento, int idEstadoElemento)
     {
         string sql = @"update Elementos
-                       set idEstadoElemento = @idEstadoElemento, Disponible = @Disponible
+                       set idEstadoElemento = @idEstadoElemento
                        where idElemento = @IdElemento";
 
         DynamicParameters parameters = new DynamicParameters();
 
-        parameters.Add("@Disponible", disponible);
         parameters.Add("@IdElemento", idElemento);
-        parameters.Add("@IdEstadoElemento", disponible ? 1 : 2);
+        parameters.Add("@IdEstadoElemento", idEstadoElemento);
 
         Conexion.Execute(sql, parameters);
+    }
+    #endregion
+
+    #region Eliminar elemento de manera logica
+    public void CambiarDisponible(int idElemento, bool disponible)
+    {
+        string query = @"update Elementos
+                         set disponible = @undisponible, fechaBaja = @unafechaBaja
+                         where idElemento = @unidElemento";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("undisponible", disponible);
+        parameters.Add("unidElemento", idElemento);
+        parameters.Add("unafechaBaja", !disponible ? DateTime.Now : null);
+
+        Conexion.Execute(query, parameters);
     }
     #endregion
 }
