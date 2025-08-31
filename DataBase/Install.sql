@@ -1,26 +1,8 @@
-delimiter $$
-drop procedure if exists InsertElemento $$
-create procedure InsertElemento (out unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoElemento tinyint, in unidCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
-begin
-    insert into elementos (idTipoElemento, idEstadoElemento, idCarrito, numeroSerie, codigoBarra, disponible, fechaBaja)
-    values (unidTipoElemento, unidEstadoElemento, unidCarrito, unnumeroSerie, uncodigoBarra, undisponible, unafechaBaja);
+-- drop database if exists aula_digital;
+-- create database aula_digital;
+-- use aula_digital;
 
-    set unidElemento = last_insert_id();
-end $$
-
-
-delimiter $$ 
-drop procedure if exists UpdateElemento $$
-create procedure UpdateElemento(in unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoElemento tinyint, in unidCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
-begin
-	
-	update elementos 
-	set idTipoElemento = unidTipoElemento,
-		idEstadoElemento = unidEstadoElemento,
-		idCarrito = unidCarrito,
-		numeroSerie = unnumeroSerie,
-		codigoBarra = uncodigoBarra,
-		disponible = undisponible,
-		fechaBaja = unafechaBaja
-	where idElemento = unidElemento;
-end $$
+SOURCE C:/Usuarios/Misael/CSharp/Form/Aula_Digital/DataBase/01_Schema/schema.sql;
+-- SOURCE C:/Usuarios/Misael/CSharp/Form/Aula_Digital/DataBase/02_Inserts/inserts.sql;
+SOURCE C:/Usuarios/Misael/CSharp/Form/Aula_Digital/DataBase/03_StoredProcedure/procedures.sql;
+-- SOURCE C:/Usuarios/Misael/CSharp/Form/Aula_Digital/DataBase/04_Views/views.sql;

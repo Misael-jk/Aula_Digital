@@ -18,6 +18,7 @@ create table Usuarios (
     apellido varchar(40) not null,
     idRol tinyint not null,
     email varchar(70),
+    fotoPerfil varchar(255),
     constraint PK_Usuarios primary key (idUsuario),
     constraint UQ_Usuarios unique (usuario),
     constraint FK_Usuarios_Rol foreign key (idRol)
@@ -37,7 +38,7 @@ create table Docentes (
 );
 
 
-create table tipoElemento (
+create table TipoElemento (
     idTipoElemento tinyint not null auto_increment,
     elemento varchar(40) not null,
     constraint PK_TipoElemento primary key (idTipoElemento)
@@ -63,6 +64,7 @@ create table Elementos (
     idElemento tinyint not null auto_increment,
     idTipoElemento tinyint not null,
     idCarrito tinyint,
+    posicionCarrito tinyint,
     idEstadoElemento tinyint not null,
     numeroSerie varchar(40) not null,
     codigoBarra varchar(40) not null,
@@ -100,7 +102,6 @@ create table Prestamos (
     idCurso tinyint,
     idDocente smallint not null,
     idCarrito tinyint,
-    idUsuario tinyint not null,
     idEstadoPrestamo tinyint not null,
     fechaPrestamo datetime not null,
     constraint PK_Prestamos primary key (idPrestamo),
@@ -110,8 +111,6 @@ create table Prestamos (
         references Cursos(idCurso),
     constraint FK_Prestamos_Carritos foreign key (idCarrito) 
         references Carritos(idCarrito),
-    constraint FK_Prestamos_Usuarios foreign key (idUsuario)
-    	references Usuarios(idUsuario),
     constraint FK_Prestamos_Estado foreign key (idEstadoPrestamo)
     	references EstadosPrestamo (idEstadoPrestamo)
 );

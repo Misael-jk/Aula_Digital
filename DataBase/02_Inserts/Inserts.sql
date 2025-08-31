@@ -1,3 +1,5 @@
+use aula_digital;
+
 -- ROL insert
 
 INSERT INTO Rol (rol) VALUES
