@@ -72,9 +72,9 @@ INSERT INTO EstadosPrestamo (estadoPrestamo) VALUES
 
 -- PRESTAMOS inserts
 
-INSERT INTO Prestamos (idCurso, idDocente, idCarrito, idUsuario, fechaPrestamo) VALUES
+INSERT INTO Prestamos (idCurso, idDocente, idCarrito, idEstadoPrestamo, fechaPrestamo) VALUES
 (1, 1, 1, 1, '2025-08-01 10:00:00'),
-(2, 2, 2, 2, '2025-08-02 11:00:00');
+(2, 2, 2, 1, '2025-08-02 11:00:00');
 
 
 -- PRESTAMOS DETALLES inserts
@@ -86,13 +86,13 @@ INSERT INTO PrestamoDetalle (idPrestamo, idElemento) VALUES
 
 -- DEVOLUCIONES inserts
 
-INSERT INTO Devoluciones (idPrestamo, idDocente, idUsuario, fechaDevolucion, observaciones) VALUES
-(1, 1, 1, '2025-08-05 15:00:00', 'Sin daños'),
-(2, 2, 2, '2025-08-06 16:00:00', 'Con problemas en batería');
+INSERT INTO Devoluciones (idPrestamo, idDocente, idUsuario, idEstadoPrestamo, fechaDevolucion, observaciones) VALUES
+(1, 1, 1, 2, '2025-08-05 15:00:00', 'Sin daños'),
+(2, 2, 2, 2, '2025-08-06 16:00:00', 'Con problemas en batería');
 
 
 -- DEVOLUCION DETALLE inserts 
 
-INSERT INTO DevolucionDetalle (idDevolucion, idElemento, idEstadoPrestamo) VALUES
-(1, 1, 2),
-(2, 3, 3);
+INSERT INTO DevolucionDetalle (idDevolucion, idElemento, idEstadoElemento, observaciones) VALUES
+(1, 1, 1, 'OKs'),
+(2, 3, 1, 'OK');

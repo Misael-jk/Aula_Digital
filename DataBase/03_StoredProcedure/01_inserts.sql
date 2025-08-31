@@ -152,7 +152,7 @@ delimiter ;
 
 delimiter $$
 
-drop procedure if exists InsertCurso
+drop procedure if exists InsertCurso $$
 create procedure InsertCurso (out unidCurso tinyint, in uncurso varchar(40))
 begin
     insert into Cursos (curso)
@@ -178,7 +178,7 @@ begin
     values (untipoElemento);
 
     set unidTipoElemento = last_insert_id();
-end$$
+end $$
 
 delimiter ;
 

@@ -1,8 +1,7 @@
 -- Mostrar Usuario disponibles en la UI
 
-delimiter $$
+drop view if exists View_GetUsuariosDTO;
 
-drop view if exists View_GetUsuariosDTO $$
 create view View_GetUsuariosDTO as
 	select 
         u.idUsuario,
@@ -15,5 +14,3 @@ create view View_GetUsuariosDTO as
         fotoPerfil
     from Usuarios u
     join Rol r using(idRol);
-
-delimiter ;

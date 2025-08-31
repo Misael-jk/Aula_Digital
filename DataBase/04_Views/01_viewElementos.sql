@@ -1,10 +1,9 @@
 -- Mostrar los Elementos disponibles en la UI
 -- View Elementos DTO
 
-delimiter $$
+drop view if exists View_GetElementosDTO;
 
-drop view if exists view_ElementosDTO $$
-create view GetElementosDTO as 
+create view View_GetElementosDTO as 
     select 
         e.idElemento,
         e.numeroSerie,
@@ -17,5 +16,3 @@ create view GetElementosDTO as
     join EstadosElemento ee using(idEstadoElemento)
     left join Carritos c using(idCarrito)
     where e.disponible = 1;
-
-delimiter ;
