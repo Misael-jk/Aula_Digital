@@ -26,6 +26,13 @@ namespace CapaPresentacion
             {
                 var elementos = elementosCN.ObtenerElementos();
                 dataGridView1.DataSource = elementos;
+
+                dataGridView1.Columns["IdElemento"].HeaderText = "ID";
+                dataGridView1.Columns[0].Width = 40;
+
+                dataGridView1.Columns["TipoElemento"].HeaderText = "Tipo";
+
+                dataGridView1.Columns["NumeroSerie"].HeaderText = "Numero de Serie";
             }
             catch (Exception ex)
             {

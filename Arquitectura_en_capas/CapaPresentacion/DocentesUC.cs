@@ -24,6 +24,11 @@ namespace CapaPresentacion
         public void MostrarDocentes()
         {
             dataGridView1.DataSource = repoDocentes.GetAll();
+
+            dataGridView1.Columns["IdDocente"].HeaderText = "ID";
+            dataGridView1.Columns[0].Width = 39;
+
+            dataGridView1.Columns[4].Width = 155;
         }
     }
 }

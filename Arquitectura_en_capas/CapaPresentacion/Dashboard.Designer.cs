@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             btnElementos = new Button();
             groupBox1 = new GroupBox();
             btnDocentes = new Button();
@@ -105,10 +106,19 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Raised;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(129, 379);
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 7F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.Location = new Point(3, 259);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(621, 197);
+            dataGridView1.Size = new Size(1070, 189);
             dataGridView1.TabIndex = 7;
             // 
             // Dashboard
@@ -118,7 +128,8 @@
             Controls.Add(dataGridView1);
             Controls.Add(groupBox1);
             Name = "Dashboard";
-            Size = new Size(871, 606);
+            Size = new Size(1076, 617);
+            Load += Dashboard_Load;
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);

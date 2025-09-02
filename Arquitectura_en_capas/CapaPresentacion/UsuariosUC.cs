@@ -24,6 +24,9 @@ namespace CapaPresentacion
         public void MostrarUsuarios()
         {
             dataGridView1.DataSource = usuariosCN.ObtenerElementos();
+
+            dataGridView1.Columns["IdUsuario"].HeaderText = "ID";
+            dataGridView1.Columns[0].Width = 35;
         }
     }
 }

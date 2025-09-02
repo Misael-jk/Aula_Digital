@@ -79,7 +79,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1100, 29);
+            panel1.Size = new Size(1300, 29);
             panel1.TabIndex = 0;
             // 
             // label1
@@ -134,7 +134,7 @@
             // 
             pnlContenedor.Location = new Point(212, 29);
             pnlContenedor.Name = "pnlContenedor";
-            pnlContenedor.Size = new Size(885, 617);
+            pnlContenedor.Size = new Size(1076, 617);
             pnlContenedor.TabIndex = 2;
             // 
             // guna2CustomGradientPanel1
@@ -158,7 +158,7 @@
             guna2CustomGradientPanel1.Location = new Point(0, 29);
             guna2CustomGradientPanel1.Name = "guna2CustomGradientPanel1";
             guna2CustomGradientPanel1.ShadowDecoration.CustomizableEdges = customizableEdges20;
-            guna2CustomGradientPanel1.Size = new Size(217, 617);
+            guna2CustomGradientPanel1.Size = new Size(217, 671);
             guna2CustomGradientPanel1.TabIndex = 1;
             // 
             // btnMantenimiento
@@ -396,7 +396,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1100, 646);
+            ClientSize = new Size(1300, 700);
             Controls.Add(guna2CustomGradientPanel1);
             Controls.Add(panel1);
             Controls.Add(pnlContenedor);

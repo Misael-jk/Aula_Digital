@@ -53,6 +53,7 @@ namespace CapaPresentacion
         private readonly IMapperUsuarios mapperUsuarios;
         private readonly IMapperElementoMantenimiento mapperElementoMantenimiento;
         private readonly MapperHistorialElemento mapperHistorialElemento;
+        private readonly MapperTransaccion mapperTransaccion;
         #endregion
 
         #region Variables capacidad Negocio
@@ -95,6 +96,7 @@ namespace CapaPresentacion
             mapperUsuarios = new MapperUsuarios(conexion);
             mapperElementoMantenimiento = new MapperElementoMantenimiento(conexion);
             mapperHistorialElemento = new MapperHistorialElemento(conexion);
+            mapperTransaccion = new MapperTransaccion(conexion);
 
             elementoCN = new ElementosCN(mapperElementos, repoElementos, repoCarritos, repoHistorialElemento);
             carritosCN = new CarritosCN(repoCarritos, repoElementos);
@@ -128,7 +130,7 @@ namespace CapaPresentacion
 
         private void BtnDashboard_Click(object sender, EventArgs e)
         {
-            dashboard = new Dashboard(mapperHistorialElemento);
+            dashboard = new Dashboard(mapperTransaccion);
 
             if (!pnlContenedor.Controls.Contains(dashboard))
             {

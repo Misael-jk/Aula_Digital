@@ -49,25 +49,25 @@
             panel2.Controls.Add(dataGridView1);
             panel2.Location = new Point(327, 15);
             panel2.Name = "panel2";
-            panel2.Size = new Size(530, 573);
+            panel2.Size = new Size(728, 573);
             panel2.TabIndex = 1;
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(15, 16);
+            dataGridView1.Location = new Point(80, 13);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(500, 535);
+            dataGridView1.Size = new Size(634, 535);
             dataGridView1.TabIndex = 0;
             // 
-            // Elementos
+            // ElementosUC
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel2);
             Controls.Add(panel1);
-            Name = "Elementos";
-            Size = new Size(871, 606);
+            Name = "ElementosUC";
+            Size = new Size(1076, 617);
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
