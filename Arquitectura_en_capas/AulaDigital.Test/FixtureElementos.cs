@@ -8,11 +8,13 @@ using AulaDigital.Test;
 using System.Transactions;
 using System.Data.Common;
 using System.Data;
+using CapaDatos.Interfaces;
 
 namespace CapaTests;
 
 public class ElementoTests : IClassFixture<TestBase>
 {
+    private readonly IRepoHistorialElemento repohistorialElemento;
     private readonly ElementosCN _elementoCN;
     private readonly TestBase _fixture;
 
@@ -22,9 +24,10 @@ public class ElementoTests : IClassFixture<TestBase>
         RepoElemento repoElementos = new RepoElemento(fixture.Conexion);
         RepoCarritos repoCarritos = new RepoCarritos(fixture.Conexion);
         MapperElementos mapper = new MapperElementos(fixture.Conexion);
+        repohistorialElemento = new RepoHistorialElemento(fixture.Conexion);
 
 
-        _elementoCN = new ElementosCN(mapper, repoElementos, repoCarritos);
+        _elementoCN = new ElementosCN(mapper, repoElementos, repoCarritos, repohistorialElemento);
     }
 
     [Fact]
@@ -42,7 +45,7 @@ public class ElementoTests : IClassFixture<TestBase>
                 Disponible = true
             };
 
-            _elementoCN.CrearElemento(NewElemento);
+            _elementoCN.CrearElemento(NewElemento, 1);
 
             Assert.True(NewElemento.IdElemento > 0);
 
@@ -51,6 +54,9 @@ public class ElementoTests : IClassFixture<TestBase>
             Assert.NotNull(elementosDTO);
             Assert.Equal(NewElemento.numeroSerie, elementosDTO.NumeroSerie);
             Assert.Equal(NewElemento.codigoBarra, elementosDTO.CodigoBarra);
+
+        var historialCreacion = repohistorialElemento.GetByElemento(NewElemento.IdElemento);
+        Assert.NotNull(historialCreacion);
 
         trasaction.Rollback();
         
@@ -71,7 +77,7 @@ public class ElementoTests : IClassFixture<TestBase>
             Disponible = true
         };
 
-        _elementoCN.CrearElemento(NewElemento);
+        _elementoCN.CrearElemento(NewElemento, 1);
 
         NewElemento.numeroSerie = "NB003";
         NewElemento.codigoBarra = "CB005";
@@ -79,7 +85,7 @@ public class ElementoTests : IClassFixture<TestBase>
         //NewElemento.IdEstadoElemento = 2;
         //NewElemento.Disponible = false;
 
-        _elementoCN.ActualizarElemento(NewElemento);
+        _elementoCN.ActualizarElemento(NewElemento, 1);
 
         ElementosDTO? OldElemento = _elementoCN.ObtenerElementos().FirstOrDefault(e => e.IdElemento == NewElemento.IdElemento);
 
@@ -91,13 +97,25 @@ public class ElementoTests : IClassFixture<TestBase>
     }
 
     [Fact]
-    public void EliminarElemento()
+    public void DeshabilitarElemento()
     {
         using IDbTransaction transaction = _fixture.Conexion.BeginTransaction();
 
-        Assert.Throws<Exception>(() => _elementoCN.EliminarElemento(9999));
+        Elemento NewElemento = new Elemento
+        {
+            IdTipoElemento = 1,
+            IdCarrito = 1,
+            IdEstadoElemento = 1,
+            numeroSerie = "NB066",
+            codigoBarra = "CB076",
+            Disponible = true
+        };
 
-        _elementoCN.EliminarElemento(1);
+        _elementoCN.CrearElemento(NewElemento, 1);
+
+        _elementoCN.DeshabilitarElemento(NewElemento.IdElemento, 1);
+
+        Assert.False(!NewElemento.Disponible);
 
         transaction.Rollback();
     }
