@@ -2,7 +2,7 @@
 
 public class HistorialElementoDTO
 {
-    public long IdHistorialElemento { get; set; }
+    public int IdHistorialElemento { get; set; }
     public required string TipoElemento { get; set; }
     public required string NumeroSerie { get; set; }
     public string? NumeroSerieCarrito { get; set; }
