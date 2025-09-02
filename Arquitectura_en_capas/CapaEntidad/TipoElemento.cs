@@ -1,4 +1,5 @@
 ﻿namespace CapaEntidad;
+
 public class TipoElemento
 {
     public int IdTipoElemento {get; set;}

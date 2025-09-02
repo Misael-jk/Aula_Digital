@@ -2,7 +2,7 @@
 
 public class HistorialElemento
 {
-    public long IdHistorialElemento { get; set; } 
+    public int IdHistorialElemento { get; set; } 
     public int IdElemento { get; set; }
     public int? IdCarrito { get; set; }
     public int idUsuario { get; set; }
