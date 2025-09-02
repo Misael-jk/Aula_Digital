@@ -25,6 +25,7 @@ public class RepoUsuarios : RepoBase, IRepoUsuarios
         parametros.Add("unapellido", usuarios.Apellido);
         parametros.Add("unrol", usuarios.IdRol);
         parametros.Add("unemail", usuarios.Email);
+        parametros.Add("unfotoPerfil", usuarios.FotoPerfil);
 
         try
         {
@@ -50,6 +51,7 @@ public class RepoUsuarios : RepoBase, IRepoUsuarios
         parametros.Add("unapellido", usuarios.Apellido);
         parametros.Add("unrol", usuarios.IdRol);
         parametros.Add("unemail", usuarios.Email);
+        parametros.Add("unfotoPerfil", usuarios.FotoPerfil);
 
         try
         {
