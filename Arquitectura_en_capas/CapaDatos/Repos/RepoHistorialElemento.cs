@@ -16,18 +16,16 @@ public class RepoHistorialElemento : RepoBase, IRepoHistorialElemento
     {
         DynamicParameters parametros = new DynamicParameters();
 
-        parametros.Add("unidHistorialElemento", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("unidElemento", historialElemento.IdElemento);
         parametros.Add("unidCarrito", historialElemento.IdCarrito);
         parametros.Add("unidUsuario", historialElemento.idUsuario);
         parametros.Add("unidEstadoElemento", historialElemento.IdEstadoElemento);
-        parametros.Add("unFechaHora", historialElemento.FechaHora);
-        parametros.Add("unObservacion", historialElemento.Observacion);
+        parametros.Add("unafechaHora", historialElemento.FechaHora);
+        parametros.Add("unaobservacion", historialElemento.Observacion);
 
         try
         {
             Conexion.Execute("InsertHistorialElemento", parametros, commandType: CommandType.StoredProcedure);
-            historialElemento.IdHistorialElemento = parametros.Get<int>("unidHistorialElemento");
         }
         catch (Exception)
         {

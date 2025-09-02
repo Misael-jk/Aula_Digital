@@ -10,8 +10,6 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     public RepoCarritos(IDbConnection conexion)
    : base(conexion)
     { 
-        if(conexion == null)
-            throw new ArgumentNullException(nameof(conexion), "La conexión no puede ser null");
     }
 
     #region Alta Carrito
@@ -26,7 +24,6 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         try
         {
             Conexion.Execute("InsertCarrito", parametros, commandType: CommandType.StoredProcedure);
-            carritos.IdCarrito = parametros.Get<int>("unidCarrito");
         }
         catch (Exception)
         {
@@ -42,7 +39,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
 
         parametros.Add("unidCarrito", carritos.IdCarrito);
         parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
-        parametros.Add("unDisponibleCarrito", carritos.DisponibleCarrito);
+        parametros.Add("undisponibleCarrito", carritos.DisponibleCarrito);
 
         try
         {

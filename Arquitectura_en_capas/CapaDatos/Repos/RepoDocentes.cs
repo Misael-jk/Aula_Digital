@@ -26,8 +26,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
 
         try
         {
-            Conexion.Execute("AltaAlumno", parametros, commandType: CommandType.StoredProcedure);
-            docentes.IdDocente = parametros.Get<int>("unidDocente");
+            Conexion.Execute("InsertDocente", parametros, commandType: CommandType.StoredProcedure);
         }
         catch (Exception)
         {
@@ -49,7 +48,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
 
         try
         {
-            Conexion.Execute("UpdateAlumno", parametros, commandType: CommandType.StoredProcedure);
+            Conexion.Execute("UpdateDocente", parametros, commandType: CommandType.StoredProcedure);
         }
         catch (Exception)
         {
@@ -79,7 +78,7 @@ public class RepoDocentes : RepoBase, IRepoDocentes
     #region Obtener por Id
     public Docentes? GetById(int idDocente)
     {
-        string query = "select * from Docentes where idDocente = unidDocente";
+        string query = "select * from Docentes where idDocente = @unidDocente";
 
         DynamicParameters parametros = new DynamicParameters();
         try
