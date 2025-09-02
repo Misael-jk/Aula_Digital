@@ -1,11 +1,7 @@
-﻿using CapaDatos;
-using CapaDatos.Interfaces;
+﻿using CapaDatos.Interfaces;
 using CapaDatos.InterfacesDTO;
-using CapaDatos.MappersDTO;
-using CapaDatos.Repos;
 using CapaDTOs;
 using CapaEntidad;
-using System.Data;
 using System.Net.Mail;
 
 namespace CapaNegocio;
@@ -140,6 +136,20 @@ public class UsuariosCN
         }
 
         return user; 
+    }
+    #endregion
+
+    #region obtener por id
+    public Usuarios? ObtenerID(int idUsuario)
+    {
+        return repoUsuarios.GetById(idUsuario);
+    }
+    #endregion
+
+    #region Obtener por usuario
+    public Usuarios? ObtenerUser(string User)
+    {
+        return repoUsuarios.GetByUser(User);
     }
     #endregion
 

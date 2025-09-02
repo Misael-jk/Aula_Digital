@@ -25,7 +25,8 @@ public class MapperUsuarios : RepoBase, IMapperUsuarios
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Email = usuario.Email,
-                Rol = rol.Rol
+                Rol = rol.Rol,
+                FotoPerfil = usuario.FotoPerfil
             },
             commandType: CommandType.StoredProcedure,
             splitOn: "Rol"
@@ -47,7 +48,8 @@ public class MapperUsuarios : RepoBase, IMapperUsuarios
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Rol = rol.Rol,
-                Email = usuario.Email
+                Email = usuario.Email,
+                FotoPerfil = usuario.FotoPerfil
             },
             parametros,
             commandType: CommandType.StoredProcedure,
