@@ -16,6 +16,13 @@ public class DocentesCN
         _repoDocente = repoDocente;
     }
 
+    #region Mostrar Docentes
+    public IEnumerable<Docentes> MostrarDocente()
+    {
+        return _repoDocente.GetAll();
+    }
+    #endregion
+
     #region INSERT DOCENTE
     public void CrearDocente(Docentes docenteNEW)
     {

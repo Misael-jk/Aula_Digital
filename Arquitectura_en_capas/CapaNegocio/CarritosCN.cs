@@ -32,6 +32,11 @@ public class CarritosCN
             throw new Exception("Ya existe un carrito con ese numero de serie, por favor elija uno nuevo");
         }
 
+        if(!repoCarrito.GetDisponible(CarritoNEW.IdCarrito))
+        {
+            throw new Exception("No se puede crear un carrito en prestamo");
+        }
+
         repoCarrito.Insert(CarritoNEW);
     }
     #endregion
@@ -82,7 +87,7 @@ public class CarritosCN
     #endregion
 
     #region Manejo de Notebooks en Carrito
-    public void AgregarNotebookAlCarrito(int idCarrito, int idElemento, int idUsuario)
+    public void AddNotebook(int idCarrito, int posicion, int idElemento, int idUsuario)
     {
         using (TransactionScope scope = new TransactionScope())
         {
@@ -110,14 +115,38 @@ public class CarritosCN
                 throw new Exception("La notebook ya esta en otro carrito.");
             }
 
-            int totalNotebooks = repoElementos.GetByCarrito(idCarrito).Count();
-
-            if (totalNotebooks >= 25)
+            if (repoCarrito.GetCountByCarrito(elemento.IdCarrito ?? 0) >= 25 && elemento.IdCarrito != null)
             {
-                throw new Exception("El carrito ya contiene el máximo de 25 notebooks");
+                throw new Exception("El carrito que selecciono esta al maximo de notebooks");
+            }
+
+            if (elemento.PosicionCarrito < 1 || elemento.PosicionCarrito > 25)
+            {
+                throw new Exception("La posición en el carrito debe estar entre 1 y 25.");
+            }
+
+            if (elemento.IdTipoElemento == 1 && elemento.IdCarrito != null)
+            {
+                if (repoElementos.DuplicatePosition(elemento.IdCarrito ?? 0, elemento.PosicionCarrito ?? 0))
+                {
+                    throw new Exception("La posición dentro del carrito ya está ocupada, por favor elija otra.");
+                }
+
+                if (elemento.PosicionCarrito == null || elemento.PosicionCarrito <= 0)
+                {
+                    throw new Exception("Debe asignar una posición válida dentro del carrito.");
+                }
+            }
+            else
+            {
+                if (elemento.PosicionCarrito != null)
+                {
+                    throw new Exception("Solo las notebooks pueden tener posición en carrito.");
+                }
             }
 
             elemento.IdCarrito = idCarrito;
+            elemento.PosicionCarrito = posicion;
 
             repoElementos.Update(elemento);
 
@@ -135,7 +164,7 @@ public class CarritosCN
         }
     }
 
-    public void QuitarNotebookDelCarrito(int idCarrito, int idElemento, int idUsuario)
+    public void RemoveNotebook(int idCarrito, int idElemento, int idUsuario)
     {
         using (TransactionScope scope = new TransactionScope())
         {
@@ -152,6 +181,8 @@ public class CarritosCN
             }
 
             elemento.IdCarrito = null;
+            elemento.PosicionCarrito = null;
+
             repoElementos.Update(elemento);
 
             HistorialElemento historial = new HistorialElemento
@@ -168,5 +199,6 @@ public class CarritosCN
     }
 
     #endregion
+
 }
 

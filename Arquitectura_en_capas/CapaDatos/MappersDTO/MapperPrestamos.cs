@@ -22,7 +22,6 @@ public class MapperPrestamos : RepoBase, IMapperPrestamos
             IdPrestamo = prestamo.IdPrestamo,
             FechaPrestamo = prestamo.FechaPrestamo,
             NombreCurso = curso?.NombreCurso ?? " - ",
-            ApellidoEncargado = usuario.Apellido ?? "Error",
             ApellidoDocentes = docente.Apellido ?? " ERROR ",
             NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
             EstadoPrestamo = estado.EstadoPrestamo
@@ -44,7 +43,6 @@ public class MapperPrestamos : RepoBase, IMapperPrestamos
                 IdPrestamo = prestamo.IdPrestamo,
                 NombreCurso = curso?.NombreCurso ?? " - ",
                 ApellidoDocentes = docente.Apellido,
-                ApellidoEncargado = usuario.Apellido,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
                 FechaPrestamo = prestamo.FechaPrestamo,
                 EstadoPrestamo = estado.EstadoPrestamo
@@ -67,7 +65,6 @@ public class MapperPrestamos : RepoBase, IMapperPrestamos
                 IdPrestamo = prestamo.IdPrestamo,
                 NombreCurso = curso?.NombreCurso ?? " - ",
                 ApellidoDocentes = docente.Apellido,
-                ApellidoEncargado = usuario.Apellido,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
                 FechaPrestamo = prestamo.FechaPrestamo,
                 EstadoPrestamo = estado.EstadoPrestamo
@@ -91,7 +88,6 @@ public class MapperPrestamos : RepoBase, IMapperPrestamos
             IdPrestamo = prestamo.IdPrestamo,
             NombreCurso = curso?.NombreCurso ?? " - ",
             ApellidoDocentes = docente.Apellido,
-            ApellidoEncargado = usuario.Apellido,
             NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
             FechaPrestamo = prestamo.FechaPrestamo,
             EstadoPrestamo = estado.EstadoPrestamo
