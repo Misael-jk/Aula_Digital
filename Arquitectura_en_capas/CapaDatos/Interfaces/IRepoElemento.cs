@@ -1,5 +1,4 @@
 ﻿using CapaEntidad;
-using System.Data;
 
 namespace CapaDatos.Interfaces;
 
@@ -15,5 +14,7 @@ public interface IRepoElemento
     public Elemento? GetById(int idElemento);
     public IEnumerable<Elemento> GetByCarrito(int idCarrito);
     public bool GetDisponible(int idElemento);
-
+    public Elemento? GetNotebookByPosicion(int idCarrito, int posicionCarrito);
+    public bool DuplicatePosition(int idCarrito, int posicionCarrito);
+    public Elemento? GetNotebookBySerieOrCodigo(string nroSerie, string codigoBarra);
 }

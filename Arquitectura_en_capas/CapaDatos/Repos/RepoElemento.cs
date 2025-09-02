@@ -20,6 +20,7 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidElemento", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
         parametros.Add("unidCarrito", elemento.IdCarrito);
+        parametros.Add("unaposicionCarrito", elemento.PosicionCarrito);
         parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
         parametros.Add("unnumeroSerie", elemento.numeroSerie);
         parametros.Add("uncodigoBarra", elemento.codigoBarra);
@@ -46,6 +47,7 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidElemento", elemento.IdElemento);
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
         parametros.Add("unidCarrito", elemento.IdCarrito);
+        parametros.Add("unaposicionCarrito", elemento.PosicionCarrito);
         parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
         parametros.Add("unnumeroSerie", elemento.numeroSerie);
         parametros.Add("uncodigoBarra", elemento.codigoBarra);
@@ -201,4 +203,55 @@ public class RepoElemento : RepoBase, IRepoElemento
         Conexion.Execute(query, parameters);
     }
     #endregion
+
+    public Elemento? GetNotebookByPosicion(int idCarrito, int posicionCarrito)
+    {
+        string query = "select * from Elementos where idCarrito = @idCarrito and posicionCarrito = @posicionCarrito and disponible = 1 limit 1;";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("unidCarrito", idCarrito);
+        parameters.Add("unaposicionCarrito", posicionCarrito);
+
+        return Conexion.QueryFirstOrDefault<Elemento>(query, parameters);
+
+    }
+
+    public bool DuplicatePosition(int idCarrito, int posicionCarrito)
+    {
+        string query = "select count(*) from Elementos where idCarrito = @idCarrito and posicionCarrito = @posicionCarrito and disponible = 1;";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("unidCarrito", idCarrito);
+        parameters.Add("unaposicionCarrito", posicionCarrito);
+
+        int count = Conexion.ExecuteScalar<int>(query, parameters);
+        return count > 0;
+    }
+
+    public Elemento? GetNotebookBySerieOrCodigo(string numeroSerie, string codigoBarra)
+    {
+        string query = @"select idEstadoElemento, numeroSerie, codigoBarra
+                         from Elementos
+                         where (numeroSerie = @numeroSerie or codigoBarra = @codigoBarra)
+                         and idCarrito is null
+                         and idEstadoElemento = 1 
+                         and disponible = 1
+                         limit 1;";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("numeroSerie", numeroSerie);
+        parameters.Add("codigoBarra", codigoBarra);
+
+        try
+        {
+            return Conexion.QueryFirstOrDefault<Elemento>(query, parameters);
+        }
+        catch (Exception)
+        {
+            throw new Exception("No se encontro el elemento con su numero de serie o codigo de barra");
+        }
+    }
 }

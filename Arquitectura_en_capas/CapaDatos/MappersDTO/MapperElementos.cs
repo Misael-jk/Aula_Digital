@@ -25,7 +25,8 @@ public class MapperElementos : RepoBase, IMapperElementos
                 CodigoBarra = elemento.codigoBarra,
                 TipoElemento = tipo.ElementoTipo,
                 Estado = estado.EstadoElementoNombre,
-                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito"
+                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
+                PosicionCarrito = elemento?.PosicionCarrito
             },
             commandType: CommandType.StoredProcedure,
             splitOn: "ElementoTipo,EstadoElementoNombre,NumeroSerieCarrito"
@@ -48,7 +49,8 @@ public class MapperElementos : RepoBase, IMapperElementos
                 CodigoBarra = elemento.codigoBarra,
                 TipoElemento = tipo.ElementoTipo,
                 Estado = estado.EstadoElementoNombre,
-                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito"
+                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
+                PosicionCarrito = elemento?.PosicionCarrito
             },
             parametros,
             commandType: CommandType.StoredProcedure,
@@ -73,7 +75,8 @@ public class MapperElementos : RepoBase, IMapperElementos
                 CodigoBarra = elemento.codigoBarra,
                 TipoElemento = tipo.ElementoTipo,
                 Estado = estado.EstadoElementoNombre,
-                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito"
+                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
+                PosicionCarrito = elemento?.PosicionCarrito
             },
             parametros,
             commandType: CommandType.StoredProcedure,
@@ -98,7 +101,8 @@ public class MapperElementos : RepoBase, IMapperElementos
                 CodigoBarra = elemento.codigoBarra,
                 TipoElemento = tipo.ElementoTipo,
                 Estado = estado.EstadoElementoNombre,
-                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito"
+                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
+                PosicionCarrito = elemento?.PosicionCarrito
             },
             parametros,
             commandType: CommandType.StoredProcedure,
@@ -122,7 +126,8 @@ public class MapperElementos : RepoBase, IMapperElementos
                 CodigoBarra = elemento.codigoBarra,
                 TipoElemento = tipo.ElementoTipo,
                 Estado = estado.EstadoElementoNombre,
-                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito"
+                Carrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
+                PosicionCarrito = elemento?.PosicionCarrito
             },
             parametros,
             commandType: CommandType.StoredProcedure,

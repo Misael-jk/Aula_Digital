@@ -99,32 +99,30 @@ namespace CapaNegocio
                 throw new Exception("El tipo de elemento es obligatorio");
             }
 
-            //if (elementoNEW.IdEstadoElemento != 1)
-            //{
-            //    throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
-            //}
+            if (elementoNEW.IdEstadoElemento != 1)
+            {
+                throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
+            }
 
-            //if (elementoNEW.Disponible == false)
-            //{
-            //    throw new Exception("El elemento debe estar disponible al momento de crearlo");
-            //}
+            if (elementoNEW.Disponible == false)
+            {
+                throw new Exception("El elemento debe estar disponible al momento de crearlo");
+            }
 
-            //if(_repoCarritos.GetCountByCarrito(elementoNEW.IdCarrito ?? 0) >= 25 && elementoNEW.IdCarrito != null)
-            //{
-            //    throw new Exception("El carrito que selecciono esta al maximo de notebooks");
-            //}
-
-            if(elementoNEW.IdTipoElemento != 1 && elementoNEW.IdCarrito != null)
+            if (elementoNEW.IdTipoElemento != 1 && elementoNEW.IdCarrito != null)
             {
                 throw new Exception("Solo las notebooks pueden seleccionar un carrito");
             }
+
+            elementoNEW.IdCarrito = null;
+            elementoNEW.PosicionCarrito = null;
 
             _repoElemento.Insert(elementoNEW);
 
             HistorialElemento historialElemento = new HistorialElemento
             {
                 IdElemento = elementoNEW.IdElemento,
-                IdCarrito = elementoNEW.IdCarrito,
+                IdCarrito = null,
                 idUsuario = idUsuario,
                 IdEstadoElemento = elementoNEW.IdEstadoElemento,
                 FechaHora = DateTime.Now,
@@ -216,6 +214,26 @@ namespace CapaNegocio
                 throw new Exception("El carrito ya tiene el maximo de elementos permitidos");
             }
 
+            if (elementoNEW.IdCarrito != null)
+            {
+                if (elementoNEW.PosicionCarrito == null || elementoNEW.PosicionCarrito <= 0)
+                {
+                    throw new Exception("El elemento asignado a un carrito debe tener una posición válida.");
+                }
+
+                Elemento? elementoOld = _repoElemento.GetNotebookByPosicion(elementoNEW.IdCarrito.Value, elementoNEW.PosicionCarrito.Value);
+
+                if (elementoOld != null && elementoOld.IdElemento != elementoNEW.IdElemento)
+                {
+                    throw new Exception($"La posición {elementoNEW.PosicionCarrito} en el carrito ya está ocupada.");
+                }
+            }
+            else
+            {
+                elementoNEW.PosicionCarrito = null;
+            }
+
+
             _repoElemento.Update(elementoNEW);
 
             HistorialElemento historialElemento = new HistorialElemento
@@ -249,6 +267,11 @@ namespace CapaNegocio
             if (!elemento.Disponible)
             {
                 throw new Exception("El elemento ya está deshabilitado.");
+            }
+
+            if (elemento.IdCarrito != null && elemento.PosicionCarrito != null)
+            {
+                elemento.PosicionCarrito = null;
             }
 
             _repoElemento.CambiarDisponible(idElemento, false);
