@@ -6,7 +6,7 @@ public class HistorialElemento
     public int IdElemento { get; set; }
     public int? IdCarrito { get; set; }
     public int idUsuario { get; set; }
-    public int IdEstadoElemento { get; set; }
+    public int IdEstadoMantenimiento { get; set; }
     public DateTime FechaHora { get; set; }
     public required string Observacion { get; set; }
 }

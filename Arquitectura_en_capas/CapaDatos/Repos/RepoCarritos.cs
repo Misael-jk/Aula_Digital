@@ -19,7 +19,9 @@ public class RepoCarritos : RepoBase, IRepoCarritos
 
         parametros.Add("unidCarrito", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
-        parametros.Add("undisponibleCarrito", carritos.DisponibleCarrito);
+        parametros.Add("unidEstadoMantenimiento", carritos.IdEstadoMantenimiento);
+        parametros.Add("unhabilitado", carritos.Habilitado);
+        parametros.Add("unfechaBaja", carritos.FechaBaja);
 
         try
         {
@@ -39,7 +41,9 @@ public class RepoCarritos : RepoBase, IRepoCarritos
 
         parametros.Add("unidCarrito", carritos.IdCarrito);
         parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
-        parametros.Add("undisponibleCarrito", carritos.DisponibleCarrito);
+        parametros.Add("unidEstadoMantenimiento", carritos.IdEstadoMantenimiento);
+        parametros.Add("unhabilitado", carritos.Habilitado);
+        parametros.Add("unfechaBaja", carritos.FechaBaja);
 
         try
         {
@@ -48,6 +52,29 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         catch (Exception)
         {
             throw new Exception("Hubo un error al actualizar un carrito");
+        }
+    }
+    #endregion
+
+    #region Deshabilitar
+    public void Deshabilitar(int idCarrito, bool habilitado)
+    {
+        string query = @"update Carritos
+                         set habilitado = @unhabilitado, fechaBaja = @unafechaBaja
+                         where idCarrito = @unidCarrito";
+
+        DynamicParameters parametros = new DynamicParameters();
+        parametros.Add("unidCarrito", idCarrito);
+        parametros.Add("unhabilitado", habilitado);
+        parametros.Add("unfechaBaja", !habilitado ? DateTime.Now : null);
+
+        try
+        {
+            Conexion.Execute(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al deshabilitar un carrito");
         }
     }
     #endregion
@@ -126,15 +153,15 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     }
     #endregion
 
-    public void UpdateDisponible(int idCarrito, bool disponible)
+    public void UpdateDisponible(int idCarrito, int idEstadoMantenimiento)
     {
         string sql = @"update Carritos
-                       Disponible = @Disponible
+                       idEstadoMantenimiento = @idEstadoMantenimiento
                        where idCarrito = @IdCarrito";
 
         DynamicParameters parameters = new DynamicParameters();
 
-        parameters.Add("@Disponible", disponible);
+        parameters.Add("@idEstadoMantenimiento", idEstadoMantenimiento);
         parameters.Add("@IdCarritoo", idCarrito);
 
         Conexion.Execute(sql, parameters);
@@ -143,7 +170,7 @@ public class RepoCarritos : RepoBase, IRepoCarritos
     public bool GetDisponible(int idCarrito)
     {
 
-        string sql = "select * from Carritos where idCarrito = @IdCarrito and DisponibleCarrito = 1 limit 1;";
+        string sql = "select * from Carritos where idCarrito = @IdCarrito and idEstadoMantenimiento = 1 and habilitado = true limit 1;";
 
         DynamicParameters parameters = new DynamicParameters();
 

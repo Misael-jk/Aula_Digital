@@ -19,7 +19,7 @@ public class RepoDevolucionDetalle : RepoBase, IRepoDevolucionDetalle
 
         parametros.Add("unidDevolucion", devolucionDetalle.IdDevolucion);
         parametros.Add("unidElemento", devolucionDetalle.IdElemento);
-        parametros.Add("unidEstadoElemento", devolucionDetalle.IdEstadoElemento);
+        parametros.Add("unidEstadoMantenimiento", devolucionDetalle.IdEstadoMantenimiento);
         parametros.Add("unaObservacion", devolucionDetalle.Observaciones);
 
         try
@@ -40,7 +40,7 @@ public class RepoDevolucionDetalle : RepoBase, IRepoDevolucionDetalle
 
         parametros.Add("unidDevolucion", devolucionDetalle.IdDevolucion);
         parametros.Add("unidElemento", devolucionDetalle.IdElemento);
-        parametros.Add("unidEstadoElemento", devolucionDetalle.IdEstadoElemento);
+        parametros.Add("unidEstadoMantenimiento", devolucionDetalle.IdEstadoMantenimiento);
         parametros.Add("unaObservacion", devolucionDetalle.Observaciones);
 
         try

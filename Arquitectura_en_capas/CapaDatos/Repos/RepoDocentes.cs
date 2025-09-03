@@ -23,6 +23,8 @@ public class RepoDocentes : RepoBase, IRepoDocentes
         parametros.Add("unnombre", docentes.Nombre);
         parametros.Add("unapellido", docentes.Apellido);
         parametros.Add("unemail", docentes.Email);
+        parametros.Add("unhabilitado", docentes.Habilitado);
+        parametros.Add("unfechabaja", docentes.FechaBaja);
 
         try
         {
@@ -45,6 +47,8 @@ public class RepoDocentes : RepoBase, IRepoDocentes
         parametros.Add("unnombre", docentes.Nombre);
         parametros.Add("unapellido", docentes.Apellido);
         parametros.Add("unemail", docentes.Email);
+        parametros.Add("unhabilitado", docentes.Habilitado);
+        parametros.Add("unafechaBaja", docentes.FechaBaja);
 
         try
         {
@@ -56,6 +60,28 @@ public class RepoDocentes : RepoBase, IRepoDocentes
         }
     }
     #endregion
+
+    #region Deshabilitar Docente
+    public void Deshabilitar(int idDocente, bool habilitado)
+    {
+        string query = "update Docentes set habilitado = @unhabilitado, fechaBaja = @unafechaBaja where idDocente = @unidDocente";
+
+        DynamicParameters parametros = new DynamicParameters();
+
+        parametros.Add("unidDocente", idDocente);
+        parametros.Add("unhabilitado", habilitado);
+        parametros.Add("unafechaBaja", !habilitado ? DateTime.Now : null);
+
+        try
+        {
+            Conexion.Execute(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al deshabilitar un docente");
+        }
+    }
+    #endregion 
 
     #region Eliminar Docente
     public void Delete(int idDocente)

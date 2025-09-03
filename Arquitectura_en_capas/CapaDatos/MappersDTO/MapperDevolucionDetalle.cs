@@ -15,19 +15,19 @@ public class MapperDevolucionDetalle : RepoBase, IMapperDevolucionDetalle
 
     public IEnumerable<DevolucionDetalleDTO> GetAllDTO()
     {
-        return Conexion.Query<Devolucion, Elemento, TipoElemento, Carritos, EstadosElemento, DevolucionDetalleDTO>(
+        return Conexion.Query<Devolucion, Elemento, TipoElemento, Carritos, EstadosMantenimiento, DevolucionDetalleDTO>(
             "GetDevolucionDetalleDTO",
             (devolucion, elemento, tipo, carrito, estado) => new DevolucionDetalleDTO
             {
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerieElemento = elemento.numeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
-                EstadoElemento = estado.EstadoElementoNombre,
+                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaDevolucion = devolucion.FechaDevolucion,
-                Observacion = devolucion.Observaciones ?? "Sin observaciones"
+                Observacion = devolucion?.Observaciones ?? "Sin observaciones"
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "FechaDevolucion,numeroSerie,ElementoTipo, NumeroSerieCarrito,EstadoElementoNombre"
+            splitOn: "FechaDevolucion,numeroSerie,ElementoTipo, NumeroSerieCarrito,EstadoMantenimientoNombre"
         ).ToList();
     }
 
@@ -36,19 +36,19 @@ public class MapperDevolucionDetalle : RepoBase, IMapperDevolucionDetalle
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("@idDevolucion", idDevolucion, dbType: DbType.Int32, ParameterDirection.Input);
 
-        return Conexion.Query<Devolucion, Elemento, TipoElemento, Carritos, EstadosElemento, DevolucionDetalleDTO>(
+        return Conexion.Query<Devolucion, Elemento, TipoElemento, Carritos, EstadosMantenimiento, DevolucionDetalleDTO>(
             "GetDevolucionDetalleDTO",
             (devolucion, elemento, tipo, carrito, estado) => new DevolucionDetalleDTO
             {
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerieElemento = elemento.numeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
-                EstadoElemento = estado.EstadoElementoNombre,
+                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaDevolucion = devolucion.FechaDevolucion,
                 Observacion = devolucion.Observaciones ?? "Sin observaciones"
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo, numeroSerie, NumeroSerieCarrito, FechaDevolucion, EstadoElementoNombre"
+            splitOn: "ElementoTipo, numeroSerie, NumeroSerieCarrito, FechaDevolucion, EstadoMantenimientoNombre"
         ).FirstOrDefault();
     }
 

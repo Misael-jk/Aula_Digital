@@ -6,9 +6,9 @@ public class Elemento
     public int IdTipoElemento {get; set;}
     public int? IdCarrito {get; set;}
     public int? PosicionCarrito { get; set; }
-    public int IdEstadoElemento {get; set;}
+    public int IdEstadoMantenimiento {get; set;}
     public required string numeroSerie {get; set;}
     public required string codigoBarra {get; set;}
-    public bool Disponible {get; set;}
+    public bool Habilitado {get; set;}
     public DateTime? FechaBaja { get; set; }
 }

@@ -7,7 +7,7 @@ public class HistorialElementoDTO
     public required string NumeroSerie { get; set; }
     public string? NumeroSerieCarrito { get; set; }
     public required string ApellidoEncargado { get; set; }
-    public required string EstadoElemento { get; set; }
+    public required string EstadoMantenimiento { get; set; }
     public DateTime FechaHora { get; set; }
     public required string Observacion { get; set; }
 }

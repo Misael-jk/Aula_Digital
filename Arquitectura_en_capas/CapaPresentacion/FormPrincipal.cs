@@ -52,6 +52,7 @@ namespace CapaPresentacion
         private readonly IMapperDevoluciones mapperDevoluciones;
         private readonly IMapperUsuarios mapperUsuarios;
         private readonly IMapperElementoMantenimiento mapperElementoMantenimiento;
+        private readonly IMapperCarritos mapperCarritos;
         private readonly MapperHistorialElemento mapperHistorialElemento;
         private readonly MapperTransaccion mapperTransaccion;
         #endregion
@@ -95,16 +96,17 @@ namespace CapaPresentacion
             mapperDevoluciones = new MapperDevoluciones(conexion);
             mapperUsuarios = new MapperUsuarios(conexion);
             mapperElementoMantenimiento = new MapperElementoMantenimiento(conexion);
+            mapperCarritos = new MapperCarrritos(conexion);
             mapperHistorialElemento = new MapperHistorialElemento(conexion);
             mapperTransaccion = new MapperTransaccion(conexion);
 
             elementoCN = new ElementosCN(mapperElementos, repoElementos, repoCarritos, repoHistorialElemento);
-            carritosCN = new CarritosCN(repoCarritos, repoElementos);
+            carritosCN = new CarritosCN(repoCarritos, repoElementos, mapperCarritos);
             docentesCN = new DocentesCN(repoDocentes);
             prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, repoUsuarios, repoDocentes, mapperPrestamos, repoHistorialElemento);
             tiposElementoCN = new TiposElementoCN(repoTipoElemento);
             usuariosCN = new UsuariosCN(repoUsuarios, repoRoles, mapperUsuarios);
-            devolucionCN = new DevolucionCN(repoDevolucion, repoPrestamos, repoUsuarios, repoElementos, repoEstadosPrestamo, repoDocentes, repoDevolucionDetalle, repoHistorialElemento, mapperDevoluciones);
+            devolucionCN = new DevolucionCN(repoDevolucion, repoPrestamos, repoUsuarios, repoElementos, repoEstadosPrestamo, repoDocentes, repoDevolucionDetalle, repoHistorialElemento, repoCarritos, mapperDevoluciones);
             mantenimientoCN = new MantenimientoCN(repoElementos, mapperElementoMantenimiento, repoHistorialElemento);
         }
 

@@ -60,8 +60,19 @@ public class PrestamosCN
                 throw new Exception("Debe prestar al menos un elemento.");
             }
 
+
             if (idCarrito.HasValue)
             {
+                if(repoCarritos.GetById(idCarrito.Value) == null)
+                {
+                    throw new Exception("El carrito no existe.");
+                }
+
+                if(repoCarritos.GetCountByCarrito(idCarrito.Value) < 25)
+                {
+                    throw new Exception("El carrito debe tener al menos 25 elementos para ser prestado.");
+                }
+
                 if (!repoCarritos.GetDisponible(idCarrito.Value))
                 {
                     throw new Exception("El carrito no esta disponible.");
@@ -69,7 +80,7 @@ public class PrestamosCN
 
                 prestamo.IdCarrito = idCarrito.Value;
 
-                repoCarritos.UpdateDisponible(idCarrito.Value, false);
+                repoCarritos.UpdateDisponible(idCarrito.Value, 2);
             }
 
             foreach (int idElemento in idsElementos)
@@ -97,7 +108,7 @@ public class PrestamosCN
                     IdElemento = idElemento,
                     IdCarrito = prestamo.IdCarrito,
                     idUsuario = prestamo.IdUsuario,
-                    IdEstadoElemento = 2, 
+                    IdEstadoMantenimiento = 2, 
                     FechaHora = DateTime.Now,
                     Observacion = "Elemento prestado"
                 });
@@ -130,13 +141,23 @@ public class PrestamosCN
 
             if (nuevoIdCarrito.HasValue)
             {
+                if (repoCarritos.GetById(nuevoIdCarrito.Value) == null)
+                {
+                    throw new Exception("El carrito no existe");
+                }
+
+                if (repoCarritos.GetCountByCarrito(nuevoIdCarrito.Value) < 25)
+                {
+                    throw new Exception("El carrito debe tener al menos 25 elementos para ser prestado");
+                }
+
                 if (!repoCarritos.GetDisponible(nuevoIdCarrito.Value))
                 {
                     throw new Exception("El carrito no esta disponible");
                 }
                 prestamo.IdCarrito = nuevoIdCarrito.Value;
 
-                repoCarritos.UpdateDisponible(nuevoIdCarrito.Value, false);
+                repoCarritos.UpdateDisponible(nuevoIdCarrito.Value, 2);
             }
 
 
@@ -167,7 +188,7 @@ public class PrestamosCN
                     IdElemento = idElemento,
                     IdCarrito = prestamo.IdCarrito,
                     idUsuario = prestamo.IdUsuario,
-                    IdEstadoElemento = 2, 
+                    IdEstadoMantenimiento = 2, 
                     FechaHora = DateTime.Now,
                     Observacion = "Elemento prestado"
                 });
@@ -190,7 +211,7 @@ public class PrestamosCN
 
             if (prestamo.IdCarrito.HasValue)
             {
-                repoCarritos.UpdateDisponible(prestamo.IdCarrito.Value, true);
+                repoCarritos.UpdateDisponible(prestamo.IdCarrito.Value, 1);
             }
 
             IEnumerable<PrestamoDetalle> detalles = repoPrestamoDetalle.GetByPrestamo(idPrestamo);
@@ -204,7 +225,7 @@ public class PrestamosCN
                     IdElemento = detalle.IdElemento,
                     IdCarrito = prestamo.IdCarrito,
                     idUsuario = prestamo.IdUsuario,
-                    IdEstadoElemento = 1, 
+                    IdEstadoMantenimiento = 1, 
                     FechaHora = DateTime.Now,
                     Observacion = "Elemento devuelto"
                 });

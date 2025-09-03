@@ -70,7 +70,7 @@ namespace CapaNegocio
 
             if(nroSerieHabilitado != null)
             {
-                if(nroSerieHabilitado.Disponible == true)
+                if(nroSerieHabilitado.Habilitado == true)
                 {
                     throw new Exception("El elemento ya existe y está habilitado.");
                 }
@@ -84,7 +84,7 @@ namespace CapaNegocio
 
             if(codigoBarraHabilitado != null)
             {
-                if (codigoBarraHabilitado.Disponible == true)
+                if (codigoBarraHabilitado.Habilitado == true)
                 {
                     throw new Exception("El elemento ya existe y está habilitado.");
                 }
@@ -99,12 +99,12 @@ namespace CapaNegocio
                 throw new Exception("El tipo de elemento es obligatorio");
             }
 
-            if (elementoNEW.IdEstadoElemento != 1)
+            if (elementoNEW.IdEstadoMantenimiento != 1)
             {
                 throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
             }
 
-            if (elementoNEW.Disponible == false)
+            if (elementoNEW.Habilitado == false)
             {
                 throw new Exception("El elemento debe estar disponible al momento de crearlo");
             }
@@ -124,7 +124,7 @@ namespace CapaNegocio
                 IdElemento = elementoNEW.IdElemento,
                 IdCarrito = null,
                 idUsuario = idUsuario,
-                IdEstadoElemento = elementoNEW.IdEstadoElemento,
+                IdEstadoMantenimiento = elementoNEW.IdEstadoMantenimiento,
                 FechaHora = DateTime.Now,
                 Observacion = "Creación del elemento"
             };
@@ -158,7 +158,7 @@ namespace CapaNegocio
 
             if (elementoOLD.numeroSerie != elementoNEW.numeroSerie && nroSerieHabilitado != null)
             {
-                if (nroSerieHabilitado.Disponible == true)
+                if (nroSerieHabilitado.Habilitado == true)
                 {
                     throw new Exception("Ya existe otro elemento con el mismo numero de serie.");
                 }
@@ -172,7 +172,7 @@ namespace CapaNegocio
 
             if (elementoOLD.codigoBarra != elementoNEW.codigoBarra && codigoBarraHabilitado != null)
             {
-                if (codigoBarraHabilitado.Disponible == true)
+                if (codigoBarraHabilitado.Habilitado == true)
                 {
                     throw new Exception("Ya existe otro elemento con el mismo código de barras.");
                 }
@@ -182,22 +182,17 @@ namespace CapaNegocio
                 }
             }
 
-            if (elementoOLD.IdEstadoElemento != elementoNEW.IdEstadoElemento && elementoOLD.IdEstadoElemento == 2)
-            {
-                throw new Exception("No se puede cambiar el estado de un elemento en prestamo sin terminar su devolucion");
-            }
-
-            if(elementoNEW.IdEstadoElemento == 2 && elementoOLD.IdEstadoElemento != 2)
+            if(elementoNEW.IdEstadoMantenimiento == 2 && elementoOLD.IdEstadoMantenimiento != 2)
             {
                 throw new Exception("No se puede cambiar el estado a 'En Prestamo' por que no se hiso un prestamo");
             }
 
-            if(elementoNEW.IdEstadoElemento != 2 && elementoOLD.IdEstadoElemento == 2)
+            if(elementoNEW.IdEstadoMantenimiento != 2 && elementoOLD.IdEstadoMantenimiento == 2)
             {
                 throw new Exception("No se puede cambiar el estado de un elemento en prestamo sin terminar su devolucion");
             }
 
-            if(elementoNEW.IdEstadoElemento == 2 && elementoNEW.IdCarrito != null)
+            if(elementoNEW.IdEstadoMantenimiento == 2 && elementoNEW.IdCarrito != null)
             {
                 throw new Exception("Un elemento en prestamo no puede estar asignado a un carrito");
             }
@@ -241,7 +236,7 @@ namespace CapaNegocio
                 IdElemento = elementoNEW.IdElemento,
                 IdCarrito = elementoNEW.IdCarrito,
                 idUsuario = idUsuario,
-                IdEstadoElemento = elementoNEW.IdEstadoElemento,
+                IdEstadoMantenimiento = elementoNEW.IdEstadoMantenimiento,
                 FechaHora = DateTime.Now,
                 Observacion = "Actualización del elemento"
             };
@@ -259,12 +254,12 @@ namespace CapaNegocio
                 throw new Exception("El elemento no existe.");
             }
 
-            if (elemento.IdEstadoElemento == 2)
+            if (elemento.IdEstadoMantenimiento == 2)
             {
                 throw new Exception("No se puede deshabilitar un elemento que está en préstamo.");
             }
 
-            if (!elemento.Disponible)
+            if (!elemento.Habilitado)
             {
                 throw new Exception("El elemento ya está deshabilitado.");
             }
@@ -274,14 +269,14 @@ namespace CapaNegocio
                 elemento.PosicionCarrito = null;
             }
 
-            _repoElemento.CambiarDisponible(idElemento, false);
+            _repoElemento.Deshabilitar(idElemento, false);
 
             HistorialElemento historialElemento = new HistorialElemento
             {
                 IdElemento = elemento.IdElemento,
                 IdCarrito = elemento.IdCarrito,
                 idUsuario = idUsuario,
-                IdEstadoElemento = elemento.IdEstadoElemento,
+                IdEstadoMantenimiento = elemento.IdEstadoMantenimiento,
                 FechaHora = DateTime.Now,
                 Observacion = "Deshabilitación del elemento"
             };

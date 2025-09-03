@@ -11,6 +11,6 @@ public interface IRepoCarritos
     public Carritos? GetById(int idCarrito);
     public Carritos? GetByNumeroSerie(string numeroSerieCarrito);
     public int GetCountByCarrito(int idCarrito);
-    public void UpdateDisponible(int idCarrito, bool disponibleCarrito);
+    public void UpdateDisponible(int idCarrito, int idEstadoMantenimiento);
     public bool GetDisponible(int idCarrito);
 }

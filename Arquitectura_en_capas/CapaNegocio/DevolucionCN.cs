@@ -7,6 +7,7 @@ using CapaDatos.InterfacesDTO;
 using CapaDTOs;
 using System.Transactions;
 using System.Data.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace CapaNegocio;
 
@@ -20,9 +21,10 @@ public class DevolucionCN
     private readonly IRepoEstadosPrestamo repoEstadosPrestamo;
     private readonly IRepoDevolucionDetalle repoDevolucionDetalle;
     private readonly IMapperDevoluciones mapperDevolucion;
+    private readonly IRepoCarritos repoCarritos;
     private readonly IRepoHistorialElemento repoHistorialElemento;
 
-    public DevolucionCN(IRepoDevolucion repoDevolucion, IRepoPrestamos repoPrestamos, IRepoUsuarios repoUsuarios, IRepoElemento repoElementos, IRepoEstadosPrestamo repoEstadosPrestamo, IRepoDocentes repoDocentes, IRepoDevolucionDetalle repoDevolucionDetalle, IRepoHistorialElemento repoHistorialElemento, IMapperDevoluciones mapperDevolucion)
+    public DevolucionCN(IRepoDevolucion repoDevolucion, IRepoPrestamos repoPrestamos, IRepoUsuarios repoUsuarios, IRepoElemento repoElementos, IRepoEstadosPrestamo repoEstadosPrestamo, IRepoDocentes repoDocentes, IRepoDevolucionDetalle repoDevolucionDetalle, IRepoHistorialElemento repoHistorialElemento, IRepoCarritos repoCarritos, IMapperDevoluciones mapperDevolucion)
     {
         this.repoDevolucion = repoDevolucion;
         this.repoPrestamos = repoPrestamos;
@@ -32,6 +34,7 @@ public class DevolucionCN
         this.repoEstadosPrestamo = repoEstadosPrestamo;
         this.repoDevolucionDetalle = repoDevolucionDetalle;
         this.mapperDevolucion = mapperDevolucion;
+        this.repoCarritos = repoCarritos;
         this.repoHistorialElemento = repoHistorialElemento;
     }
 
@@ -86,6 +89,11 @@ public class DevolucionCN
                 throw new Exception("Debe seleccionar al menos un elemento para devolver.");
             }
 
+            if (prestamo.IdCarrito != null)
+            {
+                repoCarritos.UpdateDisponible(prestamo.IdCarrito.Value, 1);
+            }
+
             repoDevolucion.Insert(devolucionNEW);
 
             int cont = 0;
@@ -98,7 +106,7 @@ public class DevolucionCN
                 {
                     IdDevolucion = devolucionNEW.IdDevolucion,
                     IdElemento = idElemento,
-                    IdEstadoElemento = estadoElemento,
+                    IdEstadoMantenimiento = estadoElemento,
                     Observaciones = obs
                 });
 
@@ -109,7 +117,7 @@ public class DevolucionCN
                     IdElemento = idElemento,
                     IdCarrito = prestamo.IdCarrito,
                     idUsuario = devolucionNEW.IdUsuario,
-                    IdEstadoElemento = estadoElemento,
+                    IdEstadoMantenimiento = estadoElemento,
                     FechaHora = DateTime.Now,
                     Observacion = obs ?? "Devolución realizada"
                 });

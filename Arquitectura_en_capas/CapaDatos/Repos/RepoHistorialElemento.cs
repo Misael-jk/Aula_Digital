@@ -19,7 +19,7 @@ public class RepoHistorialElemento : RepoBase, IRepoHistorialElemento
         parametros.Add("unidElemento", historialElemento.IdElemento);
         parametros.Add("unidCarrito", historialElemento.IdCarrito);
         parametros.Add("unidUsuario", historialElemento.idUsuario);
-        parametros.Add("unidEstadoElemento", historialElemento.IdEstadoElemento);
+        parametros.Add("unidEstadoMantenimiento", historialElemento.IdEstadoMantenimiento);
         parametros.Add("unafechaHora", historialElemento.FechaHora);
         parametros.Add("unaobservacion", historialElemento.Observacion);
 
@@ -66,13 +66,13 @@ public class RepoHistorialElemento : RepoBase, IRepoHistorialElemento
         }
     }
 
-    public IEnumerable<HistorialElemento> GetByEstado(int idEstadoElemento)
+    public IEnumerable<HistorialElemento> GetByEstado(int idEstadoMantenimiento)
     {
-        string query = "SELECT * FROM HistorialElementos WHERE IdEstadoElemento = @idEstadoElemento";
+        string query = "SELECT * FROM HistorialElementos WHERE idEstadoMantenimiento = @idEstadoMantenimiento";
 
         DynamicParameters parameters = new DynamicParameters();
 
-        parameters.Add("idEstadoElemento", idEstadoElemento);
+        parameters.Add("idEstadoMantenimiento", idEstadoMantenimiento);
 
         try
         {

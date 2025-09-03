@@ -6,5 +6,5 @@ public interface IMapperElementoMantenimiento
 {
     public IEnumerable<ElementoMantenimientoDTO> GetAllDTO();
     public IEnumerable<ElementoMantenimientoDTO> GetByTipo(int idTipoElemento);
-    public IEnumerable<ElementoMantenimientoDTO> GetByEstado(int idEstadoElemento);
+    public IEnumerable<ElementoMantenimientoDTO> GetByEstado(int idEstadoMantenimiento);
 }

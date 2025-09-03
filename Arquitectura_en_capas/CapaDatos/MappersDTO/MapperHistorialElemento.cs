@@ -15,7 +15,7 @@ public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
 
     public IEnumerable<HistorialElementoDTO> GetAllDTO()
     {
-        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosElemento, HistorialElementoDTO>(
+        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosMantenimiento, HistorialElementoDTO>(
             "GetHistorialElementosDTO",
             (historial, tipo, elemento, carrito, usuario, estado) => new HistorialElementoDTO
             {
@@ -24,12 +24,12 @@ public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
                 NumeroSerie = elemento.numeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
                 ApellidoEncargado = usuario.Apellido,
-                EstadoElemento = estado.EstadoElementoNombre,
+                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaHora = historial.FechaHora,
                 Observacion = historial.Observacion
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoElementoNombre"
+            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoMantenimientoNombre"
         ).ToList();
     }
 
@@ -39,7 +39,7 @@ public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
 
         parametros.Add("@idElemento", idElemento, DbType.Int32, ParameterDirection.Input);
 
-        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosElemento, HistorialElementoDTO>(
+        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosMantenimiento, HistorialElementoDTO>(
             "GetHistorialByElementoDTO",
             (historial, tipo, elemento, carrito, usuario, estado) => new HistorialElementoDTO
             {
@@ -48,24 +48,24 @@ public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
                 NumeroSerie = elemento.numeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
                 ApellidoEncargado = usuario.Apellido,
-                EstadoElemento = estado.EstadoElementoNombre,
+                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaHora = historial.FechaHora,
                 Observacion = historial.Observacion
             },
             parametros,
             commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoElementoNombre"
+            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoMantenimientoNombre"
         ).ToList();
     }
 
-    public IEnumerable<HistorialElementoDTO> GetByEstadoDTO(int idEstadoElemento)
+    public IEnumerable<HistorialElementoDTO> GetByEstadoDTO(int idEstadoMantenimiento)
     {
         DynamicParameters parametros = new DynamicParameters();
 
-        parametros.Add("@idEstadoElemento", idEstadoElemento, DbType.Int32, ParameterDirection.Input);
+        parametros.Add("@idEstadoMantenimiento", idEstadoMantenimiento, DbType.Int32, ParameterDirection.Input);
 
-        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosElemento, HistorialElementoDTO>(
-            "GetHistorialByEstadoElementoDTO",
+        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosMantenimiento, HistorialElementoDTO>(
+            "GetHistorialByEstadoMantenimientoDTO",
             (historial, tipo, elemento, carrito, usuario, estado) => new HistorialElementoDTO
             {
                 IdHistorialElemento = historial.IdHistorialElemento,
@@ -73,13 +73,13 @@ public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
                 NumeroSerie = elemento.numeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
                 ApellidoEncargado = usuario.Apellido,
-                EstadoElemento = estado.EstadoElementoNombre,
+                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaHora = historial.FechaHora,
                 Observacion = historial.Observacion
             },
             parametros,
             commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoElementoNombre"
+            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoMantenimientoNombre"
         ).ToList();
     }
 }

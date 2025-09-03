@@ -7,8 +7,8 @@ public interface IRepoElemento
     public void Insert(Elemento elemento);
     public void Update(Elemento elemento);
     public void Delete(int idElemento);
-    public void CambiarDisponible(int idElemento, bool disponible);
-    public void UpdateEstado(int idElemento, int idEstadoElemento);
+    public void Deshabilitar(int idElemento, bool disponible);
+    public void UpdateEstado(int idElemento, int idEstadoMantenimiento);
     public Elemento? GetByNumeroSerie(string numeroSerie);
     public Elemento? GetByCodigoBarra(string codigoBarra);
     public Elemento? GetById(int idElemento);

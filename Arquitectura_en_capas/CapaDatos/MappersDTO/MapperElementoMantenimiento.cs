@@ -15,19 +15,19 @@ public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimient
 
     public IEnumerable<ElementoMantenimientoDTO> GetAllDTO()
     {
-        return Conexion.Query<Elemento, TipoElemento, EstadosElemento, ElementoMantenimientoDTO>(
+        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoMantenimientoDTO>(
             "GetElementosMantenimientoDTO",
             (elemento, tipo, estado) => new ElementoMantenimientoDTO
             {
                 IdElemento = elemento.IdElemento,
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerie = elemento.numeroSerie,
-                Estado = estado.EstadoElementoNombre,
-                Disponible = elemento.Disponible,
+                Estado = estado.EstadoMantenimientoNombre,
+                Disponible = elemento.Habilitado,
                 FechaBaja = elemento.FechaBaja
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "numeroSerie,ElementoTipo,EstadoElementoNombre"
+            splitOn: "numeroSerie,ElementoTipo,EstadoMantenimientoNombre"
         ).ToList();
     }
 
@@ -37,20 +37,20 @@ public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimient
 
         parameters.Add("unidTipoElemento", idTipoElemento);
 
-        return Conexion.Query<Elemento, TipoElemento, EstadosElemento, ElementoMantenimientoDTO>(
+        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoMantenimientoDTO>(
             "GetElementosMantenimientoByTipoDTO",
             (elemento, tipo, estado) => new ElementoMantenimientoDTO
             {
                 IdElemento = elemento.IdElemento,
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerie = elemento.numeroSerie,
-                Estado = estado.EstadoElementoNombre,
-                Disponible = elemento.Disponible,
+                Estado = estado.EstadoMantenimientoNombre,
+                Disponible = elemento.Habilitado,
                 FechaBaja = elemento.FechaBaja
             },
             parameters,
             commandType: CommandType.StoredProcedure,
-            splitOn: "numeroSerie,ElementoTipo,EstadoElementoNombre"
+            splitOn: "numeroSerie,ElementoTipo,EstadoMantenimientoNombre"
         ).ToList();
     }
 
@@ -60,20 +60,20 @@ public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimient
 
         parameters.Add("unidEstadoElemento", idEstadoElemento);
 
-        return Conexion.Query<Elemento, TipoElemento, EstadosElemento, ElementoMantenimientoDTO>(
+        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoMantenimientoDTO>(
             "GetElementosMantenimientoByEstadoDTO",
             (elemento, tipo, estado) => new ElementoMantenimientoDTO
             {
                 IdElemento = elemento.IdElemento,
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerie = elemento.numeroSerie,
-                Estado = estado.EstadoElementoNombre,
-                Disponible = elemento.Disponible,
+                Estado = estado.EstadoMantenimientoNombre,
+                Disponible = elemento.Habilitado,
                 FechaBaja = elemento.FechaBaja
             },
             parameters,
             commandType: CommandType.StoredProcedure,
-            splitOn: "numeroSerie,ElementoTipo,EstadoElementoNombre"
+            splitOn: "numeroSerie,ElementoTipo,EstadoMantenimientoNombre"
         ).ToList();
     }
 }

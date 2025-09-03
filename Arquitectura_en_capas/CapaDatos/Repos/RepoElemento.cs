@@ -21,10 +21,10 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
         parametros.Add("unidCarrito", elemento.IdCarrito);
         parametros.Add("unaposicionCarrito", elemento.PosicionCarrito);
-        parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
+        parametros.Add("unidEstadoMantenimiento", elemento.IdEstadoMantenimiento);
         parametros.Add("unnumeroSerie", elemento.numeroSerie);
         parametros.Add("uncodigoBarra", elemento.codigoBarra);
-        parametros.Add("unDisponible", elemento.Disponible);
+        parametros.Add("unhabilitado", elemento.Habilitado);
         parametros.Add("unafechaBaja", elemento.FechaBaja);
 
         try
@@ -48,10 +48,10 @@ public class RepoElemento : RepoBase, IRepoElemento
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
         parametros.Add("unidCarrito", elemento.IdCarrito);
         parametros.Add("unaposicionCarrito", elemento.PosicionCarrito);
-        parametros.Add("unidEstadoElemento", elemento.IdEstadoElemento);
+        parametros.Add("unidEstadoMantenimiento", elemento.IdEstadoMantenimiento);
         parametros.Add("unnumeroSerie", elemento.numeroSerie);
         parametros.Add("uncodigoBarra", elemento.codigoBarra);
-        parametros.Add("unDisponible", elemento.Disponible);
+        parametros.Add("unhabilitado", elemento.Habilitado);
         parametros.Add("unafechaBaja", elemento.FechaBaja);
 
         try
@@ -62,6 +62,23 @@ public class RepoElemento : RepoBase, IRepoElemento
         {
             throw new Exception("Hubo un error al actualizar un Elemento");
         }
+    }
+    #endregion
+
+    #region Eliminar elemento de manera logica
+    public void Deshabilitar(int idElemento, bool habilitado)
+    {
+        string query = @"update Elementos
+                         set disponible = @undisponible, fechaBaja = @unafechaBaja
+                         where idElemento = @unidElemento";
+
+        DynamicParameters parameters = new DynamicParameters();
+
+        parameters.Add("unhabilitado", habilitado);
+        parameters.Add("unidElemento", idElemento);
+        parameters.Add("unafechaBaja", !habilitado ? DateTime.Now : null);
+
+        Conexion.Execute(query, parameters);
     }
     #endregion
 
@@ -159,7 +176,7 @@ public class RepoElemento : RepoBase, IRepoElemento
     public bool GetDisponible(int idElemento)
     {
 
-        string sql = "select * from Elementos where IdElemento = @IdElemento and IdEstadoElemento = 1 and Disponible = true limit 1;";
+        string sql = "select * from Elementos where IdElemento = @IdElemento and IdEstadoMantenimiento = 1 and habilitado = true limit 1;";
 
         DynamicParameters parameters = new DynamicParameters();
 
@@ -184,23 +201,6 @@ public class RepoElemento : RepoBase, IRepoElemento
         parameters.Add("@IdEstadoElemento", idEstadoElemento);
 
         Conexion.Execute(sql, parameters);
-    }
-    #endregion
-
-    #region Eliminar elemento de manera logica
-    public void CambiarDisponible(int idElemento, bool disponible)
-    {
-        string query = @"update Elementos
-                         set disponible = @undisponible, fechaBaja = @unafechaBaja
-                         where idElemento = @unidElemento";
-
-        DynamicParameters parameters = new DynamicParameters();
-
-        parameters.Add("undisponible", disponible);
-        parameters.Add("unidElemento", idElemento);
-        parameters.Add("unafechaBaja", !disponible ? DateTime.Now : null);
-
-        Conexion.Execute(query, parameters);
     }
     #endregion
 
@@ -232,11 +232,11 @@ public class RepoElemento : RepoBase, IRepoElemento
 
     public Elemento? GetNotebookBySerieOrCodigo(string numeroSerie, string codigoBarra)
     {
-        string query = @"select idEstadoElemento, numeroSerie, codigoBarra
+        string query = @"select idEstadoMantenimiento, numeroSerie, codigoBarra
                          from Elementos
                          where (numeroSerie = @numeroSerie or codigoBarra = @codigoBarra)
                          and idCarrito is null
-                         and idEstadoElemento = 1 
+                         and idEstadoMantenimiento = 1 
                          and disponible = 1
                          limit 1;";
 

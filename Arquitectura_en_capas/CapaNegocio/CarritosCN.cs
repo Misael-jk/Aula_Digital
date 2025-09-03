@@ -5,6 +5,8 @@ using CapaNegocio;
 using CapaDatos.Interfaces;
 using System.Transactions;
 using System.Xml.Linq;
+using CapaDatos.InterfacesDTO;
+using CapaDTOs;
 
 namespace CapaNegocio;
 
@@ -12,12 +14,21 @@ public class CarritosCN
 {
     private readonly IRepoCarritos repoCarrito;
     private readonly IRepoElemento repoElementos;
+    private readonly IMapperCarritos mapperCarritos;
 
-    public CarritosCN(IRepoCarritos repoCarrito, IRepoElemento repoElementos)
+    public CarritosCN(IRepoCarritos repoCarrito, IRepoElemento repoElementos, IMapperCarritos mapperCarritos)
     {
         this.repoCarrito = repoCarrito;
         this.repoElementos = repoElementos;
+        this.mapperCarritos = mapperCarritos;
     }
+
+    #region Mostrar Carritos
+    public IEnumerable<CarritosDTO> MostrarCarritos()
+    {
+        return mapperCarritos.GetAllDTO();
+    }
+    #endregion
 
     #region INSERT CARRITO
     public void CrearCarrito(Carritos CarritoNEW)
@@ -153,7 +164,7 @@ public class CarritosCN
             HistorialElemento historial = new HistorialElemento
             {
                 IdElemento = idElemento,
-                IdEstadoElemento = elemento.IdEstadoElemento,
+                IdEstadoMantenimiento = elemento.IdEstadoMantenimiento,
                 IdCarrito = idCarrito,
                 idUsuario = idUsuario,
                 FechaHora = DateTime.Now,
@@ -188,7 +199,7 @@ public class CarritosCN
             HistorialElemento historial = new HistorialElemento
             {
                 IdElemento = idElemento,
-                IdEstadoElemento = elemento.IdEstadoElemento,
+                IdEstadoMantenimiento = elemento.IdEstadoMantenimiento,
                 IdCarrito = idCarrito,
                 idUsuario = idUsuario,
                 FechaHora = DateTime.Now,

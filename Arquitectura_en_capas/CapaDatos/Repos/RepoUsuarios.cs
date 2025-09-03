@@ -26,6 +26,8 @@ public class RepoUsuarios : RepoBase, IRepoUsuarios
         parametros.Add("unrol", usuarios.IdRol);
         parametros.Add("unemail", usuarios.Email);
         parametros.Add("unfotoPerfil", usuarios.FotoPerfil);
+        parametros.Add("unhabilitado", usuarios.Habilitado);
+        parametros.Add("unfechaBaja", usuarios.FechaBaja);
 
         try
         {
@@ -52,6 +54,8 @@ public class RepoUsuarios : RepoBase, IRepoUsuarios
         parametros.Add("unrol", usuarios.IdRol);
         parametros.Add("unemail", usuarios.Email);
         parametros.Add("unfotoPerfil", usuarios.FotoPerfil);
+        parametros.Add("unhabilitado", usuarios.Habilitado);
+        parametros.Add("unfechaBaja", usuarios.FechaBaja);
 
         try
         {

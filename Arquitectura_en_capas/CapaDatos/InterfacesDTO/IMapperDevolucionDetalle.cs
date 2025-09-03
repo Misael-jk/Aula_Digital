@@ -4,6 +4,6 @@ namespace CapaDatos.InterfacesDTO;
 
 public interface IMapperDevolucionDetalle
 {
-    IEnumerable<DevolucionDetalleDTO> GetAllDTO();
-    DevolucionDetalleDTO? GetByIdDTO(int idDevolucion);
+    public IEnumerable<DevolucionDetalleDTO> GetAllDTO();
+    public DevolucionDetalleDTO? GetByIdDTO(int idDevolucion);
 }

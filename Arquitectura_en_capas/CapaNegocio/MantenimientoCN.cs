@@ -41,17 +41,17 @@ public class MantenimientoCN
         if (elemento == null)
             throw new Exception("El elemento no existe.");
 
-        if (elemento.Disponible)
+        if (elemento.Habilitado)
             throw new Exception("El elemento ya esta habilitado.");
 
-        _repoElemento.CambiarDisponible(idElemento, true);
+        _repoElemento.Deshabilitar(idElemento, true);
 
         HistorialElemento historialElemento = new HistorialElemento
         {
             IdElemento = idElemento,
             IdCarrito = elemento.IdCarrito,
             idUsuario = idUsuario,
-            IdEstadoElemento = 1,
+            IdEstadoMantenimiento = 1,
             FechaHora = DateTime.Now,
             Observacion = "El elemento ha sido habilitado."
         };
@@ -67,12 +67,12 @@ public class MantenimientoCN
             throw new Exception("El elemento no existe.");
         }
 
-        if (elementoOLD.IdEstadoElemento == 2)
+        if (elementoOLD.IdEstadoMantenimiento == 2)
         {
             throw new Exception("No se puede eliminar un elemento que está en prestamo");
         }
 
-        if (elementoOLD.Disponible)
+        if (elementoOLD.Habilitado)
         {
             throw new Exception("El elemento debe estar deshabilitado antes de eliminarlo definitivamente.");
         }
