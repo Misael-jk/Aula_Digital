@@ -19,6 +19,8 @@ create table Usuarios (
     idRol tinyint not null,
     email varchar(70),
     fotoPerfil varchar(255),
+    habilitado boolean not null,
+    fechaBaja datetime,
     constraint PK_Usuarios primary key (idUsuario),
     constraint UQ_Usuarios unique (usuario),
     constraint FK_Usuarios_Rol foreign key (idRol)
@@ -32,6 +34,8 @@ create table Docentes (
     nombre varchar(40) not null,
     apellido varchar(40) not null,
     email varchar(70) not null,
+    habilitado boolean not null,
+    fechaBaja datetime,
     constraint PK_Docentes primary key (idDocente),
     constraint UQ_Docentes_Dni unique (dni),
     constraint UQ_Docentes_Email unique (email)
@@ -45,18 +49,22 @@ create table TipoElemento (
 );
 
 
-create table EstadosElemento (
-    idEstadoElemento tinyint not null auto_increment,
-    estadoElemento varchar(40) not null,
-    constraint PK_EstadosElemento primary key (idEstadoElemento)
+create table EstadosMantenimiento (
+    idEstadoMantenimiento tinyint not null auto_increment,
+    estadoMantenimiento varchar(40) not null,
+    constraint PK_EstadosMantenimiento primary key (idEstadoMantenimiento)
 );
 
 
 create table Carritos (
     idCarrito tinyint not null auto_increment,
     numeroSerieCarrito varchar(40)not null,
-    disponibleCarrito boolean not null,
-    constraint PK_Carritos primary key (idCarrito)
+    idEstadoMantenimiento tinyint not null,
+    Habilitado boolean not null,
+    fechaBaja datetime,
+    constraint PK_Carritos primary key (idCarrito),
+    constraint FK_Carritos_EstadoMantenimiento foreign key (idEstadoMantenimiento)
+    	references EstadosMantenimiento (idEstadoMantenimiento)
 );
 
 
@@ -65,10 +73,10 @@ create table Elementos (
     idTipoElemento tinyint not null,
     idCarrito tinyint,
     posicionCarrito tinyint,
-    idEstadoElemento tinyint not null,
+    idEstadoMantenimiento tinyint not null,
     numeroSerie varchar(40) not null,
     codigoBarra varchar(40) not null,
-    disponible boolean not null,
+    habilitado boolean not null,
     fechaBaja datetime,
     constraint PK_Elementos primary key (idElemento),
     constraint UQ_Elementos_numeroSerie unique (numeroSerie),
@@ -77,8 +85,8 @@ create table Elementos (
         references tipoElemento(idTipoElemento),
     constraint FK_Elementos_Carrito foreign key (idCarrito)
         references Carritos(idCarrito),
-    constraint FK_Elementos_EstadoNotebook foreign key (idEstadoElemento)
-        references EstadosElemento(idEstadoElemento)
+    constraint FK_Elementos_EstadoMantenimiento foreign key (idEstadoMantenimiento)
+        references EstadosMantenimiento (idEstadoMantenimiento)
 );
 
 
@@ -151,15 +159,15 @@ create table Devoluciones (
 create table DevolucionDetalle (
     idDevolucion int not null,
     idElemento tinyint not null,
-    idEstadoElemento tinyint not null,
+    idEstadoMantenimiento tinyint not null,
     observaciones varchar(200),
     constraint PK_DevolucionDetalle primary key (idDevolucion, idElemento),
     constraint FK_DevolucionDetalle_Devoluciones foreign key (idDevolucion)
         references Devoluciones(idDevolucion),
     constraint FK_DevolucionDetalle_Elementos foreign key (idElemento)
         references Elementos(idElemento),
-    constraint FK_DevolucionDetalle_EstadoElemento foreign key (idEstadoElemento)
-    	references EstadosElemento (idEstadoElemento)
+    constraint FK_DevolucionDetalle_EstadosMantenimiento foreign key (idEstadoMantenimiento)
+    	references EstadosMantenimiento (idEstadoMantenimiento)
 );
 
 
@@ -168,14 +176,14 @@ create table HistorialElementos (
     idElemento tinyint not null,
     idCarrito tinyint,
     idUsuario tinyint not null,
-    idEstadoElemento tinyint not null,
+    idEstadoMantenimiento tinyint not null,
     fechaHora datetime not null,
     observacion varchar(200),
     constraint PK_HistorialElementos primary key (idHistorialElemento),
     constraint FK_HistorialElemento_Elemento foreign key (idElemento)
         references Elementos(idElemento),
-    constraint FK_HistorialElemento_Estado foreign key (idEstadoElemento)
-        references EstadosElemento(idEstadoElemento),
+    constraint FK_HistorialElemento_EstadoMantenimiento foreign key (idEstadoMantenimiento)
+        references EstadosMantenimiento(idEstadoMantenimiento),
     constraint FK_HistorialElemento_Carritos foreign key (idCarrito)
     	references Carritos (idCarrito),
     constraint FK_HistorialElemento_Usuario foreign key (idUsuario)

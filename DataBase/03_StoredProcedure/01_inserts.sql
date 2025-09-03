@@ -5,10 +5,10 @@
 delimiter $$
 
 drop procedure if exists InsertCarrito $$
-create procedure InsertCarrito(out unidCarrito tinyint, in unnumeroSerieCarrito varchar(40), in undisponibleCarrito boolean)
+create procedure InsertCarrito(out unidCarrito tinyint, in unnumeroSerieCarrito varchar(40), in unidEstadoMantenimiento tinyint, in unhabilitado boolean, in unafechaBaja datetime)
 begin
-	insert into carritos (numeroSerieCarrito, disponibleCarrito)
-	values (unnumeroSerieCarrito, undisponibleCarrito);
+	insert into carritos (numeroSerieCarrito, idEstadoMantenimiento, habilitado, fechaBaja)
+	values (unnumeroSerieCarrito, unidEstadoMantenimiento, unhabilitado, unafechaBaja);
 
 	set unidCarrito = last_insert_id(); 
 end $$
@@ -24,10 +24,10 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists InsertDocente $$
-create procedure InsertDocente (out unidDocente smallint, in undni int, in unnombre varchar(40), in unapellido varchar(40), in unemail varchar(70))
+create procedure InsertDocente (out unidDocente smallint, in undni int, in unnombre varchar(40), in unapellido varchar(40), in unemail varchar(70), in unhabilitado boolean, in unafechaBaja datetime)
 begin
-    insert into Docentes(dni, nombre, apellido, email)
-    values (undni, unnombre, unapellido, unemail);
+    insert into Docentes(dni, nombre, apellido, email, habilitado, fechaBaja)
+    values (undni, unnombre, unapellido, unemail, unhabilitado, unafechaBaja);
 
     set unidDocente = last_insert_id();
 end $$
@@ -43,10 +43,10 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists InsertElemento $$
-create procedure InsertElemento (out unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoElemento tinyint, in unidCarrito tinyint, in unaposicionCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
+create procedure InsertElemento (out unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoMantenimiento tinyint, in unidCarrito tinyint, in unaposicionCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
 begin
-    insert into elementos (idTipoElemento, idEstadoElemento, idCarrito, posicionCarrito, numeroSerie, codigoBarra, disponible, fechaBaja)
-    values (unidTipoElemento, unidEstadoElemento, unidCarrito, unaposicionCarrito, unnumeroSerie, uncodigoBarra, undisponible, unafechaBaja);
+    insert into elementos (idTipoElemento, idEstadoMantenimiento, idCarrito, posicionCarrito, numeroSerie, codigoBarra, disponible, fechaBaja)
+    values (unidTipoElemento, unidEstadoMantenimiento, unidCarrito, unaposicionCarrito, unnumeroSerie, uncodigoBarra, undisponible, unafechaBaja);
 
     set unidElemento = last_insert_id();
 end $$
@@ -62,10 +62,10 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists InsertUsuario $$
-create procedure InsertUsuario (out unidUsuario tinyint, in unusuario varchar(40), in unpassword varchar(70), in unnombre varchar(40), in unapellido varchar(40), in unidRol tinyint, in unemail varchar(70), in unafotoperfil VARCHAR(255))
+create procedure InsertUsuario (out unidUsuario tinyint, in unusuario varchar(40), in unpassword varchar(70), in unnombre varchar(40), in unapellido varchar(40), in unidRol tinyint, in unemail varchar(70), in unafotoperfil VARCHAR(255), in unhabilitado boolean, in unafechaBaja datetime)
 begin
-    insert into usuarios  (usuario, pass, nombre, apellido, idRol, email, fotoPerfil)
-    values (unusuario, unpassword, unnombre, unapellido, unidRol, unemail, unafotoperfil);
+    insert into usuarios  (usuario, pass, nombre, apellido, idRol, email, fotoPerfil, habilitado, fechaBaja)
+    values (unusuario, unpassword, unnombre, unapellido, unidRol, unemail, unafotoperfil, unhabilitado, unafechaBaja);
 
     set unidUsuario = last_insert_id(); 
 end $$
@@ -136,10 +136,10 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists InsertDevolucionDetalle $$
-create procedure InsertDevolucionDetalle (in unidDevolucion int ,in unidElemento tinyint ,in unidEstadoElemento tinyint ,in unaobservacion varchar(200))
+create procedure InsertDevolucionDetalle (in unidDevolucion int ,in unidElemento tinyint ,in unidEstadoMantenimiento tinyint ,in unaobservacion varchar(200))
 begin
-    insert into DevolucionDetalle (idDevolucion, idElemento, idEstadoElemento, observaciones)
-    values (unidDevolucion, unidElemento, unidEstadoElemento, unaobservacion);
+    insert into DevolucionDetalle (idDevolucion, idElemento, idEstadoMantenimiento, observaciones)
+    values (unidDevolucion, unidElemento, unidEstadoMantenimiento, unaobservacion);
 end $$
 
 delimiter ;
@@ -190,13 +190,13 @@ delimiter ;
 
 delimiter $$
 
-drop procedure if exists InsertEstadoElemento $$
-create procedure InsertEstadoElemento (out unidEstadoElemento tinyint, in unestadoElemento varchar(40))
+drop procedure if exists InsertEstadoMantenimiento $$
+create procedure InsertEstadoMantenimiento (out unidEstadoMantenimiento tinyint, in unestadoMantenimiento varchar(40))
 begin
-    insert into EstadosElemento (estadoPrestamo)
-    values (unestadoElemento);
+    insert into EstadosElemento (estadoMantenimiento)
+    values (unestadoMantenimiento);
 
-    set unidEstadoElemento = last_insert_id();
+    set unidEstadoMantenimiento = last_insert_id();
 end $$
 
 delimiter ;
@@ -246,10 +246,10 @@ end $$
 delimiter $$
 
 drop procedure if exists InsertHistorialElemento $$
-create procedure InsertHistorialElemento (in unidElemento tinyint, in unidCarrito tinyint, in unidUsuario tinyint, in unidEstadoElemento tinyint, in unafechaHora datetime, in unaobservacion varchar(200))
+create procedure InsertHistorialElemento (in unidElemento tinyint, in unidCarrito tinyint, in unidUsuario tinyint, in unidEstadoMantenimiento tinyint, in unafechaHora datetime, in unaobservacion varchar(200))
 begin
-    insert into HistorialElementos (idElemento, idCarrito, idUsuario, idEstadoElemento, fechaHora, observacion)
-    values (unidElemento, unidCarrito, unidUsuario, unidEstadoElemento, unafechaHora, unaobservacion);
+    insert into HistorialElementos (idElemento, idCarrito, idUsuario, idEstadoMantenimiento, fechaHora, observacion)
+    values (unidElemento, unidCarrito, unidUsuario, unidEstadoMantenimiento, unafechaHora, unaobservacion);
 end $$
 
 delimiter ;

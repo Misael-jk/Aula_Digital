@@ -5,10 +5,10 @@
 delimiter $$ 
 
 drop procedure if exists UpdateCarrito $$
-create procedure UpdateCarrito(in unidCarrito tinyint, in unnumeroSerieCarrito varchar(40), in undisponibleCarrito boolean)
+create procedure UpdateCarrito(in unidCarrito tinyint, in unnumeroSerieCarrito varchar(40), in unidEstadoMantenimiento tinyint, in unhabilitado boolean, in unafechaBaja datetime)
 begin
 	update carritos 
-	set numeroSerieCarrito = unnumeroSerieCarrito, disponibleCarrito = undisponibleCarrito
+	set numeroSerieCarrito = unnumeroSerieCarrito, idEstadoMantenimiento = unidEstadoMantenimiento, habilitado = unhabilitado, fechaBaja = unafechaBaja
 	where idCarrito = unidCarrito;
 end $$
 
@@ -23,13 +23,15 @@ delimiter ;
 delimiter $$ 
 
 drop procedure if exists UpdateDocente $$
-create procedure UpdateDocente (in unidDocente smallint, in undni int, in unnombre varchar(40), in unapellido varchar(40), in unemail varchar(70))
+create procedure UpdateDocente (in unidDocente smallint, in undni int, in unnombre varchar(40), in unapellido varchar(40), in unemail varchar(70), in habilitado boolean, in unafechaBaja datetime)
 begin
 	update docentes 
 	set dni = undni,
 		nombre = unnombre,
 		apellido = unapellido,
-		email = unemail
+		email = unemail,
+        habilitado = unhabilitado,
+        fechaBaja = unafechaBaja
 	where idDocente = unidDocente;
 end $$
 
@@ -44,12 +46,12 @@ delimiter ;
 delimiter $$ 
 
 drop procedure if exists UpdateElemento $$
-create procedure UpdateElemento(in unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoElemento tinyint, in unidCarrito tinyint, in unaposicionCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
+create procedure UpdateElemento(in unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoMantenimiento tinyint, in unidCarrito tinyint, in unaposicionCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
 begin
 	
 	update elementos 
 	set idTipoElemento = unidTipoElemento,
-		idEstadoElemento = unidEstadoElemento,
+		idEstadoMantenimiento = unidEstadoMantenimiento,
 		idCarrito = unidCarrito,
 		posicionCarrito = unaposicionCarrito,
 		numeroSerie = unnumeroSerie,
@@ -70,7 +72,7 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists UpdateUsuario $$
-create procedure UpdateUsuario (in unidUsuario tinyint, in unusuario varchar(40), in unpassword varchar(70), in unnombre varchar(40), in unapellido varchar(40), in unrol tinyint, in unemail varchar(70), in unafotoperfil VARCHAR(255))
+create procedure UpdateUsuario (in unidUsuario tinyint, in unusuario varchar(40), in unpassword varchar(70), in unnombre varchar(40), in unapellido varchar(40), in unrol tinyint, in unemail varchar(70), in unafotoperfil VARCHAR(255), in unhabilitado boolean, in unafechaBaja datetime)
 begin
     update usuarios u
     set idUsuario = unidEncargado,
@@ -80,7 +82,9 @@ begin
         apellido = unapellido,
         idRol = unrol,
         email = unemail,
-        FotoPerfil = unafotoperfil
+        FotoPerfil = unafotoperfil,
+        habilitado = unhabilitado,
+        fechaBaja = unafechaBaja
     where idUsuario = unidUsuario;
 end $$
 
@@ -175,12 +179,12 @@ delimiter ;
 
 delimiter $$
 
-drop procedure if exists UpdateEstadoElemento $$
-create procedure UpdateEstadoElemento (in unidEstadoElemento tinyint, in unestadoElemento varchar(40))
+drop procedure if exists UpdateEstadoMantenimiento $$
+create procedure UpdateEstadoMantenimiento (in unidEstadoMantenimiento tinyint, in unestadoMantenimiento varchar(40))
 begin
-    update EstadosElemento
-    set estadoElemento = unestadoElemento
-    where idEstadoElemento = unidEstadoElemento;
+    update EstadosMantenimiento
+    set estadoMantenimiento = unestadoMantenimiento
+    where idEstadoMantenimiento = unidEstadoMantenimiento;
 end $$
 
 delimiter ;

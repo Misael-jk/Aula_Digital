@@ -9,10 +9,10 @@ create view View_GetElementosDTO as
         e.numeroSerie,
         e.codigoBarra,
         te.elemento as ElementoTipo,
-        ee.estadoElemento as EstadoElementoNombre,
+        ee.estadoMantenimiento as EstadoMantenimientoNombre,
         c.numeroSerieCarrito
     from Elementos e
     join tipoElemento te using(idTipoElemento)
-    join EstadosElemento ee using(idEstadoElemento)
+    join EstadosMantenimiento ee using(idEstadoMantenimiento)
     left join Carritos c using(idCarrito)
     where e.disponible = 1;

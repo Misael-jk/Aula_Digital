@@ -9,9 +9,9 @@ create view GetHistorialElementosDTO as
        te.elemento as ElementoTipo,
        e.numeroSerie,
        c.numeroSerieCarrito,
-       ee.estadoElemento as EstadoElementoNombre
+       ee.estadoMantenimiento as EstadoMantenimientoNombre
 from HistorialElementos he
 join Elementos e using(idElemento)
 left join carritos c on e.idCarrito = c.idCarrito
 join TipoElemento te on e.idTipoElemento = te.idTipoElemento 
-join EstadosElemento ee ON e.idEstadoElemento = ee.idEstadoElemento;
+join EstadosMantenimiento ee ON e.idEstadoMantenimiento = ee.idEstadoMantenimiento;
