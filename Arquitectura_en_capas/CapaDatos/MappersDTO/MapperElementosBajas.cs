@@ -13,11 +13,11 @@ public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimient
     {
     }
 
-    public IEnumerable<ElementoMantenimientoDTO> GetAllDTO()
+    public IEnumerable<ElementoBajasDTO> GetAllDTO()
     {
-        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoMantenimientoDTO>(
+        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoBajasDTO>(
             "GetElementosMantenimientoDTO",
-            (elemento, tipo, estado) => new ElementoMantenimientoDTO
+            (elemento, tipo, estado) => new ElementoBajasDTO
             {
                 IdElemento = elemento.IdElemento,
                 TipoElemento = tipo.ElementoTipo,
@@ -31,15 +31,15 @@ public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimient
         ).ToList();
     }
 
-    public IEnumerable<ElementoMantenimientoDTO> GetByTipo(int idTipoElemento)
+    public IEnumerable<ElementoBajasDTO> GetByTipo(int idTipoElemento)
     {
         DynamicParameters parameters = new DynamicParameters();
 
         parameters.Add("unidTipoElemento", idTipoElemento);
 
-        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoMantenimientoDTO>(
+        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoBajasDTO>(
             "GetElementosMantenimientoByTipoDTO",
-            (elemento, tipo, estado) => new ElementoMantenimientoDTO
+            (elemento, tipo, estado) => new ElementoBajasDTO
             {
                 IdElemento = elemento.IdElemento,
                 TipoElemento = tipo.ElementoTipo,
@@ -54,15 +54,15 @@ public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimient
         ).ToList();
     }
 
-    public IEnumerable<ElementoMantenimientoDTO> GetByEstado(int idEstadoElemento)
+    public IEnumerable<ElementoBajasDTO> GetByEstado(int idEstadoElemento)
     {
         DynamicParameters parameters = new DynamicParameters();
 
         parameters.Add("unidEstadoElemento", idEstadoElemento);
 
-        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoMantenimientoDTO>(
+        return Conexion.Query<Elemento, TipoElemento, EstadosMantenimiento, ElementoBajasDTO>(
             "GetElementosMantenimientoByEstadoDTO",
-            (elemento, tipo, estado) => new ElementoMantenimientoDTO
+            (elemento, tipo, estado) => new ElementoBajasDTO
             {
                 IdElemento = elemento.IdElemento,
                 TipoElemento = tipo.ElementoTipo,

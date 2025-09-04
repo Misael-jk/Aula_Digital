@@ -19,17 +19,17 @@ public class MantenimientoCN
         this.repoHistorialElemento = repoHistorialElemento;
     }
 
-    public IEnumerable<ElementoMantenimientoDTO> GetAllElementos()
+    public IEnumerable<ElementoBajasDTO> GetAllElementos()
     {
         return mapperElementoMantenimiento.GetAllDTO();
     }
 
-    public IEnumerable<ElementoMantenimientoDTO> GetElementosByTipo(int idTipoElemento)
+    public IEnumerable<ElementoBajasDTO> GetElementosByTipo(int idTipoElemento)
     {
         return mapperElementoMantenimiento.GetByTipo(idTipoElemento);
     }
 
-    public IEnumerable<ElementoMantenimientoDTO> GetElementosByEstado(int idEstadoElemento)
+    public IEnumerable<ElementoBajasDTO> GetElementosByEstado(int idEstadoElemento)
     {
         return mapperElementoMantenimiento.GetByEstado(idEstadoElemento);
     }

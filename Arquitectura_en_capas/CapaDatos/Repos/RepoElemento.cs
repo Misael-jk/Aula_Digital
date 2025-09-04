@@ -65,23 +65,6 @@ public class RepoElemento : RepoBase, IRepoElemento
     }
     #endregion
 
-    #region Eliminar elemento de manera logica
-    public void Deshabilitar(int idElemento, bool habilitado)
-    {
-        string query = @"update Elementos
-                         set disponible = @undisponible, fechaBaja = @unafechaBaja
-                         where idElemento = @unidElemento";
-
-        DynamicParameters parameters = new DynamicParameters();
-
-        parameters.Add("unhabilitado", habilitado);
-        parameters.Add("unidElemento", idElemento);
-        parameters.Add("unafechaBaja", !habilitado ? DateTime.Now : null);
-
-        Conexion.Execute(query, parameters);
-    }
-    #endregion
-
     #region Eliminar Elemento
     public void Delete(int idElemento)
     {
