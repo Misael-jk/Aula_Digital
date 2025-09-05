@@ -6,32 +6,32 @@ using CapaEntidad;
 
 namespace CapaNegocio;
 
-public class MantenimientoCN
+public class ElementosBajasCN
 {
     private readonly IRepoElemento _repoElemento;
-    private readonly IMapperElementoMantenimiento mapperElementoMantenimiento;
+    private readonly IMapperElementosBajas mapperElementosBajas;
     private readonly IRepoHistorialElemento repoHistorialElemento;
 
-    public MantenimientoCN(IRepoElemento repoElemento, IMapperElementoMantenimiento mapperElementoMantenimiento, IRepoHistorialElemento repoHistorialElemento)
+    public ElementosBajasCN(IRepoElemento repoElemento, IMapperElementosBajas mapperElementosBajas, IRepoHistorialElemento repoHistorialElemento)
     {
         _repoElemento = repoElemento;
-        this.mapperElementoMantenimiento = mapperElementoMantenimiento;
+        this.mapperElementosBajas = mapperElementosBajas;
         this.repoHistorialElemento = repoHistorialElemento;
     }
 
     public IEnumerable<ElementoBajasDTO> GetAllElementos()
     {
-        return mapperElementoMantenimiento.GetAllDTO();
+        return mapperElementosBajas.GetAllDTO();
     }
 
     public IEnumerable<ElementoBajasDTO> GetElementosByTipo(int idTipoElemento)
     {
-        return mapperElementoMantenimiento.GetByTipo(idTipoElemento);
+        return mapperElementosBajas.GetByTipo(idTipoElemento);
     }
 
     public IEnumerable<ElementoBajasDTO> GetElementosByEstado(int idEstadoElemento)
     {
-        return mapperElementoMantenimiento.GetByEstado(idEstadoElemento);
+        return mapperElementosBajas.GetByEstado(idEstadoElemento);
     }
 
     public void HabilitarElemento(int idElemento, int idUsuario)
@@ -44,14 +44,18 @@ public class MantenimientoCN
         if (elemento.Habilitado)
             throw new Exception("El elemento ya esta habilitado.");
 
-        _repoElemento.Deshabilitar(idElemento, true);
+        elemento.Habilitado = true;
+        elemento.IdEstadoMantenimiento = 1;
+        elemento.FechaBaja = null;
+
+        _repoElemento.Update(elemento);
 
         HistorialElemento historialElemento = new HistorialElemento
         {
             IdElemento = idElemento,
             IdCarrito = elemento.IdCarrito,
             idUsuario = idUsuario,
-            IdEstadoMantenimiento = 1,
+            IdEstadoMantenimiento = elemento.IdEstadoMantenimiento,
             FechaHora = DateTime.Now,
             Observacion = "El elemento ha sido habilitado."
         };

@@ -13,8 +13,8 @@ namespace CapaPresentacion
 {
     public partial class MantenimientoUC: UserControl
     {
-        private readonly MantenimientoCN mantenimientoCN;
-        public MantenimientoUC(MantenimientoCN mantenimientoCN)
+        private readonly ElementosBajasCN mantenimientoCN;
+        public MantenimientoUC(ElementosBajasCN mantenimientoCN)
         {
             InitializeComponent();
             this.mantenimientoCN = mantenimientoCN;

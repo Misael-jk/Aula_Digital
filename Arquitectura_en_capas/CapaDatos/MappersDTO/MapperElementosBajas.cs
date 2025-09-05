@@ -6,9 +6,9 @@ using System.Data;
 
 namespace CapaDatos.MappersDTO;
 
-public class MapperElementoMantenimiento : RepoBase, IMapperElementoMantenimiento
+public class MapperElementosBajas : RepoBase, IMapperElementosBajas
 {
-    public MapperElementoMantenimiento(IDbConnection conexion) 
+    public MapperElementosBajas(IDbConnection conexion) 
         : base(conexion)
     {
     }

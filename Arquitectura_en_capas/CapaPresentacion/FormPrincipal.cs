@@ -51,7 +51,7 @@ namespace CapaPresentacion
         private readonly IMapperPrestamos mapperPrestamos;
         private readonly IMapperDevoluciones mapperDevoluciones;
         private readonly IMapperUsuarios mapperUsuarios;
-        private readonly IMapperElementoMantenimiento mapperElementoMantenimiento;
+        private readonly Mapp mapperElementoMantenimiento;
         private readonly IMapperCarritos mapperCarritos;
         private readonly MapperHistorialElemento mapperHistorialElemento;
         private readonly MapperTransaccion mapperTransaccion;
@@ -64,7 +64,7 @@ namespace CapaPresentacion
         private readonly PrestamosCN prestamosCN;
         private readonly TiposElementoCN tiposElementoCN;
         private readonly UsuariosCN usuariosCN;
-        private readonly MantenimientoCN mantenimientoCN;
+        private readonly ElementosBajasCN mantenimientoCN;
         private readonly DevolucionCN devolucionCN;
         #endregion
 
@@ -95,7 +95,7 @@ namespace CapaPresentacion
             mapperPrestamos = new MapperPrestamos(conexion);
             mapperDevoluciones = new MapperDevoluciones(conexion);
             mapperUsuarios = new MapperUsuarios(conexion);
-            mapperElementoMantenimiento = new MapperElementoMantenimiento(conexion);
+            mapperElementoMantenimiento = new MapperElementosBajas(conexion);
             mapperCarritos = new MapperCarrritos(conexion);
             mapperHistorialElemento = new MapperHistorialElemento(conexion);
             mapperTransaccion = new MapperTransaccion(conexion);

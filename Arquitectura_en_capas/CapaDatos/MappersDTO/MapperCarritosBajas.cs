@@ -1,12 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CapaDatos.InterfacesDTO;
+using CapaDTOs;
+using CapaEntidad;
+using Dapper;
+using System.Data;
 
-namespace CapaDatos.MappersDTO
+namespace CapaDatos.MappersDTO;
+
+public class MapperCarritosBajas : RepoBase, IMapperCarritosBajas
 {
-    class MapperCarritosBajas
+    public MapperCarritosBajas(IDbConnection conexion)
+        : base(conexion)
     {
+    }
+
+    public IEnumerable<CarrtiosBajasDTO> GetAllDTO()
+    {
+        return Conexion.Query<Carritos, EstadosMantenimiento, CarrtiosBajasDTO>(
+            "GetCarritosBajasDTO",
+            (carrito, estado) => new CarrtiosBajasDTO
+            {
+                IdCarrito = carrito.IdCarrito,
+                NumeroSerieCarrito = carrito.NumeroSerieCarrito,
+                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
+                FechaBaja = carrito.FechaBaja
+            },
+            commandType: CommandType.StoredProcedure,
+            splitOn: "NumeroSerieCarrito,EstadoMantenimientoNombre"
+        ).ToList();
     }
 }

@@ -7,5 +7,5 @@ public class ElementoBajasDTO
     public required string Estado { get; set; } 
     public required string NumeroSerie { get; set; }
     public bool Disponible { get; set; }
-    public DateTime FechaBaja { get; set; }
+    public DateTime? FechaBaja { get; set; }
 }
