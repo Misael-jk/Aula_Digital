@@ -1,6 +1,7 @@
-﻿using CapaEntidad;
+﻿using CapaDatos.InterfacesDTO;
 using CapaDTOs;
-using CapaDatos.InterfacesDTO;
+using CapaDTOs.AuditoriaDTO;
+using CapaEntidad;
 using Dapper;
 using System.Data;
 
@@ -8,78 +9,28 @@ namespace CapaDatos.MappersDTO;
 
 public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
 {
-    public MapperHistorialElemento(IDbConnection conexion)
-        : base(conexion)
+    public MapperHistorialElemento(IDbConnection conexion) : base(conexion)
     {
     }
-
-    public IEnumerable<HistorialElementoDTO> GetAllDTO()
+    public IEnumerable<HistoralElementoDTO> GetAllDTO()
     {
-        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosMantenimiento, HistorialElementoDTO>(
+        return Conexion.Query<HistorialCambios, TipoAccion, ElementosDTO, UsuariosDTO, HistoralElementoDTO>(
             "GetHistorialElementosDTO",
-            (historial, tipo, elemento, carrito, usuario, estado) => new HistorialElementoDTO
+            (historial, accion, elemento, usuario) => new HistoralElementoDTO
             {
-                IdHistorialElemento = historial.IdHistorialElemento,
-                TipoElemento = tipo.ElementoTipo,
-                NumeroSerie = elemento.numeroSerie,
-                NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
-                ApellidoEncargado = usuario.Apellido,
-                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
-                FechaHora = historial.FechaHora,
-                Observacion = historial.Observacion
+                NumeroSerie = elemento.NumeroSerie,
+                CodigoBarra = elemento.CodigoBarra,
+                Modelo = elemento.Modelo,
+                TipoElemento = elemento.TipoElemento,
+                UbicacionActual = elemento.Ubicacion,
+                EstadoMantenimiento = elemento.Estado,
+                Descripcion = historial?.Descripcion,
+                FechaCambio = historial.FechaCambio,
+                AccionRealizada = accion.Accion,
+                Usuario = usuario.Apellido
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoMantenimientoNombre"
-        ).ToList();
-    }
-
-    public IEnumerable<HistorialElementoDTO> GetByElementoDTO(int idElemento)
-    {
-        DynamicParameters parametros = new DynamicParameters();
-
-        parametros.Add("@idElemento", idElemento, DbType.Int32, ParameterDirection.Input);
-
-        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosMantenimiento, HistorialElementoDTO>(
-            "GetHistorialByElementoDTO",
-            (historial, tipo, elemento, carrito, usuario, estado) => new HistorialElementoDTO
-            {
-                IdHistorialElemento = historial.IdHistorialElemento,
-                TipoElemento = tipo.ElementoTipo,
-                NumeroSerie = elemento.numeroSerie,
-                NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
-                ApellidoEncargado = usuario.Apellido,
-                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
-                FechaHora = historial.FechaHora,
-                Observacion = historial.Observacion
-            },
-            parametros,
-            commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoMantenimientoNombre"
-        ).ToList();
-    }
-
-    public IEnumerable<HistorialElementoDTO> GetByEstadoDTO(int idEstadoMantenimiento)
-    {
-        DynamicParameters parametros = new DynamicParameters();
-
-        parametros.Add("@idEstadoMantenimiento", idEstadoMantenimiento, DbType.Int32, ParameterDirection.Input);
-
-        return Conexion.Query<HistorialElemento, TipoElemento, Elemento, Carritos, Usuarios, EstadosMantenimiento, HistorialElementoDTO>(
-            "GetHistorialByEstadoMantenimientoDTO",
-            (historial, tipo, elemento, carrito, usuario, estado) => new HistorialElementoDTO
-            {
-                IdHistorialElemento = historial.IdHistorialElemento,
-                TipoElemento = tipo.ElementoTipo,
-                NumeroSerie = elemento.numeroSerie,
-                NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito",
-                ApellidoEncargado = usuario.Apellido,
-                EstadoMantenimiento = estado.EstadoMantenimientoNombre,
-                FechaHora = historial.FechaHora,
-                Observacion = historial.Observacion
-            },
-            parametros,
-            commandType: CommandType.StoredProcedure,
-            splitOn: "ElementoTipo,numeroSerie,NumeroSerieCarrito,Apellido,EstadoMantenimientoNombre"
+            splitOn: "FechaCambio,Accion,NombreElemento,Apellido"
         ).ToList();
     }
 }

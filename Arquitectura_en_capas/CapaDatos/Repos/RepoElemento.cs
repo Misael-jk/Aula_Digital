@@ -19,11 +19,12 @@ public class RepoElemento : RepoBase, IRepoElemento
 
         parametros.Add("unidElemento", dbType: DbType.Int32, direction: ParameterDirection.Output);
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
-        parametros.Add("unidCarrito", elemento.IdCarrito);
-        parametros.Add("unaposicionCarrito", elemento.PosicionCarrito);
         parametros.Add("unidEstadoMantenimiento", elemento.IdEstadoMantenimiento);
-        parametros.Add("unnumeroSerie", elemento.numeroSerie);
-        parametros.Add("uncodigoBarra", elemento.codigoBarra);
+        parametros.Add("unaubicacion", elemento.IdUbicacion);
+        parametros.Add("unmodelo", elemento.IdModelo);
+        parametros.Add("unnumeroSerie", elemento.NumeroSerie);
+        parametros.Add("uncodigoBarra", elemento.CodigoBarra);
+        parametros.Add("unpatrimonio", elemento.Patrimonio);
         parametros.Add("unhabilitado", elemento.Habilitado);
         parametros.Add("unafechaBaja", elemento.FechaBaja);
 
@@ -46,11 +47,12 @@ public class RepoElemento : RepoBase, IRepoElemento
 
         parametros.Add("unidElemento", elemento.IdElemento);
         parametros.Add("unidTipoElemento", elemento.IdTipoElemento);
-        parametros.Add("unidCarrito", elemento.IdCarrito);
-        parametros.Add("unaposicionCarrito", elemento.PosicionCarrito);
         parametros.Add("unidEstadoMantenimiento", elemento.IdEstadoMantenimiento);
-        parametros.Add("unnumeroSerie", elemento.numeroSerie);
-        parametros.Add("uncodigoBarra", elemento.codigoBarra);
+        parametros.Add("unaubicacion", elemento.IdUbicacion);
+        parametros.Add("unmodelo", elemento.IdModelo);
+        parametros.Add("unnumeroSerie", elemento.NumeroSerie);
+        parametros.Add("uncodigoBarra", elemento.CodigoBarra);
+        parametros.Add("unPatrimonio", elemento.Patrimonio);
         parametros.Add("unhabilitado", elemento.Habilitado);
         parametros.Add("unafechaBaja", elemento.FechaBaja);
 

@@ -269,7 +269,13 @@ namespace CapaNegocio
                 elemento.PosicionCarrito = null;
             }
 
-            _repoElemento.Deshabilitar(idElemento, false);
+            elemento.Habilitado = false;
+            elemento.IdCarrito = null;
+            elemento.IdEstadoMantenimiento = 4; // Asumiendo que 4 es el estado 'Fuera de Servicio'
+            elemento.PosicionCarrito = null;
+            elemento.FechaBaja = DateTime.Now;
+
+            _repoElemento.Update(elemento);
 
             HistorialElemento historialElemento = new HistorialElemento
             {
