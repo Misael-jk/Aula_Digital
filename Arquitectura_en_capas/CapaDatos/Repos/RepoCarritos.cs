@@ -42,6 +42,8 @@ public class RepoCarritos : RepoBase, IRepoCarritos
         parametros.Add("unidCarrito", carritos.IdCarrito);
         parametros.Add("unnumeroSerieCarrito", carritos.NumeroSerieCarrito);
         parametros.Add("unidEstadoMantenimiento", carritos.IdEstadoMantenimiento);
+        parametros.Add("unidUbicacion", carritos.IdUbicacion);
+        parametros.Add("unidModelo", carritos.IdModelo);
         parametros.Add("unhabilitado", carritos.Habilitado);
         parametros.Add("unfechaBaja", carritos.FechaBaja);
 

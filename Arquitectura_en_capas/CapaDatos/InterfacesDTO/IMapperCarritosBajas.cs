@@ -4,5 +4,5 @@ namespace CapaDatos.InterfacesDTO;
 
 public interface IMapperCarritosBajas
 {
-    public IEnumerable<CarrtiosBajasDTO> GetAllDTO();
+    public IEnumerable<CarritosBajasDTO> GetAllDTO();
 }

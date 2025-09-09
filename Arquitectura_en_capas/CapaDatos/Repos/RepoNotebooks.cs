@@ -11,6 +11,7 @@ public class RepoNotebooks : RepoBase, IRepoNotebooks
     {
     }
 
+    #region Insert Notebooks
     public void Insert(Notebooks notebooks)
     {
         DynamicParameters parameters = new DynamicParameters();
@@ -34,7 +35,9 @@ public class RepoNotebooks : RepoBase, IRepoNotebooks
             throw new Exception("Hubo un error al insertar una notebook");
         }
     }
+    #endregion
 
+    #region Update Notebook
     public void Update(Notebooks notebooks)
     {
         DynamicParameters parameters = new DynamicParameters();
@@ -57,25 +60,37 @@ public class RepoNotebooks : RepoBase, IRepoNotebooks
             throw new Exception("Hubo un error al actualizar una notebook");
         }
     }
+    #endregion
 
+    #region Obtener por ID
     public Notebooks? GetById(int idNotebook)
     {
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where e.idElemento = @unidNotebook;";
+
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("unidNotebook", idNotebook);
 
         try
         {
-            return Conexion.QueryFirstOrDefault<Notebooks>("sp_ObtenerNotebookPorId", parameters, commandType: CommandType.StoredProcedure);
+            return Conexion.QueryFirstOrDefault<Notebooks>(query, parameters);
         }
         catch (Exception)
         {
             throw new Exception("Hubo un error al obtener la notebook por id");
         }
     }
+    #endregion
 
+    #region Obtener Todas las Notebooks
     public IEnumerable<Notebooks> GetAll()
     {
-        string query = "select * from view_GetAllNotebooks";
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento);
+                         where habilitado = 1;";
 
         try
         {
@@ -86,19 +101,93 @@ public class RepoNotebooks : RepoBase, IRepoNotebooks
             throw new Exception("Hubo un error al traer las notebooks");
         }
     }
+    #endregion
 
+    #region Obtener por carrito
     public IEnumerable<Notebooks> GetByCarrito(int idCarrito)
     {
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where n.idCarrito = @unidCarrito;";
+
         DynamicParameters parameters = new DynamicParameters();
-        parameters.Add("pIdCarrito", idCarrito);
+        parameters.Add("unidCarrito", idCarrito);
 
         try
         {
-            return Conexion.Query<Notebooks>("sp_ListarNotebooksPorCarrito", parameters, commandType: CommandType.StoredProcedure);
+            return Conexion.Query<Notebooks>(query, parameters);
         }
         catch (Exception)
         {
             throw new Exception("Hubo un error al obtener las notebooks por carrito");
         }
+    }
+    #endregion
+
+    public Notebooks? GetNotebookByPosicion(int idCarrito, int posicionCarrito)
+    {
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where idCarrito = @idCarrito
+                         and posicionCarrito = @posicionCarrito
+                         and idEstadoMantenimiento = 1 
+                         and habilitado = true
+                         limit 1;";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("idCarrito", idCarrito);
+        parameters.Add("posicionCarrito", posicionCarrito);
+        try
+        {
+            return Conexion.QueryFirstOrDefault<Notebooks>(query, parameters);
+        }
+        catch (Exception)
+        {
+            throw new Exception("No se encontro el elemento en la posicion indicada");
+        }
+    }
+    public bool DuplicatePosition(int idCarrito, int posicionCarrito)
+    {
+        string query = @"select count(*) 
+                         from Notebooks
+                         where idCarrito = @idCarrito
+                         and posicionCarrito = @posicionCarrito;";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("idCarrito", idCarrito);
+        parameters.Add("posicionCarrito", posicionCarrito);
+
+        int count = Conexion.ExecuteScalar<int>(query, parameters);
+        return count > 0;
+    }
+    public bool GetDisponible(int idElemento)
+    {
+        string query = @"select e.idElemento
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where e.idElemento = @idElemento
+                         and e.idEstadoMantenimiento = 1 
+                         and e.habilitado = true;";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("idElemento", idElemento);
+
+        int resultado = Conexion.ExecuteScalar<int>(query, parameters);
+
+        return resultado > 0;
+    }
+    public void UpdateEstado(int idElemento, int idEstadoMantenimiento)
+    {
+        string sql = @"update Elementos
+                       set idEstadoMantenimiento = @idEstadoMantenimiento
+                       where idElemento = @IdElemento";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("@IdElemento", idElemento);
+        parameters.Add("@idEstadoMantenimiento", idEstadoMantenimiento);
+
+        Conexion.Execute(sql, parameters);
     }
 }

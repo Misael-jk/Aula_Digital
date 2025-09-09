@@ -1,6 +1,5 @@
 ﻿using CapaDatos.Interfaces;
 using CapaDatos.InterfacesDTO;
-using CapaDatos.Repos;
 using CapaDTOs;
 using CapaEntidad;
 
@@ -10,13 +9,11 @@ public class ElementosBajasCN
 {
     private readonly IRepoElemento _repoElemento;
     private readonly IMapperElementosBajas mapperElementosBajas;
-    private readonly IRepoHistorialElemento repoHistorialElemento;
 
-    public ElementosBajasCN(IRepoElemento repoElemento, IMapperElementosBajas mapperElementosBajas, IRepoHistorialElemento repoHistorialElemento)
+    public ElementosBajasCN(IRepoElemento repoElemento, IMapperElementosBajas mapperElementosBajas)
     {
         _repoElemento = repoElemento;
         this.mapperElementosBajas = mapperElementosBajas;
-        this.repoHistorialElemento = repoHistorialElemento;
     }
 
     public IEnumerable<ElementoBajasDTO> GetAllElementos()
@@ -24,15 +21,15 @@ public class ElementosBajasCN
         return mapperElementosBajas.GetAllDTO();
     }
 
-    public IEnumerable<ElementoBajasDTO> GetElementosByTipo(int idTipoElemento)
-    {
-        return mapperElementosBajas.GetByTipo(idTipoElemento);
-    }
+    //public IEnumerable<ElementoBajasDTO> GetElementosByTipo(int idTipoElemento)
+    //{
+    //    return mapperElementosBajas.GetByTipo(idTipoElemento);
+    //}
 
-    public IEnumerable<ElementoBajasDTO> GetElementosByEstado(int idEstadoElemento)
-    {
-        return mapperElementosBajas.GetByEstado(idEstadoElemento);
-    }
+    //public IEnumerable<ElementoBajasDTO> GetElementosByEstado(int idEstadoElemento)
+    //{
+    //    return mapperElementosBajas.GetByEstado(idEstadoElemento);
+    //}
 
     public void HabilitarElemento(int idElemento, int idUsuario)
     {
@@ -50,15 +47,6 @@ public class ElementosBajasCN
 
         _repoElemento.Update(elemento);
 
-        HistorialElemento historialElemento = new HistorialElemento
-        {
-            IdElemento = idElemento,
-            IdCarrito = elemento.IdCarrito,
-            idUsuario = idUsuario,
-            IdEstadoMantenimiento = elemento.IdEstadoMantenimiento,
-            FechaHora = DateTime.Now,
-            Observacion = "El elemento ha sido habilitado."
-        };
     }
 
     #region DELETE ELEMENTO 

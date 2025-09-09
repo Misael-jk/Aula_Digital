@@ -18,7 +18,7 @@ public class CarritosBajasCN
         this.repoCarritos = repoCarritos;
     }
 
-    public IEnumerable<CarrtiosBajasDTO> GetAllDTO()
+    public IEnumerable<CarritosBajasDTO> GetAllDTO()
     {
         return _mapperCarritosBajas.GetAllDTO();
     }

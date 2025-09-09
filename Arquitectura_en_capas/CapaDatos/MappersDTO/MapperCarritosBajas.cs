@@ -13,19 +13,21 @@ public class MapperCarritosBajas : RepoBase, IMapperCarritosBajas
     {
     }
 
-    public IEnumerable<CarrtiosBajasDTO> GetAllDTO()
+    public IEnumerable<CarritosBajasDTO> GetAllDTO()
     {
-        return Conexion.Query<Carritos, EstadosMantenimiento, CarrtiosBajasDTO>(
+        return Conexion.Query<Carritos, Ubicacion, Modelos, EstadosMantenimiento, CarritosBajasDTO>(
             "GetCarritosBajasDTO",
-            (carrito, estado) => new CarrtiosBajasDTO
+            (carrito, ubicacion, modelo, estado) => new CarritosBajasDTO
             {
                 IdCarrito = carrito.IdCarrito,
                 NumeroSerieCarrito = carrito.NumeroSerieCarrito,
                 EstadoMantenimiento = estado.EstadoMantenimientoNombre,
+                Ubicacion = ubicacion.NombreUbicacion,
+                Modelo = modelo.NombreModelo,
                 FechaBaja = carrito.FechaBaja
             },
             commandType: CommandType.StoredProcedure,
-            splitOn: "NumeroSerieCarrito,EstadoMantenimientoNombre"
+            splitOn: "NumeroSerieCarrito,NombreUbicacion,NombreModelo,EstadoMantenimientoNombre"
         ).ToList();
     }
 }

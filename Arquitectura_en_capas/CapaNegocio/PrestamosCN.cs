@@ -21,9 +21,8 @@ public class PrestamosCN
     private readonly IRepoPrestamoDetalle repoPrestamoDetalle;
     private readonly IRepoUsuarios repoUsuarios;
     private readonly IMapperPrestamos mapperPrestamos;
-    private readonly IRepoHistorialElemento repoHistorialElemento;
 
-    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, IRepoElemento repoElemento, IRepoPrestamoDetalle repoPrestamoDetalle, IRepoUsuarios repoUsuarios, IRepoDocentes repoDocentes, IMapperPrestamos mapperPrestamos, IRepoHistorialElemento repoHistorialElemento)
+    public PrestamosCN(IRepoPrestamos repoPrestamos, IRepoCarritos repoCarritos, IRepoElemento repoElemento, IRepoPrestamoDetalle repoPrestamoDetalle, IRepoUsuarios repoUsuarios, IRepoDocentes repoDocentes, IMapperPrestamos mapperPrestamos)
     {
         this.repoPrestamos = repoPrestamos;
         this.mapperPrestamos = mapperPrestamos;
@@ -32,7 +31,6 @@ public class PrestamosCN
         this.repoDocentes = repoDocentes;
         this.repoUsuarios = repoUsuarios;
         this.repoPrestamoDetalle = repoPrestamoDetalle;
-        this.repoHistorialElemento = repoHistorialElemento;
     }
 
     public IEnumerable<PrestamosDTO> ObtenerTodo()
@@ -102,16 +100,6 @@ public class PrestamosCN
                 });
 
                 repoElemento.UpdateEstado(idElemento, 2);
-
-                repoHistorialElemento.Insert(new HistorialElemento
-                {
-                    IdElemento = idElemento,
-                    IdCarrito = prestamo.IdCarrito,
-                    idUsuario = prestamo.IdUsuario,
-                    IdEstadoMantenimiento = 2, 
-                    FechaHora = DateTime.Now,
-                    Observacion = "Elemento prestado"
-                });
             }
 
 
@@ -183,15 +171,6 @@ public class PrestamosCN
 
                 repoElemento.UpdateEstado(idElemento, 2);
 
-                repoHistorialElemento.Insert(new HistorialElemento
-                {
-                    IdElemento = idElemento,
-                    IdCarrito = prestamo.IdCarrito,
-                    idUsuario = prestamo.IdUsuario,
-                    IdEstadoMantenimiento = 2, 
-                    FechaHora = DateTime.Now,
-                    Observacion = "Elemento prestado"
-                });
             }
 
             scope.Complete();
@@ -220,15 +199,6 @@ public class PrestamosCN
             {
                 repoElemento.UpdateEstado(detalle.IdElemento, 1);
 
-                repoHistorialElemento.Insert(new HistorialElemento
-                {
-                    IdElemento = detalle.IdElemento,
-                    IdCarrito = prestamo.IdCarrito,
-                    idUsuario = prestamo.IdUsuario,
-                    IdEstadoMantenimiento = 1, 
-                    FechaHora = DateTime.Now,
-                    Observacion = "Elemento devuelto"
-                });
             }
 
             repoPrestamoDetalle.Delete(idPrestamo);

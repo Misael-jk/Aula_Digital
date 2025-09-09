@@ -7,7 +7,7 @@ namespace CapaDatos.Repos;
 
 public class RepoTipoSeccion : RepoBase, IRepoTipoSeccion
 {
-    public RepoTipoSeccion(string conexion) : base(conexion)
+    public RepoTipoSeccion(IDbConnection conexion) : base(conexion)
     {
     }
 

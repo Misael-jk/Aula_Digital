@@ -20,7 +20,7 @@ public class MapperDevolucionDetalle : RepoBase, IMapperDevolucionDetalle
             (devolucion, elemento, tipo, carrito, estado) => new DevolucionDetalleDTO
             {
                 TipoElemento = tipo.ElementoTipo,
-                NumeroSerieElemento = elemento.numeroSerie,
+                NumeroSerieElemento = elemento.NumeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
                 EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaDevolucion = devolucion.FechaDevolucion,
@@ -41,7 +41,7 @@ public class MapperDevolucionDetalle : RepoBase, IMapperDevolucionDetalle
             (devolucion, elemento, tipo, carrito, estado) => new DevolucionDetalleDTO
             {
                 TipoElemento = tipo.ElementoTipo,
-                NumeroSerieElemento = elemento.numeroSerie,
+                NumeroSerieElemento = elemento.NumeroSerie,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin carrito",
                 EstadoMantenimiento = estado.EstadoMantenimientoNombre,
                 FechaDevolucion = devolucion.FechaDevolucion,

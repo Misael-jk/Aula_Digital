@@ -22,9 +22,8 @@ public class DevolucionCN
     private readonly IRepoDevolucionDetalle repoDevolucionDetalle;
     private readonly IMapperDevoluciones mapperDevolucion;
     private readonly IRepoCarritos repoCarritos;
-    private readonly IRepoHistorialElemento repoHistorialElemento;
 
-    public DevolucionCN(IRepoDevolucion repoDevolucion, IRepoPrestamos repoPrestamos, IRepoUsuarios repoUsuarios, IRepoElemento repoElementos, IRepoEstadosPrestamo repoEstadosPrestamo, IRepoDocentes repoDocentes, IRepoDevolucionDetalle repoDevolucionDetalle, IRepoHistorialElemento repoHistorialElemento, IRepoCarritos repoCarritos, IMapperDevoluciones mapperDevolucion)
+    public DevolucionCN(IRepoDevolucion repoDevolucion, IRepoPrestamos repoPrestamos, IRepoUsuarios repoUsuarios, IRepoElemento repoElementos, IRepoEstadosPrestamo repoEstadosPrestamo, IRepoDocentes repoDocentes, IRepoDevolucionDetalle repoDevolucionDetalle, IRepoCarritos repoCarritos, IMapperDevoluciones mapperDevolucion)
     {
         this.repoDevolucion = repoDevolucion;
         this.repoPrestamos = repoPrestamos;
@@ -35,7 +34,6 @@ public class DevolucionCN
         this.repoDevolucionDetalle = repoDevolucionDetalle;
         this.mapperDevolucion = mapperDevolucion;
         this.repoCarritos = repoCarritos;
-        this.repoHistorialElemento = repoHistorialElemento;
     }
 
     public IEnumerable<DevolucionesDTO> ObtenerElementos()
@@ -112,15 +110,15 @@ public class DevolucionCN
 
                 repoElementos.UpdateEstado(idElemento, estadoElemento);
 
-                repoHistorialElemento.Insert(new HistorialElemento
-                {
-                    IdElemento = idElemento,
-                    IdCarrito = prestamo.IdCarrito,
-                    idUsuario = devolucionNEW.IdUsuario,
-                    IdEstadoMantenimiento = estadoElemento,
-                    FechaHora = DateTime.Now,
-                    Observacion = obs ?? "Devolución realizada"
-                });
+                //repoHistorialElemento.Insert(new HistorialElemento
+                //{
+                //    IdElemento = idElemento,
+                //    IdCarrito = prestamo.IdCarrito,
+                //    idUsuario = devolucionNEW.IdUsuario,
+                //    IdEstadoMantenimiento = estadoElemento,
+                //    FechaHora = DateTime.Now,
+                //    Observacion = obs ?? "Devolución realizada"
+                //});
 
                 cont++;
             }

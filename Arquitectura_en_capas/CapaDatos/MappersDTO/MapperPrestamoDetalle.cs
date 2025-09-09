@@ -19,7 +19,7 @@ public class MapperPrestamoDetalle : RepoBase, IMapperPrestamoDetalle
             "GetPrestamoDetalleDTO",
             (elemento, tipo, carrito) => new PrestamosDetalleDTO
             {
-                NumeroSerieElemento = elemento.numeroSerie,
+                NumeroSerieElemento = elemento.NumeroSerie,
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito"
             },
@@ -55,7 +55,7 @@ public class MapperPrestamoDetalle : RepoBase, IMapperPrestamoDetalle
             "GetPrestamosDetalleByPrestamos",
             (elemento, tipo, carrito) => new PrestamosDetalleDTO
             {
-                NumeroSerieElemento = elemento.numeroSerie,
+                NumeroSerieElemento = elemento.NumeroSerie,
                 TipoElemento = tipo.ElementoTipo,
                 NumeroSerieCarrito = carrito?.NumeroSerieCarrito ?? "Sin Carrito"
             },
