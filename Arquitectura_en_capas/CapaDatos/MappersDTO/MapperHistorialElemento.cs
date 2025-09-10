@@ -14,18 +14,19 @@ public class MapperHistorialElemento : RepoBase, IMapperHistorialElemento
     }
     public IEnumerable<HistoralElementoDTO> GetAllDTO()
     {
-        return Conexion.Query<HistorialCambios, TipoAccion, ElementosDTO, UsuariosDTO, HistoralElementoDTO>(
+        return Conexion.Query<HistorialElementos, HistorialCambios, TipoAccion, ElementosDTO, UsuariosDTO, HistoralElementoDTO>(
             "GetHistorialElementosDTO",
-            (historial, accion, elemento, usuario) => new HistoralElementoDTO
+            (historial, cambios, accion, elemento, usuario) => new HistoralElementoDTO
             {
+                IdHistorialElemento = historial.IdHistorialCambio,
                 NumeroSerie = elemento.NumeroSerie,
                 CodigoBarra = elemento.CodigoBarra,
                 Modelo = elemento.Modelo,
                 TipoElemento = elemento.TipoElemento,
                 UbicacionActual = elemento.Ubicacion,
                 EstadoMantenimiento = elemento.Estado,
-                Descripcion = historial?.Descripcion,
-                FechaCambio = historial.FechaCambio,
+                Descripcion = cambios?.Descripcion,
+                FechaCambio = cambios.FechaCambio,
                 AccionRealizada = accion.Accion,
                 Usuario = usuario.Apellido
             },

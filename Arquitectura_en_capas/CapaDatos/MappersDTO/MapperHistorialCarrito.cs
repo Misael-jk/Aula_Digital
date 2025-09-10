@@ -15,16 +15,17 @@ public class MapperHistorialCarrito : RepoBase, IMapperHistorialCarrito
 
     public IEnumerable<HistorialCarritosDTO> GetAllDTO()
     {
-        return Conexion.Query<HistorialCambios, TipoAccion, CarritosDTO, UsuariosDTO, HistorialCarritosDTO>(
+        return Conexion.Query<HistorialCarritos, HistorialCambios, TipoAccion, CarritosDTO, UsuariosDTO, HistorialCarritosDTO>(
             "GetHistorialCarritosDTO",
-            (historial, accion, carrito, usuario) => new HistorialCarritosDTO
+            (historial, cambio, accion, carrito, usuario) => new HistorialCarritosDTO
             {
+                IdHistorialCarrito = historial.IdHistorialCambio,
                 NumeroSerie = carrito.NumeroSerieCarrito,
                 UbicacionActual = carrito.UbicacionActual,
                 Modelo = carrito.Modelo,
                 EstadoMantenimiento = carrito.EstadoMantenimiento,
-                Descripcion = historial?.Descripcion,
-                FechaCambio = historial.FechaCambio,
+                Descripcion = cambio?.Descripcion,
+                FechaCambio = cambio.FechaCambio,
                 AccionRealizada = accion.Accion,
                 Usuario = usuario.Apellido
 

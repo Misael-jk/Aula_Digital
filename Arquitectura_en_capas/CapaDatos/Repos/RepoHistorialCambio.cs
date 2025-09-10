@@ -15,7 +15,6 @@ public class RepoHistorialCambio : RepoBase, IRepoHistorialCambio
     {
         DynamicParameters parameters = new DynamicParameters();
         parameters.Add("unidHistorialCambio", dbType: DbType.Int32, direction: ParameterDirection.Output);
-        parameters.Add("unidTipoSeccion", historialCambio.IdTipoSeccion);
         parameters.Add("unidTipoAccion", historialCambio.IdTipoAccion);
         parameters.Add("unfechaCambio", historialCambio.FechaCambio);
         parameters.Add("unadescripcion", historialCambio.Descripcion);
@@ -51,22 +50,6 @@ public class RepoHistorialCambio : RepoBase, IRepoHistorialCambio
         catch (Exception)
         {
             throw new Exception("Hubo un error al obtener un historial de cambio por id");
-        }
-    }
-
-    public IEnumerable<HistorialCambios> GetBySeccion(int idTipoSeccion)
-    {
-        DynamicParameters parameters = new DynamicParameters();
-        parameters.Add("unidTipoSeccion", idTipoSeccion);
-        string query = "select * from HistorialCambios where idTipoSeccion = @unidTipoSeccion";
-
-        try
-        {
-            return Conexion.Query<HistorialCambios>(query, parameters);
-        }
-        catch (Exception)
-        {
-            throw new Exception("Hubo un error al obtener los historiales de cambio por seccion");
         }
     }
 
