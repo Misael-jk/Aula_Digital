@@ -59,10 +59,10 @@ public class DevolucionCN
                 throw new Exception("El prestamo ya fue devuelto");
             }
 
-            if (repoDocentes.GetById(devolucionNEW.IdDocente) == null)
-            {
-                throw new Exception("El docente no existe");
-            }
+            //if (repoDocentes.GetById(devolucionNEW.IdDocente) == null)
+            //{
+            //    throw new Exception("El docente no existe");
+            //}
 
             if (repoUsuarios.GetById(devolucionNEW.IdUsuario) == null)
             {
