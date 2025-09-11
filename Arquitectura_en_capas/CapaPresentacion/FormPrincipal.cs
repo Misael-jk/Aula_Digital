@@ -43,7 +43,6 @@ namespace CapaPresentacion
         private readonly IRepoRoles repoRoles;
         private readonly IRepoEstadosPrestamo repoEstadosPrestamo;
         private readonly IRepoDevolucionDetalle repoDevolucionDetalle;
-        private readonly IRepoHistorialElemento repoHistorialElemento;
         #endregion
 
         #region Variables Mappers Interface
@@ -51,7 +50,6 @@ namespace CapaPresentacion
         private readonly IMapperPrestamos mapperPrestamos;
         private readonly IMapperDevoluciones mapperDevoluciones;
         private readonly IMapperUsuarios mapperUsuarios;
-        private readonly Mapp mapperElementoMantenimiento;
         private readonly IMapperCarritos mapperCarritos;
         private readonly MapperHistorialElemento mapperHistorialElemento;
         private readonly MapperTransaccion mapperTransaccion;
@@ -89,25 +87,23 @@ namespace CapaPresentacion
             repoRoles = new RepoRoles(conexion);
             repoDevolucionDetalle = new RepoDevolucionDetalle(conexion);
             repoEstadosPrestamo = new RepoEstadosPrestamo(conexion);
-            repoHistorialElemento = new RepoHistorialElemento(conexion);
 
             mapperElementos = new MapperElementos(conexion);
             mapperPrestamos = new MapperPrestamos(conexion);
             mapperDevoluciones = new MapperDevoluciones(conexion);
             mapperUsuarios = new MapperUsuarios(conexion);
-            mapperElementoMantenimiento = new MapperElementosBajas(conexion);
             mapperCarritos = new MapperCarrritos(conexion);
             mapperHistorialElemento = new MapperHistorialElemento(conexion);
             mapperTransaccion = new MapperTransaccion(conexion);
 
-            elementoCN = new ElementosCN(mapperElementos, repoElementos, repoCarritos, repoHistorialElemento);
-            carritosCN = new CarritosCN(repoCarritos, repoElementos, mapperCarritos);
-            docentesCN = new DocentesCN(repoDocentes);
-            prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, repoUsuarios, repoDocentes, mapperPrestamos, repoHistorialElemento);
-            tiposElementoCN = new TiposElementoCN(repoTipoElemento);
-            usuariosCN = new UsuariosCN(repoUsuarios, repoRoles, mapperUsuarios);
-            devolucionCN = new DevolucionCN(repoDevolucion, repoPrestamos, repoUsuarios, repoElementos, repoEstadosPrestamo, repoDocentes, repoDevolucionDetalle, repoHistorialElemento, repoCarritos, mapperDevoluciones);
-            mantenimientoCN = new MantenimientoCN(repoElementos, mapperElementoMantenimiento, repoHistorialElemento);
+            //elementoCN = new ElementosCN(mapperElementos, repoElementos, repoCarritos, repoHistorialElemento);
+            //carritosCN = new CarritosCN(repoCarritos, repoElementos, mapperCarritos);
+            //docentesCN = new DocentesCN(repoDocentes);
+            //prestamosCN = new PrestamosCN(repoPrestamos, repoCarritos, repoElementos, repoPrestamoDetalle, repoUsuarios, repoDocentes, mapperPrestamos, repoHistorialElemento);
+            //tiposElementoCN = new TiposElementoCN(repoTipoElemento);
+            //usuariosCN = new UsuariosCN(repoUsuarios, repoRoles, mapperUsuarios);
+            //devolucionCN = new DevolucionCN(repoDevolucion, repoPrestamos, repoUsuarios, repoElementos, repoEstadosPrestamo, repoDocentes, repoDevolucionDetalle, repoHistorialElemento, repoCarritos, mapperDevoluciones);
+            //mantenimientoCN = new MantenimientoCN(repoElementos, mapperElementoMantenimiento, repoHistorialElemento);
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)

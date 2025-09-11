@@ -84,6 +84,11 @@ public class NotebooksCN
             throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
         }
 
+        if(notebookNEW.IdTipoElemento != 1)
+        {
+            throw new Exception("El tipo de elemento debe ser 'Notebook'");
+        }
+
         if (repoUbicacion.GetById(notebookNEW.IdUbicacion) == null)
         {
             throw new Exception("Ubicacion del elemento invalida");
