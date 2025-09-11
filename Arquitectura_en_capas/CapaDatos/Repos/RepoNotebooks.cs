@@ -84,6 +84,66 @@ public class RepoNotebooks : RepoBase, IRepoNotebooks
     }
     #endregion
 
+    public Notebooks? GetByNumeroSerie(string numeroSerie)
+    {
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where e.numeroSerie = @unnumeroSerie;";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("unnumeroSerie", numeroSerie);
+
+        try
+        {
+            return Conexion.QueryFirstOrDefault<Notebooks>(query, parameters);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al obtener la notebook por numero de serie");
+        }
+    }
+
+    public Notebooks? GetByCodigoBarra(string codigoBarra)
+    {
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where e.codigoBarra = @uncodigoBarra;";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("uncodigoBarra", codigoBarra);
+
+        try
+        {
+            return Conexion.QueryFirstOrDefault<Notebooks>(query, parameters);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al obtener la notebook por codigo de barra");
+        }
+    }
+
+    public Notebooks? GetByPatrimonio(string patrimonio)
+    {
+        string query = @"select e.idElemento, e.idModelo, n.idCarrito, n.posicionCarrito, e.idEstadoMantenimiento, e.numeroSerie, e.codigoBarra, e.patrimonio, e.habilitado, e.fechaBaja
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where e.patrimonio = @unpatrimonio;";
+
+        DynamicParameters parameters = new DynamicParameters();
+        parameters.Add("unpatrimonio", patrimonio);
+
+        try
+        {
+            return Conexion.QueryFirstOrDefault<Notebooks>(query, parameters);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al obtener la notebook por patrimonio");
+        }
+    }
+
     #region Obtener Todas las Notebooks
     public IEnumerable<Notebooks> GetAll()
     {

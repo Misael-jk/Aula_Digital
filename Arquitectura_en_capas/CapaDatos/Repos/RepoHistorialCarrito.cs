@@ -5,7 +5,7 @@ using System.Data;
 
 namespace CapaDatos.Repos;
 
-public class RepoHistorialCarrito : RepoBase, IRepoHistorialaCarrito
+public class RepoHistorialCarrito : RepoBase, IRepoHistorialCarrito
 {
     public RepoHistorialCarrito(IDbConnection conexion) : base(conexion)
     {

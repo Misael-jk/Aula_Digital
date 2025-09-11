@@ -3,6 +3,7 @@ using CapaDatos.Interfaces;
 using System.Transactions;
 using CapaDatos.InterfacesDTO;
 using CapaDTOs;
+using CapaDatos.Repos;
 
 namespace CapaNegocio;
 
@@ -13,14 +14,18 @@ public class CarritosCN
     private readonly IRepoUbicacion repoUbicacion;
     private readonly IRepoModelo repoModelo;
     private readonly IRepoNotebooks repoNotebooks;
+    private readonly IRepoHistorialCambio repoHistorialCambio;
+    private readonly IRepoHistorialCarrito repoHistorialCarrito;
     private readonly IMapperCarritos mapperCarritos;
 
-    public CarritosCN(IRepoCarritos repoCarrito, IRepoNotebooks repoNotebooks, IRepoUbicacion repoUbicacion, IRepoModelo repoModelo, IMapperCarritos mapperCarritos)
+    public CarritosCN(IRepoCarritos repoCarrito, IRepoNotebooks repoNotebooks, IRepoUbicacion repoUbicacion, IRepoModelo repoModelo, IRepoHistorialCambio repoHistorialCambio, IRepoHistorialCarrito repoHistorialCarrito, IMapperCarritos mapperCarritos)
     {
         this.repoCarrito = repoCarrito;
         this.repoNotebooks = repoNotebooks;
         this.repoUbicacion = repoUbicacion;
         this.repoModelo = repoModelo;
+        this.repoHistorialCambio = repoHistorialCambio;
+        this.repoHistorialCarrito = repoHistorialCarrito; 
         this.mapperCarritos = mapperCarritos;
     }
 
@@ -32,7 +37,7 @@ public class CarritosCN
     #endregion
 
     #region INSERT CARRITO
-    public void CrearCarrito(Carritos CarritoNEW)
+    public void CrearCarrito(Carritos CarritoNEW, int idUsuario)
     {
         if(string.IsNullOrWhiteSpace(CarritoNEW.NumeroSerieCarrito))
         {
@@ -65,11 +70,27 @@ public class CarritosCN
         }
 
         repoCarrito.Insert(CarritoNEW);
+
+        HistorialCambios historial = new HistorialCambios
+        {
+            IdTipoAccion = 1,
+            FechaCambio = DateTime.Now,
+            Descripcion = $"Se creó el carrito con número de serie {CarritoNEW.NumeroSerieCarrito}.",
+            IdUsuario = idUsuario
+        };
+
+        repoHistorialCambio.Insert(historial);
+
+        repoHistorialCarrito.Insert(new HistorialCarritos
+        {
+            IdHistorialCambio = historial.IdHistorialCambio,
+            IdCarrito = CarritoNEW.IdCarrito
+        });
     }
     #endregion
 
     #region UPDATE CARRITO
-    public void ActualizarCarrito(Carritos carritoNEW)
+    public void ActualizarCarrito(Carritos carritoNEW, int idUsuario)
     {
         if (string.IsNullOrWhiteSpace(carritoNEW.NumeroSerieCarrito))
         {
@@ -109,6 +130,22 @@ public class CarritosCN
         }
 
         repoCarrito.Update(carritoNEW);
+
+        HistorialCambios historial = new HistorialCambios
+        {
+            IdTipoAccion = 2,
+            FechaCambio = DateTime.Now,
+            Descripcion = $"Se actualizó el carrito con número de serie {carritoNEW.NumeroSerieCarrito}.",
+            IdUsuario = idUsuario
+        };
+
+        repoHistorialCambio.Insert(historial);
+
+        repoHistorialCarrito.Insert(new HistorialCarritos
+        {
+            IdHistorialCambio = historial.IdHistorialCambio,
+            IdCarrito = carritoNEW.IdCarrito
+        });
     }
     #endregion
 
@@ -146,7 +183,12 @@ public class CarritosCN
 
             if (notebooks == null)
             {
-                throw new Exception("Elemento no encontrado");
+                throw new Exception("Notebook no encontrado");
+            }
+
+            if (notebooks.IdEstadoMantenimiento == 2 && notebooks.IdCarrito != null)
+            {
+                throw new Exception("Un elemento en prestamo no puede estar asignado a un carrito");
             }
 
             if (!repoNotebooks.GetDisponible(idNotebook))
@@ -189,6 +231,7 @@ public class CarritosCN
                 }
             }
 
+            notebooks.IdUbicacion = carrito.IdUbicacion;
             notebooks.IdCarrito = idCarrito;
             notebooks.PosicionCarrito = posicion;
 
@@ -199,7 +242,7 @@ public class CarritosCN
         }
     }
 
-    public void RemoveNotebook(int idCarrito, int idNotebook, int idUsuario)
+    public void RemoveNotebook(int idCarrito, int idNotebook, int idUsuario, int idUbicacion)
     {
         using (TransactionScope scope = new TransactionScope())
         {
@@ -215,6 +258,7 @@ public class CarritosCN
                 throw new Exception("La notebook no esta disponible para quitar del carrito");
             }
 
+            notebooks.IdUbicacion = idUbicacion;
             notebooks.IdCarrito = null;
             notebooks.PosicionCarrito = null;
 

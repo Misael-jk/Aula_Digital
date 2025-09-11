@@ -10,6 +10,7 @@ public interface IRepoElemento
     public void UpdateEstado(int idElemento, int idEstadoMantenimiento);
     public Elemento? GetByNumeroSerie(string numeroSerie);
     public Elemento? GetByCodigoBarra(string codigoBarra);
+    public Elemento? GetByPatrimonio(string patrimonio);
     public Elemento? GetById(int idElemento);
     public bool GetDisponible(int idElemento);
     public Elemento? GetNotebookBySerieOrCodigo(string nroSerie, string codigoBarra);

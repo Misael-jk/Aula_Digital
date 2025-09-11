@@ -196,6 +196,22 @@ public class RepoElemento : RepoBase, IRepoElemento
         }
     }
 
+    public Elemento? GetByPatrimonio(string patrimonio)
+    {
+        string query = "select * from Elementos where patrimonio = @unpatrimonio";
+        DynamicParameters parametros = new DynamicParameters();
+
+        try
+        {
+            parametros.Add("unpatrimonio", patrimonio);
+            return Conexion.QueryFirstOrDefault<Elemento>(query, parametros);
+        }
+        catch (Exception)
+        {
+            throw new Exception("No se encontro el elemento con su patrimonio");
+        }
+    }
+
     //public Elemento? GetNotebookByPosicion(int idCarrito, int posicionCarrito)
     //{
     //    string query = "select * from Elementos where idCarrito = @idCarrito and posicionCarrito = @posicionCarrito and disponible = 1 limit 1;";

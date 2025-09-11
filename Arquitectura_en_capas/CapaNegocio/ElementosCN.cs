@@ -9,13 +9,16 @@ namespace CapaNegocio
     {
         private readonly IMapperElementos _mapperElementos;
         private readonly IRepoElemento _repoElemento;
-        private readonly IRepoCarritos _repoCarritos;
+        private readonly IRepoUbicacion repoUbicacion;
+        private readonly IRepoModelo repoModelo;
 
-        public ElementosCN(IMapperElementos mapperElementos, IRepoElemento repoElemento, IRepoCarritos repoCarritos)
+        public ElementosCN(IMapperElementos mapperElementos, IRepoModelo repoModelo, IRepoUbicacion repoUbicacion, IRepoElemento repoElemento)
         {
             _mapperElementos = mapperElementos;
+            this.repoModelo = repoModelo;
+            this.repoUbicacion = repoUbicacion;
             _repoElemento = repoElemento;
-            _repoCarritos = repoCarritos;
+
         }
 
         #region Metodos de Lectura para la UI DTOs
@@ -64,17 +67,22 @@ namespace CapaNegocio
                 throw new Exception("El código de barras es obligatorio");
             }
 
+            if((string.IsNullOrEmpty(elementoNEW.Patrimonio)))
+            {
+                throw new Exception("El patrimonio es obligatorio");
+            }
+
             Elemento? nroSerieHabilitado = _repoElemento.GetByNumeroSerie(elementoNEW.NumeroSerie);
 
             if(nroSerieHabilitado != null)
             {
                 if(nroSerieHabilitado.Habilitado == true)
                 {
-                    throw new Exception("El elemento ya existe y está habilitado.");
+                    throw new Exception("El elemento ya existe con ese numero de serie y está habilitado.");
                 }
                 else
                 {
-                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
+                    throw new Exception("El elemento ya existe con ese numero de serie pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
                 }
             }
 
@@ -84,11 +92,25 @@ namespace CapaNegocio
             {
                 if (codigoBarraHabilitado.Habilitado == true)
                 {
-                    throw new Exception("El elemento ya existe y está habilitado.");
+                    throw new Exception("El elemento ya existe con ese codigo de barra y está habilitado.");
                 }
                 else
                 {
-                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
+                    throw new Exception("El elemento ya existe con ese codigo de barra pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
+                }
+            }
+
+            Elemento? patrimonioHabilitado = _repoElemento.GetByPatrimonio(elementoNEW.Patrimonio);
+
+            if (patrimonioHabilitado != null)
+            {
+                if (patrimonioHabilitado.Habilitado == true)
+                {
+                    throw new Exception("El elemento ya existe con ese patrimonio y está habilitado.");
+                }
+                else
+                {
+                    throw new Exception("El elemento ya existe con ese patrimonio pero está deshabilitado, por favor habilitelo antes de crear uno nuevo.");
                 }
             }
 
@@ -100,6 +122,21 @@ namespace CapaNegocio
             if (elementoNEW.IdEstadoMantenimiento != 1)
             {
                 throw new Exception("El estado del elemento debe ser 'Disponible' al momento de crearlo");
+            }
+
+            if(repoUbicacion.GetById(elementoNEW.IdUbicacion) == null)
+            {
+                throw new Exception("Ubicacion del elemento invalida");
+            }
+
+            if(repoModelo.GetById(elementoNEW.IdModelo) == null)
+            {
+                throw new Exception("Modelo del elemento invalida");
+            }
+
+            if(repoModelo.GetByTipo(elementoNEW.IdTipoElemento) == null)
+            {
+                throw new Exception("El modelo debe ser correspondiente al tipo de elemento");
             }
 
             if (elementoNEW.Habilitado == false)
@@ -127,11 +164,55 @@ namespace CapaNegocio
                 throw new Exception("El código de barras es obligatorio");
             }
 
+            if(string.IsNullOrEmpty(elementoNEW.Patrimonio))
+            {
+                throw new Exception("El patrimonio es obligatorio");
+            }
+
             Elemento? elementoOLD = _repoElemento.GetById(elementoNEW.IdElemento);
 
             if (elementoOLD == null)
             {
                 throw new Exception("El elemento no existe");
+            }
+
+            if (repoUbicacion.GetById(elementoNEW.IdUbicacion) == null)
+            {
+                throw new Exception("Ubicacion del elemento invalida");
+            }
+
+            if (repoModelo.GetById(elementoNEW.IdModelo) == null)
+            {
+                throw new Exception("Modelo del elemento invalida");
+            }
+
+            if(_repoElemento.GetByPatrimonio(elementoNEW.Patrimonio) == null)
+            {
+                throw new Exception("El patrimonio no existe en otro elemento, por favor elija uno existente");
+            }
+
+            if(elementoOLD.IdTipoElemento != elementoNEW.IdTipoElemento)
+            {
+                throw new Exception("No se puede cambiar el tipo de elemento");
+            }
+
+            if (repoModelo.GetByTipo(elementoNEW.IdTipoElemento) == null)
+            {
+                throw new Exception("El modelo debe ser correspondiente al tipo de elemento");
+            }
+
+            Elemento? patrimonioHabilitado = _repoElemento.GetByPatrimonio(elementoNEW.Patrimonio);
+
+            if(elementoOLD.Patrimonio != elementoNEW.Patrimonio && patrimonioHabilitado != null)
+            {
+                if (patrimonioHabilitado.Habilitado == true)
+                {
+                    throw new Exception("Ya existe otro elemento con el mismo patrimonio.");
+                }
+                else
+                {
+                    throw new Exception("El elemento ya existe pero está deshabilitado, por favor habilitelo antes de actualizar uno nuevo.");
+                }
             }
 
             Elemento? nroSerieHabilitado = _repoElemento.GetByNumeroSerie(elementoNEW.NumeroSerie);
