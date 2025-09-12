@@ -208,13 +208,6 @@ create table DevolucionDetalle (
 );
 
 
-create table TipoSeccion(
-idTipoSeccion tinyint not null auto_increment,
-seccion varchar(40) not null,
-constraint PK_TipoSeccion primary key (idTipoSeccion)
-);
-
-
 create table TipoAccion(
 idTipoAccion tinyint not null auto_increment,
 accion varchar(40) not null,
@@ -223,17 +216,47 @@ constraint PK_TipoAccion primary key (idTipoAccion)
 
 
 create table HistorialCambio(
-idHistorialCambio bigint not null auto_increment,
-idTipoSeccion tinyint not null, 
+idHistorialCambio int not null auto_increment,
 idTipoAccion tinyint not null,
 idUsuario tinyint not null,
 fechaCambio datetime not null,
 observacion varchar(200) not null,
 constraint PK_HistorialCambio primary key (idHistorialCambio),
-constraint FK_HistorialCambio_Seccion foreign key (idTipoSeccion) 
-	references TipoSeccion (idTipoSeccion),	
 constraint FK_HistorialCambio_Accion foreign key (idTipoAccion) 
 	references TipoAccion (idTipoAccion),
 constraint FK_HistorialCambio_idUsuarios foreign key (idUsuario)
 	references Usuarios (idUsuario)
+);
+
+
+create table HistorialNotebook(
+idHistorialCambio int not null,
+idElemento smallint not null,
+constraint PK_HistorialNotebook primary key (idHistorialCambio, idElemento),
+constraint FK_HistorialNotebook_HistorialCambio foreign key (idHistorialCambio)
+	references HistorialCambio (idHistorialCambio),
+constraint FK_HistorialNotebook_Notebook foreign key (idElemento)
+	references Notebooks (idElemento)
+);
+
+
+create table HistorialElemento(
+idHistorialCambio int not null,
+idElemento smallint not null,
+constraint PK_HistorialElemento primary key (idHistorialCambio, idElemento),
+constraint FK_HistorialElemento_HistorialCambio foreign key (idHistorialCambio)
+	references HistorialCambio (idHistorialCambio),
+constraint FK_HistorialElemento_Elemento foreign key (idElemento)
+	references Elementos (idElemento)
+);
+
+
+create table HistorialCarrito(
+idHistorialCambio int not null,
+idCarrito tinyint not null,
+constraint PK_HistorialCarrito primary key (idHistorialCambio, idCarrito),
+constraint FK_HistorialCarrito_HistorialCambio foreign key (idHistorialCambio)
+	references HistorialCambio (idHistorialCambio),
+constraint FK_HistorialCambio_Carrito foreign key (idCarrito)
+	references Carritos (idCarrito)
 );

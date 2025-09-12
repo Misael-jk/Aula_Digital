@@ -16,4 +16,6 @@ public interface IRepoNotebooks
     public bool DuplicatePosition(int idCarrito, int posicionCarrito);
     public bool GetDisponible(int idElemento);
     public void UpdateEstado(int idElemento, int idEstadoMantenimiento);
+    public IEnumerable<Notebooks> GetNroSerieByNotebook();
+    public IEnumerable<Notebooks> GetCodBarraByNotebook();
 }

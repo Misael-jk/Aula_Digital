@@ -250,4 +250,40 @@ public class RepoNotebooks : RepoBase, IRepoNotebooks
 
         Conexion.Execute(sql, parameters);
     }
+
+    public IEnumerable<Notebooks> GetNroSerieByNotebook()
+    {
+        string query = @"select e.numeroSerie
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where habilitado = 1
+                         where idEstadoMantenimiento = 1";
+
+        try
+        {
+            return Conexion.Query<Notebooks>(query);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al traer los numeros de serie de las notebooks");
+        }
+    }
+
+    public IEnumerable<Notebooks> GetCodBarraByNotebook()
+    {
+        string query = @"select e.codigoBarra
+                         from Elementos e
+                         join Notebooks n using (idElemento)
+                         where habilitado = 1
+                         where idEstadoMantenimiento = 1";
+
+        try
+        {
+            return Conexion.Query<Notebooks>(query);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Hubo un error al traer los codigos de barra de las notebooks");
+        }
+    }
 }

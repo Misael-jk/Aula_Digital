@@ -70,5 +70,33 @@ public class FixtureNotebook
         mockRepoNotebooks.Verify(r => r.Insert(It.IsAny<Notebooks>()), Times.Once);
     }
 
+    [Fact]
+    public void Update()
+    {
+        // Arrange
+        var service = CrearService();
+        var notebook = CrearNotebookValida();
+
+        mockRepoUbicacion.Setup(r => r.GetById(It.IsAny<int>())).Returns(new Ubicacion() { IdUbicacion = 1, NombreUbicacion = "Aula Digital" });
+        mockRepoTipoElemento.Setup(r => r.GetById(It.IsAny<int>())).Returns(new TipoElemento() { IdTipoElemento = 1, ElementoTipo = "Notebook" });
+        mockRepoEstadosMantenimiento.Setup(r => r.GetById(It.IsAny<int>())).Returns(new EstadosMantenimiento() { IdEstadoMantenimiento = 1, EstadoMantenimientoNombre = "Disponible" });
+        mockRepoModelo.Setup(r => r.GetById(It.IsAny<int>())).Returns(new Modelos() { IdModelo = 1, IdTipoElemento = 1, NombreModelo = "Ferrari" });
+
+        mockRepoNotebooks.Setup(r => r.GetByNumeroSerie(notebook.NumeroSerie)).Returns((Notebooks?)null);
+        mockRepoNotebooks.Setup(r => r.GetByCodigoBarra(notebook.CodigoBarra)).Returns((Notebooks?)null);
+        mockRepoNotebooks.Setup(r => r.GetByPatrimonio(notebook.Patrimonio)).Returns((Notebooks?)null);
+
+        service.CrearNotebook(notebook);
+
+        notebook.NumeroSerie = "1234"; 
+
+        // Act
+        service.ActualizarNotebook(notebook);
+
+        // Assert
+        mockRepoNotebooks.Verify(r => r.Update(It.IsAny<Notebooks>()), Times.Once);
+
+    }
+
 
 }

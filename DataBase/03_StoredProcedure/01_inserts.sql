@@ -5,12 +5,12 @@
 delimiter $$
 
 drop procedure if exists InsertCarrito $$
-create procedure InsertCarrito(out unidCarrito tinyint, in unnumeroSerieCarrito varchar(40), in unidEstadoMantenimiento tinyint, in unhabilitado boolean, in unafechaBaja datetime)
+create procedure InsertCarrito(out unidCarrito tinyint, in unnumeroSerieCarrito varchar(40), in unidEstadoMantenimiento tinyint, in unidUbicacion tinyint, in unidModelo tinyint, in unhabilitado boolean, in unafechaBaja datetime)
 begin
-	insert into carritos (numeroSerieCarrito, idEstadoMantenimiento, habilitado, fechaBaja)
-	values (unnumeroSerieCarrito, unidEstadoMantenimiento, unhabilitado, unafechaBaja);
+    insert into Carritos (numeroSerieCarrito, idEstadoMantenimiento, idUbicacion, idModelo, habilitado, fechaBaja)
+    values (unnumeroSerieCarrito, unidEstadoMantenimiento, unidUbicacion, unidModelo, unhabilitado, unafechaBaja);
 
-	set unidCarrito = last_insert_id(); 
+    set unidCarrito = last_insert_id();
 end $$
 
 delimiter ;
@@ -43,10 +43,10 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists InsertElemento $$
-create procedure InsertElemento (out unidElemento tinyint, in unidTipoElemento tinyint, in unidEstadoMantenimiento tinyint, in unidCarrito tinyint, in unaposicionCarrito tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in undisponible boolean, in unafechaBaja datetime)
+create procedure InsertElemento (out unidElemento tinyint, in unidTipoElemento tinyint, in unidModelo tinyint, in unidUbicacion tinyint, in unidEstadoMantenimiento tinyint, in unnumeroSerie varchar(40), in uncodigoBarra varchar(40), in unpatrimonio varchar(40), in unhabilitado boolean, in unafechaBaja datetime)
 begin
-    insert into elementos (idTipoElemento, idEstadoMantenimiento, idCarrito, posicionCarrito, numeroSerie, codigoBarra, disponible, fechaBaja)
-    values (unidTipoElemento, unidEstadoMantenimiento, unidCarrito, unaposicionCarrito, unnumeroSerie, uncodigoBarra, undisponible, unafechaBaja);
+    insert into Elementos (idTipoElemento, idModelo, idUbicacion, idEstadoMantenimiento, numeroSerie, codigoBarra, patrimonio, habilitado, fechaBaja)
+    values (unidTipoElemento, unidModelo, unidUbicacion, unidEstadoMantenimiento, unnumeroSerie, uncodigoBarra, unpatrimonio, unhabilitado, unafechaBaja);
 
     set unidElemento = last_insert_id();
 end $$
@@ -81,10 +81,10 @@ delimiter ;
 delimiter $$
 
 drop procedure if exists InsertPrestamo $$
-create procedure InsertPrestamo (out unidPrestamo int, in unidCurso tinyint, in unidDocente smallint ,in unidCarrito tinyint ,in unidEstadoPrestamo tinyint ,in unafechaPrestamo datetime)
+create procedure InsertPrestamo (out unidPrestamo int, in unidUsuario tinyint, in unidCurso tinyint, in unidDocente smallint ,in unidCarrito tinyint ,in unidEstadoPrestamo tinyint ,in unafechaPrestamo datetime)
 begin
-    insert into Prestamos (idCurso, idDocente, idCarrito, idEstadoPrestamo, fechaPrestamo)
-    values (unidCurso, unidDocente, unidCarrito, unidEstadoPrestamo, unafechaPrestamo);
+    insert into Prestamos(idUsuarioRecibio, idCurso, idDocente, idCarrito, idEstadoPrestamo, fechaPrestamo)
+    values (unidUsuario, unidCurso, unidDocente, unidCarrito, unidEstadoPrestamo, unafechaPrestamo);
 
     set unidPrestamo = last_insert_id();
 end $$
@@ -120,7 +120,7 @@ drop procedure if exists InsertDevolucion $$
 create procedure InsertDevolucion (out unidDevolucion int, in unidPrestamo int, in unidDocente smallint, in unidUsuario tinyint, in unidEstadoPrestamo tinyint, in unafechaDevolucion datetime, in unaobservacion varchar(200))
 begin
     insert into Devoluciones (idPrestamo, idDocente, idUsuario, idEstadoPrestamo, fechaDevolucion, observaciones)
-    values (unidPrestamo, unidDocente, unidUsuario, unidEstadoPrestamo, unafechaDevolucion, unaobservacion);
+    values (unidPrestamo, unidUsuario, unidEstadoPrestamo, unafechaDevolucion, unaobservacion);
 
     set unidDevolucion = last_insert_id();
 end $$
@@ -240,16 +240,129 @@ end $$
 
 
 -- =====================================================================
--- INSERT PARA LA TABLA DE HISTORIAL ELEMENTO
+-- INSERT PARA LA TABLA UBICACION
+-- =====================================================================
+
+delimiter $$
+
+drop procedure if exists InsertUbicacion $$
+create procedure InsertUbicacion (out unidUbicacion tinyint, in unaubicacion varchar(40))
+begin
+    insert into Ubicacion (ubicacion)
+    values (unaubicacion);
+
+    set unidUbicacion = last_insert_id();
+end $$
+
+delimiter ;
+
+
+
+-- =====================================================================
+-- INSERT PARA LA TABLA MODELOS
+-- =====================================================================
+
+delimiter $$
+
+drop procedure if exists InsertModelo $$
+create procedure InsertModelo (out unidModelo smallint, in unmodelo varchar(40), in unidTipoElemento tinyint)
+begin
+    insert into Modelo (idTipoElemento, modelo)
+    values (unidTipoElemento, unmodelo);
+
+    set unidModelo = last_insert_id();
+end $$
+
+delimiter ;
+
+
+
+-- =====================================================================
+-- INSERT PARA LA TABLA TIPOS DE ACCION
+-- =====================================================================
+
+delimiter $$
+
+drop procedure if exists InsertTipoAccion $$
+create procedure InsertTipoAccion (out unidTipoAccion tinyint, in unnombreAccion varchar(50))
+begin
+    insert into TipoAccion (nombreAccion)
+    values (unnombreAccion);
+
+    set unidTipoAccion = last_insert_id();
+end $$
+
+delimiter ;
+
+
+
+-- =====================================================================
+-- INSERT PARA LA TABLA HISTORIAL DE CAMBIOS
+-- =====================================================================
+
+delimiter $$
+
+drop procedure if exists InsertHistorialCambio $$
+create procedure InsertHistorialCambio (out unidHistorialCambio int, in unidTipoAccion tinyint, in unidUsuario tinyint, in unfechaCambio datetime, in unaobservacion varchar(200))
+begin
+    insert into HistorialCambio (idTipoAccion, idUsuario, fechaCambio, observacion)
+    values (unidTipoAccion, unidUsuario, unfechaCambio, unaobservacion);
+
+    set unidHistorialCambio = last_insert_id();
+end $$
+
+delimiter ;
+
+
+
+-- =====================================================================
+-- INSERT PARA LA TABLA HISTORIAL DE NOTEBOOKS
+-- =====================================================================
+
+delimiter $$
+
+drop procedure if exists InsertHistorialNotebook $$
+create procedure InsertHistorialNotebook (
+    in unidHistorialCambio int,
+    in unidElemento smallint
+)
+begin
+    insert into HistorialNotebook (idHistorialCambio, idElemento)
+    values (unidHistorialCambio, unidElemento);
+end $$
+
+delimiter ;
+
+
+
+-- =====================================================================
+-- INSERT PARA LA TABLA HISTORIAL DE ELEMENTOS
 -- =====================================================================
 
 delimiter $$
 
 drop procedure if exists InsertHistorialElemento $$
-create procedure InsertHistorialElemento (in unidElemento tinyint, in unidCarrito tinyint, in unidUsuario tinyint, in unidEstadoMantenimiento tinyint, in unafechaHora datetime, in unaobservacion varchar(200))
+create procedure InsertHistorialElemento (in unidHistorialCambio int, in unidElemento smallint)
 begin
-    insert into HistorialElementos (idElemento, idCarrito, idUsuario, idEstadoMantenimiento, fechaHora, observacion)
-    values (unidElemento, unidCarrito, unidUsuario, unidEstadoMantenimiento, unafechaHora, unaobservacion);
+    insert into HistorialElemento (idHistorialCambio, idElemento)
+    values (unidHistorialCambio, unidElemento);
+end $$
+
+delimiter ;
+
+
+
+-- =====================================================================
+-- INSERT PARA LA TABLA HISTORIAL DE CARRITOS
+-- =====================================================================
+
+delimiter $$
+
+drop procedure if exists InsertHistorialCarrito $$
+create procedure InsertHistorialCarrito (in unidHistorialCambio int, in unidCarrito tinyint)
+begin
+    insert into HistorialCarrito (idHistorialCambio, idCarrito)
+    values (unidHistorialCambio, unidCarrito);
 end $$
 
 delimiter ;
